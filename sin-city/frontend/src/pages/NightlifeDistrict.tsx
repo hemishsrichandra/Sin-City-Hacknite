@@ -3,13 +3,65 @@ import { motion, AnimatePresence } from 'framer-motion'
 import FlickerLight from '../components/ui/FlickerLight'
 import GlowCard from '../components/ui/GlowCard'
 
-const venues = [
-  { name: 'NEON PULSE', genre: 'Techno', vibe: 8, cover: '$40', tags: ['TECHNO'], heat: '🔥🔥🔥' },
-  { name: 'VELVET UNDERGROUND', genre: 'Hip-Hop', vibe: 7, cover: '$30', tags: ['HIP-HOP'], heat: '🔥🔥' },
-  { name: 'THE MIRAGE LOUNGE', genre: 'Live Band', vibe: 9, cover: '$50', tags: ['LIVE BAND'], heat: '🔥🔥🔥🔥' },
-  { name: 'ELECTRIC CHAPEL', genre: 'Techno', vibe: 6, cover: '$35', tags: ['TECHNO'], heat: '🔥🔥' },
-  { name: 'GOLD ROOM', genre: 'Hip-Hop', vibe: 8, cover: '$45', tags: ['HIP-HOP'], heat: '🔥🔥🔥' },
-  { name: 'CRIMSON STAGE', genre: 'Live Band', vibe: 10, cover: '$60', tags: ['LIVE BAND'], heat: '🔥🔥🔥🔥🔥' },
+import lunaVossImg from '../assets/luna_voss.png'
+import sakuraMinxImg from '../assets/sakura_minx.png'
+import zaraKnightImg from '../assets/zara_knight.png'
+import naomiBlazeImg from '../assets/naomi_blaze.png'
+import isabellaRoseImg from '../assets/isabella_rose.png'
+import VIPRoomImg from '../assets/vip_lounge.png'
+import heroImg from '../assets/hero.png'
+
+const escorts = [
+  { 
+    name: 'LUNA VOSS', 
+    ethnicity: 'Eastern European', 
+    age: '24', 
+    specialty: 'Sensual GFE + Deepthroat', 
+    price: '$600/hr', 
+    tags: ['GFE', 'ORAL', 'ANAL'],
+    heat: '🔥🔥🔥🔥',
+    image: lunaVossImg
+  },
+  { 
+    name: 'SAKURA MINX', 
+    ethnicity: 'Japanese-Korean', 
+    age: '22', 
+    specialty: 'Shibari & Submissive Play', 
+    price: '$550/hr', 
+    tags: ['BDSM', 'FETISH', 'ROLEPLAY'],
+    heat: '🔥🔥🔥',
+    image: sakuraMinxImg
+  },
+  { 
+    name: 'ZARA KNIGHT', 
+    ethnicity: 'Brazilian', 
+    age: '26', 
+    specialty: 'Passionate Latin Passion + Twerk', 
+    price: '$650/hr', 
+    tags: ['LATINA', 'DANCE', 'FULL SERVICE'],
+    heat: '🔥🔥🔥🔥🔥',
+    image: zaraKnightImg 
+  },
+  { 
+    name: 'NAOMI BLAZE', 
+    ethnicity: 'Ebony', 
+    age: '25', 
+    specialty: 'Dominatrix Experience + Foot Worship', 
+    price: '$700/hr', 
+    tags: ['DOM', 'FETISH', 'BDSM'],
+    heat: '🔥🔥🔥🔥',
+    image: naomiBlazeImg
+  },
+  { 
+    name: 'ISABELLA ROSE', 
+    ethnicity: 'Latina', 
+    age: '23', 
+    specialty: 'Pornstar Experience + Squirting', 
+    price: '$580/hr', 
+    tags: ['PSE', 'SQUIRT', 'ANAL'],
+    heat: '🔥🔥🔥',
+    image: isabellaRoseImg
+  },
 ]
 
 const cabaretShows = [
@@ -18,13 +70,12 @@ const cabaretShows = [
   { name: 'MIDNIGHT REVUE', time: '12:00 AM', venue: 'The Underground', rating: '21+', price: '$85', description: 'Where burlesque meets jazz. The last show standing.' },
 ]
 
-const vibeOptions = ['TECHNO', 'HIP-HOP', 'LIVE BAND']
+const vibeOptions = ['GFE', 'BDSM', 'PSE', 'FETISH']
 
 // ─── AGE VERIFICATION GATE ────────────────────────────────────────────────────
 function AgeGate({ onVerified }: { onVerified: () => void }) {
   const [hovering, setHovering] = useState(false)
   const [denied, setDenied] = useState(false)
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -38,7 +89,6 @@ function AgeGate({ onVerified }: { onVerified: () => void }) {
         style={{ background: 'linear-gradient(to bottom, transparent, #E60039, transparent)' }} />
       <div className="absolute top-0 right-[20%] w-[2px] h-full opacity-20"
         style={{ background: 'linear-gradient(to bottom, transparent, #E60039, transparent)' }} />
-
       <motion.div
         initial={{ scale: 0.8, y: 50 }}
         animate={{ scale: 1, y: 0 }}
@@ -72,7 +122,6 @@ function AgeGate({ onVerified }: { onVerified: () => void }) {
             />
           </svg>
         </motion.div>
-
         {/* Neon sign */}
         <motion.h1
           className="font-display text-5xl md:text-7xl mb-2"
@@ -85,15 +134,12 @@ function AgeGate({ onVerified }: { onVerified: () => void }) {
         >
           AFTER HOURS
         </motion.h1>
-
         <p className="font-mono text-sm text-[var(--text-secondary)] mb-8">
-          This section contains heavily explicit and kinky content.
+          This section contains heavily explicit, adult, and kinky sexual content.
         </p>
-
         <p className="font-body text-lg text-[var(--text-primary)] mb-6">
           Are you 21 or older?
         </p>
-
         <div className="flex gap-4 justify-center">
           <motion.button
             whileHover={{ scale: 1.05, boxShadow: '0 0 30px #E6003966' }}
@@ -114,7 +160,6 @@ function AgeGate({ onVerified }: { onVerified: () => void }) {
             NOT YET
           </motion.button>
         </div>
-
         <AnimatePresence>
           {denied && (
             <motion.p
@@ -164,98 +209,16 @@ function FlickeringNeonSign({ text, color = '#E60039' }: { text: string; color?:
   )
 }
 
-// ─── BURLESQUE DANCER SILHOUETTE ───────────────────────────────────────────────
-function BurlesqueDancer({ delay = 0 }: { delay?: number }) {
-  return (
-    <motion.div
-      className="relative"
-      style={{ width: 100, height: 180 }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay }}
-    >
-      <svg viewBox="0 0 100 180" className="w-full h-full">
-        <defs>
-          <linearGradient id={`dancer-glow-${delay}`} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#E60039" stopOpacity="0.6" />
-            <stop offset="100%" stopColor="#BF00FF" stopOpacity="0.2" />
-          </linearGradient>
-        </defs>
-        {/* Silhouette body */}
-        <motion.g
-          animate={{
-            rotate: [0, -3, 0, 3, 0],
-            y: [0, -2, 0, -2, 0],
-          }}
-          transition={{ duration: 4, repeat: Infinity, delay: delay * 0.5, ease: 'easeInOut' }}
-        >
-          {/* Head */}
-          <circle cx="50" cy="25" r="10" fill="#111" />
-          {/* Hair plume */}
-          <motion.path
-            d="M 45 17 Q 50 5 55 17"
-            stroke="#E60039"
-            strokeWidth="2"
-            fill="none"
-            animate={{ d: ['M 45 17 Q 50 5 55 17', 'M 45 17 Q 48 3 55 17', 'M 45 17 Q 52 3 55 17', 'M 45 17 Q 50 5 55 17'] }}
-            transition={{ duration: 3, repeat: Infinity }}
-          />
-          {/* Neck */}
-          <rect x="47" y="35" width="6" height="8" fill="#111" />
-          {/* Torso */}
-          <path d="M 35 43 Q 50 40 65 43 L 60 90 Q 50 95 40 90 Z" fill="#111" />
-          {/* Feather boa */}
-          <motion.path
-            d="M 30 50 Q 50 45 70 50"
-            stroke="#E60039"
-            strokeWidth="3"
-            fill="none"
-            opacity="0.7"
-            animate={{ d: ['M 30 50 Q 50 45 70 50', 'M 28 48 Q 50 42 72 48', 'M 30 50 Q 50 45 70 50'] }}
-            transition={{ duration: 2.5, repeat: Infinity }}
-          />
-          {/* Left leg */}
-          <motion.path
-            d="M 42 90 L 30 140 L 25 170"
-            stroke="#111"
-            strokeWidth="6"
-            strokeLinecap="round"
-            fill="none"
-            animate={{ d: ['M 42 90 L 30 140 L 25 170', 'M 42 90 L 35 140 L 30 170', 'M 42 90 L 30 140 L 25 170'] }}
-            transition={{ duration: 4, repeat: Infinity, delay: delay * 0.3 }}
-          />
-          {/* Right leg */}
-          <motion.path
-            d="M 58 90 L 70 140 L 75 170"
-            stroke="#111"
-            strokeWidth="6"
-            strokeLinecap="round"
-            fill="none"
-            animate={{ d: ['M 58 90 L 70 140 L 75 170', 'M 58 90 L 65 140 L 70 170', 'M 58 90 L 70 140 L 75 170'] }}
-            transition={{ duration: 4, repeat: Infinity, delay: delay * 0.3 }}
-          />
-          {/* High heels */}
-          <path d="M 20 168 L 30 168 L 25 173 Z" fill="#E60039" />
-          <path d="M 70 168 L 80 168 L 75 173 Z" fill="#E60039" />
-        </motion.g>
-        {/* Spotlight */}
-        <ellipse cx="50" cy="175" rx="30" ry="5" fill={`url(#dancer-glow-${delay})`} opacity="0.5" />
-      </svg>
-    </motion.div>
-  )
-}
-
 // ─── RISQUÉ CARD DEALER ────────────────────────────────────────────────────────
 function CardDealerAnimation() {
-  const cards = ['♠', '♥', '♦', '♣']
+  const cards = ['♠️', '♥️', '♦️', '♣️']
   const [dealtCards, setDealtCards] = useState<number[]>([])
   const [dealing, setDealing] = useState(false)
-
   const deal = () => {
     if (dealing) return
     setDealing(true)
     setDealtCards([])
-    
+   
     cards.forEach((_, i) => {
       setTimeout(() => {
         setDealtCards(prev => [...prev, i])
@@ -265,7 +228,6 @@ function CardDealerAnimation() {
       }, i * 400)
     })
   }
-
   return (
     <div className="flex flex-col items-center">
       {/* Dealer silhouette */}
@@ -293,7 +255,6 @@ function CardDealerAnimation() {
           />
         </svg>
       </div>
-
       {/* Dealt cards */}
       <div className="flex gap-3 mb-6 h-24">
         <AnimatePresence>
@@ -317,7 +278,6 @@ function CardDealerAnimation() {
           ))}
         </AnimatePresence>
       </div>
-
       <motion.button
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
@@ -331,17 +291,15 @@ function CardDealerAnimation() {
   )
 }
 
-// ─── VIP ROOM ──────────────────────────────────────────────────────────────────
+// ─── MATURE VIP ROOM ───────────────────────────────────────────────────────────
 function VIPRoom() {
   const [unlocking, setUnlocking] = useState(false)
   const [unlocked, setUnlocked] = useState(false)
   const [keySequence, setKeySequence] = useState<string[]>([])
-  const secretCode = ['♠', '♥', '♦']
-
+  const secretCode = ['♠️', '♥️', '♦️']
   const handleKeyPress = (symbol: string) => {
     const next = [...keySequence, symbol]
     setKeySequence(next)
-
     if (next.length === secretCode.length) {
       if (next.every((s, i) => s === secretCode[i])) {
         setUnlocking(true)
@@ -373,7 +331,7 @@ function VIPRoom() {
           transition={{ duration: 2 }}
           className="mt-6 font-mono text-sm text-neon-gold"
         >
-          UNLOCKING VIP ACCESS...
+          UNLOCKING ELITE KINK ACCESS...
         </motion.p>
       </motion.div>
     )
@@ -388,7 +346,7 @@ function VIPRoom() {
         className="py-16 relative overflow-hidden rounded-3xl border border-neon-gold/20"
       >
         <div className="absolute inset-0 z-0">
-          <img src="/@fs/Users/hemish/.gemini/antigravity/brain/61816b40-6441-4ea1-a9db-5752d9dc6ced/kinky_vip_lounge_1775744595766.png" className="w-full h-full object-cover opacity-40 mix-blend-lighten" alt="VIP Lounge" />
+          <img src={VIPRoomImg} className="w-full h-full object-cover opacity-40 mix-blend-lighten" alt="VIP Lounge" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a14]/90 via-[#0a0a14]/60 to-[#0a0a14]/90" />
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-6">
@@ -401,7 +359,7 @@ function VIPRoom() {
             initial={{ y: 30 }}
             animate={{ y: 0 }}
           >
-            WELCOME TO THE VIP ROOM
+            WELCOME TO THE KINK VAULT
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
@@ -409,15 +367,35 @@ function VIPRoom() {
             transition={{ delay: 0.5 }}
             className="font-mono text-sm text-center text-[var(--text-secondary)] mb-12"
           >
-            Where the elite come to play. What happens in VIP, stays in VIP.
+            Unlimited access to premium BDSM, fetish, and taboo experiences.
           </motion.p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
-              { name: 'CHAMPAGNE LOUNGE', desc: 'Private bottles. Private moments. Dom Pérignon on ice.', price: '$500+', icon: '🥂' },
-              { name: 'HIGH ROLLER SUITE', desc: 'No limits table. Minimum buy-in: $10,000. Maximum thrill: unlimited.', price: '$10,000+', icon: '🎰' },
-              { name: 'SKYLINE TERRACE', desc: 'The best view of the Strip. Reserved for the chosen few.', price: '$800+', icon: '🌃' },
-              { name: 'THE VAULT', desc: 'If you have to ask what happens here, you can\'t afford it.', price: 'POA', icon: '🔒' },
+              { 
+                name: 'PREMIUM KINK SUBSCRIPTION', 
+                desc: 'Monthly unlimited access to all private BDSM suites, fetish rooms, and elite companions. Includes custom scenes.', 
+                price: '$4,999/mo', 
+                icon: '⛓️' 
+              },
+              { 
+                name: 'BDSM PLAYROOM', 
+                desc: 'Fully equipped dungeon with suspension rigs, spanking benches, and professional dominatrix on staff.', 
+                price: '$1,200/session', 
+                icon: '🖤' 
+              },
+              { 
+                name: 'TABOO SUITE', 
+                desc: 'Roleplay, CNC, age play, and extreme fetish experiences in total discretion.', 
+                price: '$2,500+', 
+                icon: '🔞' 
+              },
+              { 
+                name: 'ELITE COMPANION CLUB', 
+                desc: 'Hand-selected models for overnight GFE, threesomes, and group kink sessions.', 
+                price: 'POA', 
+                icon: '💎' 
+              },
             ].map((room, i) => (
               <motion.div
                 key={room.name}
@@ -432,6 +410,12 @@ function VIPRoom() {
                       <h3 className="font-display text-xl text-[var(--text-primary)] mb-1">{room.name}</h3>
                       <p className="font-body text-sm text-[var(--text-secondary)] mb-2">{room.desc}</p>
                       <span className="font-mono text-xs text-neon-gold">{room.price}</span>
+                      <motion.button
+                        whileHover={{ scale: 1.03 }}
+                        className="mt-4 block w-full py-2 text-xs font-display tracking-widest border border-neon-gold text-neon-gold hover:bg-neon-gold hover:text-black"
+                      >
+                        BOOK SESSION
+                      </motion.button>
                     </div>
                   </div>
                 </GlowCard>
@@ -455,7 +439,7 @@ function VIPRoom() {
           <rect x="20" y="10" width="120" height="200" rx="8" fill="none" stroke="#FFD700" strokeWidth="2" opacity="0.5" />
           <rect x="25" y="15" width="110" height="190" rx="6" fill="#0a0a14" stroke="#FFD700" strokeWidth="1" opacity="0.3" />
           {/* VIP text on door */}
-          <text x="80" y="90" fill="#FFD700" fontSize="28" fontFamily="var(--font-display)" textAnchor="middle" opacity="0.8">VIP</text>
+          <text x="80" y="90" fill="#FFD700" fontSize="28" fontFamily="var(--font-display)" textAnchor="middle" opacity="0.8">KINK VAULT</text>
           {/* Keyhole */}
           <motion.g
             animate={{ opacity: [0.5, 1, 0.5] }}
@@ -476,15 +460,13 @@ function VIPRoom() {
           />
         </svg>
       </motion.div>
-
-      <h3 className="font-display text-3xl neon-gold mb-2">VIP ROOM — LOCKED</h3>
+      <h3 className="font-display text-3xl neon-gold mb-2">KINK VAULT — LOCKED</h3>
       <p className="font-mono text-xs text-[var(--text-secondary)] mb-8">
-        Enter the code to gain access: ♠ ♥ ♦
+        Enter the code to gain access: ♠️ ♥️ ♦️
       </p>
-
       {/* Key input */}
       <div className="flex justify-center gap-3 mb-4">
-        {['♠', '♥', '♦', '♣'].map((symbol) => (
+        {['♠️', '♥️', '♦️', '♣️'].map((symbol) => (
           <motion.button
             key={symbol}
             whileHover={{ scale: 1.1, y: -3 }}
@@ -493,15 +475,14 @@ function VIPRoom() {
             className="w-14 h-14 rounded-lg font-bold text-2xl border transition-all duration-200"
             style={{
               background: '#0a0a14',
-              borderColor: symbol === '♥' || symbol === '♦' ? '#E6003944' : '#ffffff22',
-              color: symbol === '♥' || symbol === '♦' ? '#E60039' : '#ddd',
+              borderColor: symbol === '♥️' || symbol === '♦️' ? '#E6003944' : '#ffffff22',
+              color: symbol === '♥️' || symbol === '♦️' ? '#E60039' : '#ddd',
             }}
           >
             {symbol}
           </motion.button>
         ))}
       </div>
-
       {/* Progress dots */}
       <div className="flex justify-center gap-2">
         {secretCode.map((_, i) => (
@@ -526,9 +507,9 @@ export default function NightlifeDistrict() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animRef = useRef<number>(0)
 
-  const filteredVenues = selectedVibe
-    ? venues.filter(v => v.tags.includes(selectedVibe))
-    : venues
+  const filteredEscorts = selectedVibe
+    ? escorts.filter(e => e.tags.includes(selectedVibe))
+    : escorts
 
   // Bass visualizer
   useEffect(() => {
@@ -536,25 +517,21 @@ export default function NightlifeDistrict() {
     if (!canvas) return
     const ctx = canvas.getContext('2d')
     if (!ctx) return
-
     const resize = () => {
       canvas.width = window.innerWidth
       canvas.height = 80
     }
     resize()
     window.addEventListener('resize', resize)
-
     let time = 0
     const barCount = 32
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       const barWidth = canvas.width / barCount - 2
-
       for (let i = 0; i < barCount; i++) {
         const height = 15 + Math.abs(Math.sin((i * 0.3) + time * 2)) * 55
         const x = i * (barWidth + 2)
         const hue = 320 + (i / barCount) * 40
-
         ctx.fillStyle = `hsl(${hue}, 100%, 60%)`
         ctx.shadowColor = `hsl(${hue}, 100%, 60%)`
         ctx.shadowBlur = 10
@@ -564,7 +541,6 @@ export default function NightlifeDistrict() {
       animRef.current = requestAnimationFrame(animate)
     }
     animate()
-
     return () => {
       cancelAnimationFrame(animRef.current)
       window.removeEventListener('resize', resize)
@@ -593,7 +569,7 @@ export default function NightlifeDistrict() {
         {/* ─── HERO ─────────────────────────────────────────── */}
         <section className="relative py-32 px-6 text-center overflow-hidden">
           <div className="absolute inset-0 z-0">
-            <img src="/@fs/Users/hemish/.gemini/antigravity/brain/61816b40-6441-4ea1-a9db-5752d9dc6ced/seductive_neon_portrait_1775744546678.png" className="w-full h-full object-cover opacity-50 mix-blend-luminosity" alt="Seductive Host" />
+            <img src={heroImg} className="w-full h-full object-cover opacity-50 mix-blend-luminosity" alt="Seductive Host" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0A0004] via-[#0A0004]/60 to-transparent" />
           </div>
           <div className="relative z-10">
@@ -602,7 +578,7 @@ export default function NightlifeDistrict() {
               animate={{ opacity: 1, y: 0 }}
               className="font-display text-6xl md:text-[96px] neon-crimson leading-none mb-4"
             >
-              NEON NIGHTLIFE
+              NEON DESIRE
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }}
@@ -610,7 +586,7 @@ export default function NightlifeDistrict() {
               transition={{ delay: 0.3 }}
               className="font-mono text-base text-[var(--text-secondary)]"
             >
-              Flesh, fantasy, and endless vice.
+              Premium escorts • Explicit encounters • No limits after midnight
             </motion.p>
           </div>
         </section>
@@ -620,50 +596,94 @@ export default function NightlifeDistrict() {
           <div className="max-w-6xl mx-auto flex flex-col items-center gap-8">
             <FlickeringNeonSign text="GIRLS GIRLS GIRLS" color="#E60039" />
             <div className="flex gap-8 md:gap-16 flex-wrap justify-center">
-              <FlickeringNeonSign text="LIVE" color="#00F5FF" />
-              <FlickeringNeonSign text="NUDE" color="#E60039" />
+              <FlickeringNeonSign text="ESCORTS" color="#00F5FF" />
+              <FlickeringNeonSign text="KINK" color="#E60039" />
               <FlickeringNeonSign text="XXX" color="#BF00FF" />
             </div>
-            <FlickeringNeonSign text="OPEN 24 HRS" color="#FFD700" />
+            <FlickeringNeonSign text="BOOK NOW • 24/7" color="#FFD700" />
           </div>
         </section>
 
-        {/* ─── BURLESQUE STAGE ──────────────────────────────── */}
+        {/* ─── PREMIUM ESCORTS GALLERY ──────────────────────── */}
         <section className="py-20 px-6">
-          <div className="max-w-5xl mx-auto">
-            <h2 className="font-display text-4xl md:text-5xl text-center neon-crimson mb-2">THE BURLESQUE STAGE</h2>
+          <div className="max-w-6xl mx-auto">
+            <h2 className="font-display text-5xl text-center neon-crimson mb-3">PREMIUM COMPANIONS</h2>
             <p className="font-mono text-xs text-center text-[var(--text-secondary)] mb-12">
-              Flesh in motion. Succumb to your deepest desires.
+              Hand-selected. Discreet. Unforgettable. All services are explicit and consensual.
             </p>
 
-            {/* Stage with dancers */}
-            <div className="relative bg-gradient-to-b from-[#0a0015] to-[#08080F] rounded-2xl p-8 border border-neon-crimson/10 overflow-hidden">
-              {/* Spotlights */}
-              <div className="absolute top-0 left-1/4 w-32 h-full opacity-10"
-                style={{ background: 'linear-gradient(to bottom, #E60039, transparent)' }} />
-              <div className="absolute top-0 left-1/2 w-32 h-full opacity-10 -translate-x-1/2"
-                style={{ background: 'linear-gradient(to bottom, #BF00FF, transparent)' }} />
-              <div className="absolute top-0 right-1/4 w-32 h-full opacity-10"
-                style={{ background: 'linear-gradient(to bottom, #E60039, transparent)' }} />
+            <div className="flex flex-wrap justify-center gap-4 mb-12">
+              {vibeOptions.map((vibe) => (
+                <motion.button
+                  key={vibe}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setSelectedVibe(selectedVibe === vibe ? null : vibe)}
+                  className={`px-8 py-3 rounded-full font-body font-semibold text-sm uppercase tracking-wider transition-all duration-300 border ${
+                    selectedVibe === vibe
+                      ? 'bg-neon-crimson/20 border-neon-crimson text-neon-crimson shadow-[0_0_20px_#E6003944]'
+                      : 'bg-transparent border-white/20 text-[var(--text-secondary)] hover:border-white/40'
+                  }`}
+                >
+                  {vibe}
+                </motion.button>
+              ))}
+            </div>
 
-              {/* Curtain edges */}
-              <div className="absolute top-0 left-0 w-16 h-full"
-                style={{ background: 'linear-gradient(to right, #1a0020, transparent)' }} />
-              <div className="absolute top-0 right-0 w-16 h-full"
-                style={{ background: 'linear-gradient(to left, #1a0020, transparent)' }} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <AnimatePresence mode="wait">
+                {filteredEscorts.map((escort, i) => (
+                  <motion.div
+                    key={escort.name}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 30 }}
+                    transition={{ delay: i * 0.05 }}
+                  >
+                    <GlowCard accentColor="#E60039" className="overflow-hidden group">
+                      <div className="relative h-96">
+                        <img 
+                          src={escort.image} 
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                          alt={escort.name} 
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+                        <div className="absolute bottom-0 left-0 right-0 p-6">
+                          <div className="flex justify-between items-end">
+                            <div>
+                              <h3 className="font-display text-3xl text-white">{escort.name}</h3>
+                              <p className="text-sm text-white/70">{escort.ethnicity} • {escort.age}</p>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-2xl font-display text-neon-crimson">{escort.price}</div>
+                              <div className="text-xs text-white/60">{escort.heat}</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
-              {/* Massive Seductive Club Dancers Image */}
-              <div className="w-full h-[500px] relative rounded-xl overflow-hidden border border-neon-crimson/30 mt-4 shadow-[0_0_30px_#E6003944]">
-                <img src="/@fs/Users/hemish/.gemini/antigravity/brain/61816b40-6441-4ea1-a9db-5752d9dc6ced/neon_nightclub_dancers_1775744530671.png" className="w-full h-full object-cover" alt="Mature Cabaret Dancers" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
-                <div className="absolute bottom-10 left-0 right-0 text-center px-4">
-                  <h3 className="font-display text-4xl text-neon-crimson tracking-widest drop-shadow-[0_0_10px_#E60039]">SEDUCTION HAS A NEW NAME</h3>
-                  <p className="font-mono text-xs text-[var(--text-secondary)] mt-2">Private dances. Strict confidentiality. Enter the red room.</p>
-                </div>
-              </div>
+                      <div className="p-6">
+                        <p className="font-body text-sm mb-4 text-[var(--text-secondary)]">{escort.specialty}</p>
+                        
+                        <div className="flex flex-wrap gap-2 mb-6">
+                          {escort.tags.map(tag => (
+                            <span key={tag} className="px-3 py-1 text-[10px] font-mono bg-white/5 border border-white/10 rounded-full text-white/70">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
 
-              {/* Stage floor */}
-              <div className="h-[2px] bg-gradient-to-r from-transparent via-neon-crimson/50 to-transparent" />
+                        <motion.button
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="w-full py-4 bg-neon-crimson hover:bg-white hover:text-black text-black font-display tracking-widest text-sm transition-all"
+                        >
+                          BOOK {escort.name.toUpperCase()} NOW
+                        </motion.button>
+                      </div>
+                    </GlowCard>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             </div>
           </div>
         </section>
@@ -675,7 +695,6 @@ export default function NightlifeDistrict() {
             <p className="font-mono text-xs text-center text-[var(--text-secondary)] mb-10">
               Tonight's performances. Reservations required.
             </p>
-
             <div className="space-y-4">
               {cabaretShows.map((show, i) => (
                 <motion.div
@@ -704,7 +723,7 @@ export default function NightlifeDistrict() {
                           whileTap={{ scale: 0.95 }}
                           className="px-6 py-2 rounded-lg font-body font-semibold text-xs uppercase tracking-wider border border-neon-purple text-neon-purple hover:bg-neon-purple hover:text-black transition-all"
                         >
-                          Reserve
+                          Reserve Seat
                         </motion.button>
                       </div>
                     </div>
@@ -720,77 +739,11 @@ export default function NightlifeDistrict() {
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="font-display text-4xl neon-crimson mb-2">THE PRIVATE TABLE</h2>
             <p className="font-mono text-xs text-[var(--text-secondary)] mb-10">
-              Your personal dealer. High stakes. Higher temptation.
+              High stakes. Higher pleasure. Private encounters arranged here.
             </p>
             <div className="bg-gradient-to-b from-[#0a0a14] to-[#08080F] rounded-2xl p-8 border border-neon-crimson/10">
               <CardDealerAnimation />
             </div>
-          </div>
-        </section>
-
-        {/* ─── WHAT'S YOUR VIBE? VENUES ─────────────────────── */}
-        <section className="py-16 px-6">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="font-display text-4xl text-[var(--text-primary)] mb-8">WHAT'S YOUR VIBE?</h2>
-            <div className="flex flex-wrap justify-center gap-4 mb-12">
-              {vibeOptions.map((vibe) => (
-                <motion.button
-                  key={vibe}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setSelectedVibe(selectedVibe === vibe ? null : vibe)}
-                  className={`px-8 py-3 rounded-full font-body font-semibold text-sm uppercase tracking-wider transition-all duration-300 ${
-                    selectedVibe === vibe
-                      ? 'bg-neon-crimson/20 border-neon-crimson text-neon-crimson shadow-[0_0_20px_#E6003944]'
-                      : 'bg-transparent border-white/20 text-[var(--text-secondary)] hover:border-white/40'
-                  } border`}
-                >
-                  {vibe}
-                </motion.button>
-              ))}
-            </div>
-
-            {/* Venue cards */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selectedVibe || 'all'}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-              >
-                {filteredVenues.map((venue) => (
-                  <GlowCard key={venue.name} accentColor="#E60039" className="p-6 text-left">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="font-display text-2xl text-[var(--text-primary)]">{venue.name}</h3>
-                      <span className="text-sm">{venue.heat}</span>
-                    </div>
-                    <div className="flex items-center gap-2 mb-3">
-                      <span className="text-xs font-mono px-2 py-0.5 rounded bg-neon-crimson/10 text-neon-crimson border border-neon-crimson/20">
-                        {venue.genre}
-                      </span>
-                      <span className="text-xs font-mono text-[var(--text-muted)]">Cover: {venue.cover}</span>
-                    </div>
-                    {/* Vibe rating bar */}
-                    <div className="flex items-center gap-2 mb-4">
-                      <span className="text-xs font-mono text-[var(--text-muted)]">Vibe:</span>
-                      <div className="flex gap-[2px]">
-                        {Array.from({ length: 10 }, (_, j) => (
-                          <div
-                            key={j}
-                            className={`w-3 h-2 rounded-sm ${j < venue.vibe ? 'bg-neon-crimson' : 'bg-white/10'}`}
-                          />
-                        ))}
-                      </div>
-                      <span className="text-xs font-mono text-neon-crimson">{venue.vibe}/10</span>
-                    </div>
-                    <button className="font-body font-semibold text-xs uppercase tracking-wider text-neon-crimson hover:text-neon-crimson/80 transition-colors">
-                      Get on the list →
-                    </button>
-                  </GlowCard>
-                ))}
-              </motion.div>
-            </AnimatePresence>
           </div>
         </section>
 
@@ -802,7 +755,7 @@ export default function NightlifeDistrict() {
           </div>
         </section>
 
-        {/* Bass visualizer — no longer covering footer */}
+        {/* Bass visualizer */}
         <div className="fixed bottom-0 left-0 w-full pointer-events-none z-10">
           <canvas ref={canvasRef} className="w-full" style={{ height: 80 }} />
         </div>
