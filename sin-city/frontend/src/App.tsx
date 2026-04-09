@@ -8,6 +8,7 @@ import CasinoDistrict from './pages/CasinoDistrict'
 import NightlifeDistrict from './pages/NightlifeDistrict'
 import ShowsDistrict from './pages/ShowsDistrict'
 import StreetScene from './pages/StreetScene'
+import Cloud9District from './pages/Cloud9District'
 import Planner from './pages/Planner'
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/districts/casino" element={<CasinoDistrict />} />
           <Route path="/districts/nightlife" element={<NightlifeDistrict />} />
           <Route path="/districts/shows" element={<ShowsDistrict />} />
+          <Route path="/districts/cloud9" element={<Cloud9District />} />
           <Route path="/districts/street" element={<StreetScene />} />
           <Route path="/planner" element={<Planner />} />
         </Routes>

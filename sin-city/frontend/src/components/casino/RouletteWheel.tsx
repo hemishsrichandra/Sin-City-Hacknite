@@ -1,5 +1,6 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
+import confetti from 'canvas-confetti'
 
 const SEGMENTS = 37
 const COLORS = Array.from({ length: SEGMENTS }, (_, i) => {
@@ -10,7 +11,6 @@ const COLORS = Array.from({ length: SEGMENTS }, (_, i) => {
 export default function RouletteWheel() {
   const [spinning, setSpinning] = useState(false)
   const [result, setResult] = useState<number | null>(null)
-  const wheelRef = useRef<SVGGElement>(null)
   const [rotation, setRotation] = useState(0)
 
   const spin = useCallback(() => {
@@ -19,7 +19,7 @@ export default function RouletteWheel() {
     setResult(null)
 
     const winningNumber = Math.floor(Math.random() * 37)
-    const extraRotations = 3 + Math.floor(Math.random() * 5) // 3-8 full rotations
+    const extraRotations = 5 + Math.floor(Math.random() * 5) // 5-10 full rotations
     const segmentAngle = 360 / SEGMENTS
     const targetAngle = extraRotations * 360 + (360 - winningNumber * segmentAngle)
 
@@ -29,22 +29,38 @@ export default function RouletteWheel() {
     setTimeout(() => {
       setSpinning(false)
       setResult(winningNumber)
+      // Celebrate with confetti on green 0
+      if (winningNumber === 0) {
+        confetti({
+          particleCount: 150,
+          spread: 100,
+          origin: { y: 0.5 },
+          colors: ['#00AA44', '#FFD700', '#00F5FF'],
+        })
+      }
     }, 4000)
   }, [spinning, rotation])
 
   return (
     <div className="flex flex-col items-center">
       <div className="relative w-[300px] h-[300px] md:w-[400px] md:h-[400px]">
+        {/* Ball marker (fixed at top - outside the rotating group) */}
+        <div
+          className="absolute left-1/2 -translate-x-1/2 top-[2%] z-10"
+          style={{ width: 14, height: 14 }}
+        >
+          <div className="w-full h-full rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
+        </div>
+
         <svg viewBox="-150 -150 300 300" className="w-full h-full">
           {/* Outer ring */}
           <circle cx={0} cy={0} r={145} fill="none" stroke="#2A2A3A" strokeWidth={4} />
-          
-          {/* Wheel segments */}
+
+          {/* Spinning wheel group - uses CSS transform-origin for proper center rotation */}
           <g
-            ref={wheelRef}
             style={{
               transform: `rotate(${rotation}deg)`,
-              transformOrigin: 'center',
+              transformOrigin: '0px 0px',
               transition: spinning ? 'transform 4s cubic-bezier(0.15, 0.8, 0.2, 1)' : 'none',
             }}
           >
@@ -92,9 +108,6 @@ export default function RouletteWheel() {
             <circle cx={0} cy={0} r={20} fill="#1A1A2E" stroke="#FFD700" strokeWidth={2} />
             <circle cx={0} cy={0} r={8} fill="#FFD700" />
           </g>
-
-          {/* Ball marker (fixed at top) */}
-          <circle cx={0} cy={-138} r={6} fill="white" stroke="#ccc" strokeWidth={1} />
         </svg>
       </div>
 

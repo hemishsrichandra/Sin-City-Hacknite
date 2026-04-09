@@ -25,7 +25,7 @@ export default function Districts() {
             transition={{ delay: 0.2 }}
             className="font-body text-lg text-[var(--text-secondary)]"
           >
-            Every vice has its neighbourhood. Choose wisely.
+            Succumb to the night. Give in to temptation.
           </motion.p>
         </div>
         <DistrictMap />

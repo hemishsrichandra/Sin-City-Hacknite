@@ -6,19 +6,20 @@
 
 :root {
   /* Core palette */
-  --neon-pink:     #FF006E;
+  --neon-crimson:  #E60039;
   --neon-cyan:     #00F5FF;
   --neon-gold:     #FFD700;
   --neon-purple:   #BF00FF;
   --neon-green:    #00FF88;
   --neon-orange:   #FF6B00;
+  --neon-magenta:  #FF00A0;
 
   /* Backgrounds */
-  --bg-void:       #030308;
-  --bg-deep:       #08080F;
-  --bg-surface:    #0D0D1A;
-  --bg-card:       #12121F;
-  --bg-card-hover: #181828;
+  --bg-void:       #050002;
+  --bg-deep:       #0A0004;
+  --bg-surface:    #100206;
+  --bg-card:       #160309;
+  --bg-card-hover: #20040A;
 
   /* Text */
   --text-primary:   #F0EEE4;
@@ -35,7 +36,7 @@
   --font-mono:     'Space Mono', monospace;
 
   /* Neon glow shadows */
-  --glow-pink:   0 0 10px #FF006E, 0 0 30px #FF006E66, 0 0 60px #FF006E33;
+  --glow-crimson: 0 0 10px #E60039, 0 0 30px #E6003966, 0 0 60px #E6003933;
   --glow-cyan:   0 0 10px #00F5FF, 0 0 30px #00F5FF66, 0 0 60px #00F5FF33;
   --glow-gold:   0 0 10px #FFD700, 0 0 30px #FFD70066, 0 0 60px #FFD70033;
   --glow-purple: 0 0 10px #BF00FF, 0 0 30px #BF00FF66, 0 0 60px #BF00FF33;
@@ -57,7 +58,7 @@ body {
 }
 
 /* Neon text utility classes */
-.neon-pink   { color: var(--neon-pink);   text-shadow: var(--glow-pink); }
+.neon-crimson { color: var(--neon-crimson); text-shadow: var(--glow-crimson); }
 .neon-cyan   { color: var(--neon-cyan);   text-shadow: var(--glow-cyan); }
 .neon-gold   { color: var(--neon-gold);   text-shadow: var(--glow-gold); }
 .neon-purple { color: var(--neon-purple); text-shadow: var(--glow-purple); }
@@ -66,11 +67,11 @@ body {
 /* Scrollbar */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg-void); }
-::-webkit-scrollbar-thumb { background: var(--neon-pink); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: var(--neon-crimson); border-radius: 2px; }
 
 /* Selection */
 ::selection {
-  background: rgba(255, 0, 110, 0.3);
+  background: rgba(230, 0, 57, 0.4);
   color: #fff;
 }
 

@@ -59,9 +59,9 @@ Sun, bass, and champagne. The perfect afternoon before the final night.
 [District: Street Scene] [Estimated cost: $75]
 Three bars. Three passwords. Zero regrets.
 
-9:30 PM — Fremont Street Experience
-[District: Street Scene] [Estimated cost: $0]
-The world's largest LED canopy. Old Vegas at its most electric.
+9:30 PM — The Apothecary (Restricted Zone)
+[District: Cloud 9] [Estimated cost: $100]
+Drop a synthetic tab. Let complete ego dissolution take over as you transcend reality into neon euphoria.
 
 11:00 PM — One Final Hand at The Cosmopolitan
 [District: Casino Floor] [Estimated cost: $150]

@@ -490,8 +490,28 @@
     "tags": ["LIVE SHOWS"],
     "cost_per_person": 30,
     "duration_hours": 2,
-    "description": "The real history of organised crime in Vegas. Interactive exhibits, a courtroom where mobsters were tried, and a speakeasy in the basement.",
-    "vibe_match": ["MYSTERY", "SOPHISTICATED"],
-    "time_of_day": "afternoon"
+    "description": "The real history of organised crime in Vegas. Interactive exhibits, a courtroom where mobsters were tried, and a speakeasy in the basement."
+  },
+  {
+    "id": "act_046",
+    "name": "Neon Tab at The Apothecary",
+    "district": "CLOUD 9",
+    "tags": ["NIGHTLIFE", "WILD"],
+    "cost_per_person": 100,
+    "duration_hours": 4,
+    "description": "Drop a high-grade synthetic neon tab. The world dissolves into pure digital euphoria. Enter the restricted zone.",
+    "vibe_match": ["MYSTERY", "WILD"],
+    "time_of_day": "night"
+  },
+  {
+    "id": "act_047",
+    "name": "Synth Hookah Lounge",
+    "district": "CLOUD 9",
+    "tags": ["LAID_BACK", "MYSTERY"],
+    "cost_per_person": 150,
+    "duration_hours": 3,
+    "description": "Breathe in the digital haze. Sit back as reality melts into a psychedelic symphony of colors and bass.",
+    "vibe_match": ["LAID_BACK", "SOPHISTICATED"],
+    "time_of_day": "night"
   }
 ]

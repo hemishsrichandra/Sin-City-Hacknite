@@ -9,9 +9,9 @@ import FlickerLight from '../components/ui/FlickerLight'
 // Typewriter lines for the AI teaser terminal
 const terminalLines = [
   '> Analysing your preferences...',
-  '> High risk tolerance detected ♠',
+  '> High risk mature behavior detected ♠',
   '> Budget: $500/night',
-  '> Building itinerary...',
+  '> Building immersive itinerary...',
   '> Day 1: Check in → Casino Floor (8pm-2am)',
   '> Day 2: Pool party → Nightclub crawl',
   '> Itinerary ready. 14 activities. 3 districts.',
@@ -144,7 +144,7 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="font-body text-lg text-[var(--text-secondary)] tracking-[0.4em] uppercase mb-4"
           >
-            Welcome To
+            Give In To
           </motion.p>
 
           {/* SIN CITY neon sign */}
@@ -158,7 +158,7 @@ export default function Home() {
               {sinCityLetters.map((letter, i) => (
                 <span
                   key={i}
-                  className="neon-pink inline-block"
+                  className="neon-crimson inline-block"
                   style={{
                     animation: `flicker ${3 + Math.random() * 2}s infinite`,
                     animationDelay: `${Math.random() * 2}s`,
@@ -187,7 +187,7 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.8 }}
             className="font-mono text-[13px] text-[var(--text-secondary)] tracking-[0.2em]"
           >
-            YOUR RULES. YOUR VICES. YOUR NIGHT.
+            YOUR DESIRES. YOUR VICES. YOUR NIGHT.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -197,8 +197,8 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 1.0 }}
             className="flex flex-col sm:flex-row gap-4 justify-center mt-10"
           >
-            <AnimatedButton variant="filled" color="#FF006E" onClick={() => navigate('/districts')}>
-              Enter the City
+            <AnimatedButton variant="filled" color="#E60039" onClick={() => navigate('/districts')}>
+              Succumb to the Night
             </AnimatedButton>
             <AnimatedButton variant="outlined" color="#00F5FF" onClick={() => navigate('/planner')}>
               Plan My Trip
@@ -223,8 +223,8 @@ export default function Home() {
         </motion.div>
 
         {/* Ambient lights */}
-        <FlickerLight color="#FF006E" intensity="low" className="-top-20 -left-20" size={300} />
-        <FlickerLight color="#BF00FF" intensity="low" className="-bottom-20 -right-20" size={300} />
+        <FlickerLight color="#E60039" intensity="high" className="-top-20 -left-20" size={400} />
+        <FlickerLight color="#BF00FF" intensity="medium" className="-bottom-20 -right-20" size={350} />
       </section>
 
       {/* ═══════════════ MARQUEE ═══════════════ */}
@@ -232,7 +232,7 @@ export default function Home() {
         <div className="animate-marquee whitespace-nowrap">
           {[...Array(2)].map((_, idx) => (
             <span key={idx} className="font-display text-[22px] neon-gold mx-4">
-              ★ BLACKJACK  ·  ROULETTE  ·  COCKTAILS  ·  CABARET  ·  POKER  ·  LIVE SHOWS  ·  NEON NIGHTS  ·  
+              ★ BLACKJACK  ·  ROULETTE  ·  COCKTAILS  ·  LIVE NUDE  ·  THE HIGH LIFE  ·  BURLESQUE  ·  HIGH STAKES  ·  
             </span>
           ))}
         </div>
@@ -257,7 +257,7 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="font-body text-lg text-[var(--text-secondary)]"
           >
-            Four districts. Infinite possibilities.
+            Five districts. Infinite temptation.
           </motion.p>
         </div>
         <DistrictMap />
@@ -266,7 +266,7 @@ export default function Home() {
       {/* ═══════════════ AI PLANNER TEASER ═══════════════ */}
       <section className="bg-bg-surface py-24 px-6 relative overflow-hidden">
         <FlickerLight color="#00F5FF" intensity="low" className="top-10 right-10" size={250} />
-        <FlickerLight color="#FF006E" intensity="low" className="bottom-10 left-10" size={250} />
+        <FlickerLight color="#E60039" intensity="low" className="bottom-10 left-10" size={250} />
 
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left — Text */}
@@ -285,8 +285,8 @@ export default function Home() {
             <p className="font-body text-lg text-[var(--text-secondary)] mb-8 max-w-lg">
               Tell our AI agent your vices. It builds your perfect Las Vegas itinerary — hour by hour, district by district.
             </p>
-            <AnimatedButton variant="filled" color="#FF006E" onClick={() => navigate('/planner')}>
-              Start Planning →
+            <AnimatedButton variant="filled" color="#E60039" onClick={() => navigate('/planner')}>
+              Indulge Now →
             </AnimatedButton>
           </motion.div>
 
