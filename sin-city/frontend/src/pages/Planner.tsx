@@ -93,9 +93,7 @@ export default function Planner() {
 
   if (stage === 'streaming' && !isStreaming && (output.length > 0 || displayOutput)) {
     // Auto-transition to result
-    if (stage !== 'result') {
-      setTimeout(() => setStage('result'), 500)
-    }
+    setTimeout(() => setStage('result'), 500)
   }
 
   return (

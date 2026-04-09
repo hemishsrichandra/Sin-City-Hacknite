@@ -127,7 +127,7 @@ export default function NightlifeDistrict() {
               transition={{ duration: 0.3 }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
-              {filteredVenues.map((venue, i) => (
+              {filteredVenues.map((venue) => (
                 <GlowCard key={venue.name} accentColor="#FF006E" className="p-6 text-left">
                   <h3 className="font-display text-2xl text-[var(--text-primary)] mb-2">{venue.name}</h3>
                   <div className="flex items-center gap-2 mb-3">
