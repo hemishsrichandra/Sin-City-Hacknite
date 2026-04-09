@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Core palette */
+  --neon-pink:     #FF006E;
+  --neon-cyan:     #00F5FF;
+  --neon-gold:     #FFD700;
+  --neon-purple:   #BF00FF;
+  --neon-green:    #00FF88;
+  --neon-orange:   #FF6B00;
+
+  /* Backgrounds */
+  --bg-void:       #030308;
+  --bg-deep:       #08080F;
+  --bg-surface:    #0D0D1A;
+  --bg-card:       #12121F;
+  --bg-card-hover: #181828;
+
+  /* Text */
+  --text-primary:   #F0EEE4;
+  --text-secondary: #9B97B4;
+  --text-muted:     #4A4865;
+
+  /* Borders */
+  --border-subtle:  rgba(255,255,255,0.06);
+  --border-glow:    rgba(0,245,255,0.3);
+
+  /* Typography */
+  --font-display:  'Bebas Neue', cursive;
+  --font-body:     'Rajdhani', sans-serif;
+  --font-mono:     'Space Mono', monospace;
+
+  /* Neon glow shadows */
+  --glow-pink:   0 0 10px #FF006E, 0 0 30px #FF006E66, 0 0 60px #FF006E33;
+  --glow-cyan:   0 0 10px #00F5FF, 0 0 30px #00F5FF66, 0 0 60px #00F5FF33;
+  --glow-gold:   0 0 10px #FFD700, 0 0 30px #FFD70066, 0 0 60px #FFD70033;
+  --glow-purple: 0 0 10px #BF00FF, 0 0 30px #BF00FF66, 0 0 60px #BF00FF33;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg-void);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Neon text utility classes */
+.neon-pink   { color: var(--neon-pink);   text-shadow: var(--glow-pink); }
+.neon-cyan   { color: var(--neon-cyan);   text-shadow: var(--glow-cyan); }
+.neon-gold   { color: var(--neon-gold);   text-shadow: var(--glow-gold); }
+.neon-purple { color: var(--neon-purple); text-shadow: var(--glow-purple); }
+.neon-green  { color: var(--neon-green);  text-shadow: 0 0 10px #00FF88, 0 0 30px #00FF8866, 0 0 60px #00FF8833; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-void); }
+::-webkit-scrollbar-thumb { background: var(--neon-pink); border-radius: 2px; }
+
+/* Selection */
+::selection {
+  background: rgba(255, 0, 110, 0.3);
+  color: #fff;
+}
+
+/* Flicker keyframe for neon signs */
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+  20%, 24%, 55% { opacity: 0.4; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 10px #00F5FF, 0 0 30px #00F5FF66, 0 0 60px #00F5FF33; }
+  50%       { box-shadow: 0 0 20px #00F5FF, 0 0 60px #00F5FF88, 0 0 120px #00F5FF44; }
+}
+
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes bounce-dot {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+@keyframes pulse-bar {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1); }
+}
+
+/* Print styles for itinerary export */
+@media print {
+  body { background: white !important; color: black !important; }
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+}

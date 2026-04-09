@@ -1,0 +1,29 @@
+0 verbose cli /Users/hemish/Desktop/HackNite/.node/bin/node /Users/hemish/Desktop/HackNite/.node/lib/node_modules/npm/bin/npm-cli.js
+1 info using npm@10.7.0
+2 info using node@v20.14.0
+3 silly config:load:file:/Users/hemish/Desktop/HackNite/.node/lib/node_modules/npm/npmrc
+4 silly config:load:file:/Users/hemish/Desktop/HackNite/sin-city/frontend/.npmrc
+5 silly config:load:file:/Users/hemish/.npmrc
+6 silly config:load:file:/Users/hemish/Desktop/HackNite/.node/etc/npmrc
+7 verbose title npm exec create-vite@latest ./ -- --template react-ts
+8 verbose argv "exec" "--yes" "--" "create-vite@latest" "./" "--" "--template" "react-ts"
+9 verbose logfile logs-max:10 dir:/Users/hemish/Desktop/HackNite/.npm-cache/_logs/2026-04-09T06_12_45_873Z-
+10 verbose logfile /Users/hemish/Desktop/HackNite/.npm-cache/_logs/2026-04-09T06_12_45_873Z-debug-0.log
+11 silly logfile done cleaning log files
+12 http fetch GET 200 https://registry.npmjs.org/create-vite 299ms (cache miss)
+13 silly idealTree buildDeps
+14 silly fetch manifest create-vite@9.0.4
+15 http fetch GET 200 https://registry.npmjs.org/npm 454ms
+16 http fetch GET 200 https://registry.npmjs.org/create-vite 126ms (cache miss)
+17 silly placeDep ROOT create-vite@9.0.4 OK for:  want: 9.0.4
+18 warn EBADENGINE Unsupported engine {
+18 warn EBADENGINE   package: 'create-vite@9.0.4',
+18 warn EBADENGINE   required: { node: '^20.19.0 || >=22.12.0' },
+18 warn EBADENGINE   current: { node: 'v20.14.0', npm: '10.7.0' }
+18 warn EBADENGINE }
+19 silly reify moves {}
+20 silly audit bulk request { 'create-vite': [ '9.0.4' ] }
+21 silly tarball no local data for create-vite@https://registry.npmjs.org/create-vite/-/create-vite-9.0.4.tgz. Extracting by manifest.
+22 http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 335ms
+23 silly audit report {}
+24 http fetch GET 200 https://registry.npmjs.org/create-vite/-/create-vite-9.0.4.tgz 370ms (cache miss)

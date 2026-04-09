@@ -1,0 +1,762 @@
+0 verbose cli /Users/hemish/Desktop/HackNite/.node/bin/node /Users/hemish/Desktop/HackNite/.node/bin/npm
+1 info using npm@10.7.0
+2 info using node@v20.14.0
+3 silly config:load:file:/Users/hemish/Desktop/HackNite/.node/lib/node_modules/npm/npmrc
+4 silly config:load:file:/Users/hemish/Desktop/HackNite/sin-city/frontend/.npmrc
+5 silly config:load:file:/Users/hemish/.npmrc
+6 silly config:load:file:/Users/hemish/Desktop/HackNite/.node/etc/npmrc
+7 verbose title npm install react-router-dom@6 framer-motion gsap @gsap/react zustand axios howler lucide-react canvas-confetti
+8 verbose argv "install" "react-router-dom@6" "framer-motion" "gsap" "@gsap/react" "zustand" "axios" "howler" "lucide-react" "canvas-confetti"
+9 verbose logfile logs-max:10 dir:/Users/hemish/Desktop/HackNite/.npm-cache/_logs/2026-04-09T06_13_47_358Z-
+10 verbose logfile /Users/hemish/Desktop/HackNite/.npm-cache/_logs/2026-04-09T06_13_47_358Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly idealTree buildDeps
+13 silly fetch manifest react-router-dom@6
+14 http fetch GET 200 https://registry.npmjs.org/react-router-dom 418ms (cache miss)
+15 silly fetch manifest react@^18.3.1
+16 http fetch GET 200 https://registry.npmjs.org/react 12ms (cache hit)
+17 silly fetch manifest react-dom@^18.3.1
+18 http fetch GET 200 https://registry.npmjs.org/react-dom 12ms (cache hit)
+19 silly fetch manifest framer-motion@*
+20 http fetch GET 200 https://registry.npmjs.org/framer-motion 241ms (cache miss)
+21 silly fetch manifest @emotion/is-prop-valid@*
+22 http fetch GET 200 https://registry.npmjs.org/@emotion%2fis-prop-valid 166ms (cache miss)
+23 silly fetch manifest gsap@*
+24 http fetch GET 200 https://registry.npmjs.org/gsap 171ms (cache miss)
+25 silly fetch manifest @gsap/react@*
+26 http fetch GET 200 https://registry.npmjs.org/@gsap%2freact 881ms (cache miss)
+27 silly fetch manifest zustand@*
+28 http fetch GET 200 https://registry.npmjs.org/zustand 173ms (cache miss)
+29 silly fetch manifest @types/react@^18.3.12
+30 http fetch GET 200 https://registry.npmjs.org/@types%2freact 11ms (cache hit)
+31 silly fetch manifest immer@>=9.0.6
+32 http fetch GET 200 https://registry.npmjs.org/immer 119ms (cache miss)
+33 silly fetch manifest use-sync-external-store@>=1.2.0
+34 http fetch GET 200 https://registry.npmjs.org/use-sync-external-store 198ms (cache miss)
+35 silly fetch manifest axios@*
+36 http fetch GET 200 https://registry.npmjs.org/axios 187ms (cache miss)
+37 silly fetch manifest howler@*
+38 http fetch GET 200 https://registry.npmjs.org/howler 452ms (cache miss)
+39 silly fetch manifest lucide-react@*
+40 http fetch GET 200 https://registry.npmjs.org/lucide-react 270ms (cache miss)
+41 silly fetch manifest canvas-confetti@*
+42 http fetch GET 200 https://registry.npmjs.org/canvas-confetti 104ms (cache miss)
+43 silly placeDep ROOT @gsap/react@2.1.2 OK for: frontend@0.0.0 want: *
+44 silly placeDep ROOT gsap@3.14.2 OK for: @gsap/react@2.1.2 want: ^3.12.5
+45 silly placeDep ROOT axios@1.15.0 OK for: frontend@0.0.0 want: *
+46 silly placeDep ROOT canvas-confetti@1.9.4 OK for: frontend@0.0.0 want: *
+47 silly placeDep ROOT framer-motion@12.38.0 OK for: frontend@0.0.0 want: *
+48 silly placeDep ROOT gsap@3.14.2 REPLACE for: frontend@0.0.0 want: *
+49 silly placeDep ROOT howler@2.2.4 OK for: frontend@0.0.0 want: *
+50 silly placeDep ROOT lucide-react@1.7.0 OK for: frontend@0.0.0 want: *
+51 silly placeDep ROOT react-router-dom@6.30.3 OK for: frontend@0.0.0 want: 6
+52 silly placeDep ROOT zustand@5.0.12 OK for: frontend@0.0.0 want: *
+53 silly fetch manifest follow-redirects@^1.15.11
+54 silly fetch manifest form-data@^4.0.5
+55 silly fetch manifest proxy-from-env@^2.1.0
+56 silly fetch manifest tslib@^2.4.0
+57 silly fetch manifest motion-dom@^12.38.0
+58 silly fetch manifest motion-utils@^12.36.0
+59 silly fetch manifest react-router@6.30.3
+60 silly fetch manifest @remix-run/router@1.23.2
+61 http fetch GET 200 https://registry.npmjs.org/follow-redirects 184ms (cache miss)
+62 http fetch GET 200 https://registry.npmjs.org/proxy-from-env 310ms (cache miss)
+63 http fetch GET 200 https://registry.npmjs.org/motion-utils 311ms (cache miss)
+64 http fetch GET 200 https://registry.npmjs.org/motion-dom 325ms (cache miss)
+65 http fetch GET 200 https://registry.npmjs.org/tslib 333ms (cache miss)
+66 http fetch GET 200 https://registry.npmjs.org/form-data 334ms (cache miss)
+67 http fetch GET 200 https://registry.npmjs.org/@remix-run%2frouter 400ms (cache miss)
+68 http fetch GET 200 https://registry.npmjs.org/react-router 486ms (cache miss)
+69 silly placeDep ROOT follow-redirects@1.15.11 OK for: axios@1.15.0 want: ^1.15.11
+70 silly placeDep ROOT form-data@4.0.5 OK for: axios@1.15.0 want: ^4.0.5
+71 silly placeDep ROOT proxy-from-env@2.1.0 OK for: axios@1.15.0 want: ^2.1.0
+72 silly fetch manifest asynckit@^0.4.0
+73 silly fetch manifest combined-stream@^1.0.8
+74 silly fetch manifest es-set-tostringtag@^2.1.0
+75 silly fetch manifest hasown@^2.0.2
+76 silly fetch manifest mime-types@^2.1.12
+77 http fetch GET 200 https://registry.npmjs.org/hasown 161ms (cache miss)
+78 http fetch GET 200 https://registry.npmjs.org/es-set-tostringtag 182ms (cache miss)
+79 http fetch GET 200 https://registry.npmjs.org/combined-stream 189ms (cache miss)
+80 http fetch GET 200 https://registry.npmjs.org/asynckit 191ms (cache miss)
+81 http fetch GET 200 https://registry.npmjs.org/mime-types 200ms (cache miss)
+82 silly placeDep ROOT asynckit@0.4.0 OK for: form-data@4.0.5 want: ^0.4.0
+83 silly placeDep ROOT combined-stream@1.0.8 OK for: form-data@4.0.5 want: ^1.0.8
+84 silly placeDep ROOT es-set-tostringtag@2.1.0 OK for: form-data@4.0.5 want: ^2.1.0
+85 silly placeDep ROOT hasown@2.0.2 OK for: form-data@4.0.5 want: ^2.0.2
+86 silly placeDep ROOT mime-types@2.1.35 OK for: form-data@4.0.5 want: ^2.1.12
+87 silly fetch manifest delayed-stream@~1.0.0
+88 silly fetch manifest es-errors@^1.3.0
+89 silly fetch manifest get-intrinsic@^1.2.6
+90 silly fetch manifest has-tostringtag@^1.0.2
+91 silly fetch manifest function-bind@^1.1.2
+92 silly fetch manifest mime-db@1.52.0
+93 http fetch GET 200 https://registry.npmjs.org/has-tostringtag 108ms (cache miss)
+94 http fetch GET 200 https://registry.npmjs.org/function-bind 108ms (cache miss)
+95 http fetch GET 200 https://registry.npmjs.org/get-intrinsic 109ms (cache miss)
+96 http fetch GET 200 https://registry.npmjs.org/delayed-stream 111ms (cache miss)
+97 http fetch GET 200 https://registry.npmjs.org/es-errors 111ms (cache miss)
+98 http fetch GET 200 https://registry.npmjs.org/mime-db 112ms (cache miss)
+99 silly placeDep ROOT delayed-stream@1.0.0 OK for: combined-stream@1.0.8 want: ~1.0.0
+100 silly placeDep ROOT es-errors@1.3.0 OK for: es-set-tostringtag@2.1.0 want: ^1.3.0
+101 silly placeDep ROOT get-intrinsic@1.3.0 OK for: es-set-tostringtag@2.1.0 want: ^1.2.6
+102 silly placeDep ROOT has-tostringtag@1.0.2 OK for: es-set-tostringtag@2.1.0 want: ^1.0.2
+103 silly fetch manifest gopd@^1.2.0
+104 silly fetch manifest get-proto@^1.0.1
+105 silly fetch manifest has-symbols@^1.1.0
+106 silly fetch manifest es-object-atoms@^1.1.1
+107 silly fetch manifest math-intrinsics@^1.1.0
+108 silly fetch manifest es-define-property@^1.0.1
+109 silly fetch manifest call-bind-apply-helpers@^1.0.2
+110 silly fetch manifest has-symbols@^1.0.3
+111 http fetch GET 200 https://registry.npmjs.org/has-symbols 88ms (cache miss)
+112 http fetch GET 200 https://registry.npmjs.org/es-object-atoms 118ms (cache miss)
+113 http fetch GET 200 https://registry.npmjs.org/has-symbols 118ms (cache miss)
+114 http fetch GET 200 https://registry.npmjs.org/call-bind-apply-helpers 118ms (cache miss)
+115 http fetch GET 200 https://registry.npmjs.org/math-intrinsics 120ms (cache miss)
+116 http fetch GET 200 https://registry.npmjs.org/es-define-property 120ms (cache miss)
+117 http fetch GET 200 https://registry.npmjs.org/get-proto 121ms (cache miss)
+118 http fetch GET 200 https://registry.npmjs.org/gopd 128ms (cache miss)
+119 silly placeDep ROOT motion-dom@12.38.0 OK for: framer-motion@12.38.0 want: ^12.38.0
+120 silly placeDep ROOT motion-utils@12.36.0 OK for: framer-motion@12.38.0 want: ^12.36.0
+121 silly placeDep ROOT tslib@2.8.1 OK for: framer-motion@12.38.0 want: ^2.4.0
+122 silly placeDep ROOT call-bind-apply-helpers@1.0.2 OK for: get-intrinsic@1.3.0 want: ^1.0.2
+123 silly placeDep ROOT es-define-property@1.0.1 OK for: get-intrinsic@1.3.0 want: ^1.0.1
+124 silly placeDep ROOT es-object-atoms@1.1.1 OK for: get-intrinsic@1.3.0 want: ^1.1.1
+125 silly placeDep ROOT function-bind@1.1.2 OK for: get-intrinsic@1.3.0 want: ^1.1.2
+126 silly placeDep ROOT get-proto@1.0.1 OK for: get-intrinsic@1.3.0 want: ^1.0.1
+127 silly placeDep ROOT gopd@1.2.0 OK for: get-intrinsic@1.3.0 want: ^1.2.0
+128 silly placeDep ROOT has-symbols@1.1.0 OK for: get-intrinsic@1.3.0 want: ^1.1.0
+129 silly placeDep ROOT math-intrinsics@1.1.0 OK for: get-intrinsic@1.3.0 want: ^1.1.0
+130 silly fetch manifest dunder-proto@^1.0.1
+131 http fetch GET 200 https://registry.npmjs.org/dunder-proto 160ms (cache miss)
+132 silly placeDep ROOT dunder-proto@1.0.1 OK for: get-proto@1.0.1 want: ^1.0.1
+133 silly placeDep ROOT mime-db@1.52.0 OK for: mime-types@2.1.35 want: 1.52.0
+134 silly fetch manifest react@>=16.8
+135 silly placeDep ROOT @remix-run/router@1.23.2 OK for: react-router-dom@6.30.3 want: 1.23.2
+136 silly placeDep ROOT react-router@6.30.3 OK for: react-router-dom@6.30.3 want: 6.30.3
+137 warn EBADENGINE Unsupported engine {
+137 warn EBADENGINE   package: 'eslint-visitor-keys@5.0.1',
+137 warn EBADENGINE   required: { node: '^20.19.0 || ^22.13.0 || >=24' },
+137 warn EBADENGINE   current: { node: 'v20.14.0', npm: '10.7.0' }
+137 warn EBADENGINE }
+138 silly reify moves {}
+139 silly audit bulk request {
+139 silly audit   '@babel/code-frame': [ '7.29.0' ],
+139 silly audit   '@babel/compat-data': [ '7.29.0' ],
+139 silly audit   '@babel/core': [ '7.29.0' ],
+139 silly audit   '@babel/generator': [ '7.29.1' ],
+139 silly audit   '@babel/helper-compilation-targets': [ '7.28.6' ],
+139 silly audit   '@babel/helper-globals': [ '7.28.0' ],
+139 silly audit   '@babel/helper-module-imports': [ '7.28.6' ],
+139 silly audit   '@babel/helper-module-transforms': [ '7.28.6' ],
+139 silly audit   '@babel/helper-plugin-utils': [ '7.28.6' ],
+139 silly audit   '@babel/helper-string-parser': [ '7.27.1' ],
+139 silly audit   '@babel/helper-validator-identifier': [ '7.28.5' ],
+139 silly audit   '@babel/helper-validator-option': [ '7.27.1' ],
+139 silly audit   '@babel/helpers': [ '7.29.2' ],
+139 silly audit   '@babel/parser': [ '7.29.2' ],
+139 silly audit   '@babel/plugin-transform-react-jsx-self': [ '7.27.1' ],
+139 silly audit   '@babel/plugin-transform-react-jsx-source': [ '7.27.1' ],
+139 silly audit   '@babel/template': [ '7.28.6' ],
+139 silly audit   '@babel/traverse': [ '7.29.0' ],
+139 silly audit   '@babel/types': [ '7.29.0' ],
+139 silly audit   '@esbuild/aix-ppc64': [ '0.21.5' ],
+139 silly audit   '@esbuild/android-arm': [ '0.21.5' ],
+139 silly audit   '@esbuild/android-arm64': [ '0.21.5' ],
+139 silly audit   '@esbuild/android-x64': [ '0.21.5' ],
+139 silly audit   '@esbuild/darwin-arm64': [ '0.21.5' ],
+139 silly audit   '@esbuild/darwin-x64': [ '0.21.5' ],
+139 silly audit   '@esbuild/freebsd-arm64': [ '0.21.5' ],
+139 silly audit   '@esbuild/freebsd-x64': [ '0.21.5' ],
+139 silly audit   '@esbuild/linux-arm': [ '0.21.5' ],
+139 silly audit   '@esbuild/linux-arm64': [ '0.21.5' ],
+139 silly audit   '@esbuild/linux-ia32': [ '0.21.5' ],
+139 silly audit   '@esbuild/linux-loong64': [ '0.21.5' ],
+139 silly audit   '@esbuild/linux-mips64el': [ '0.21.5' ],
+139 silly audit   '@esbuild/linux-ppc64': [ '0.21.5' ],
+139 silly audit   '@esbuild/linux-riscv64': [ '0.21.5' ],
+139 silly audit   '@esbuild/linux-s390x': [ '0.21.5' ],
+139 silly audit   '@esbuild/linux-x64': [ '0.21.5' ],
+139 silly audit   '@esbuild/netbsd-x64': [ '0.21.5' ],
+139 silly audit   '@esbuild/openbsd-x64': [ '0.21.5' ],
+139 silly audit   '@esbuild/sunos-x64': [ '0.21.5' ],
+139 silly audit   '@esbuild/win32-arm64': [ '0.21.5' ],
+139 silly audit   '@esbuild/win32-ia32': [ '0.21.5' ],
+139 silly audit   '@esbuild/win32-x64': [ '0.21.5' ],
+139 silly audit   '@eslint-community/eslint-utils': [ '4.9.1' ],
+139 silly audit   'eslint-visitor-keys': [ '3.4.3', '5.0.1', '4.2.1' ],
+139 silly audit   '@eslint-community/regexpp': [ '4.12.2' ],
+139 silly audit   '@eslint/config-array': [ '0.21.2' ],
+139 silly audit   '@eslint/config-helpers': [ '0.4.2' ],
+139 silly audit   '@eslint/core': [ '0.17.0' ],
+139 silly audit   '@eslint/eslintrc': [ '3.3.5' ],
+139 silly audit   globals: [ '14.0.0', '15.15.0' ],
+139 silly audit   '@eslint/js': [ '9.39.4' ],
+139 silly audit   '@eslint/object-schema': [ '2.1.7' ],
+139 silly audit   '@eslint/plugin-kit': [ '0.4.1' ],
+139 silly audit   '@humanfs/core': [ '0.19.1' ],
+139 silly audit   '@humanfs/node': [ '0.16.7' ],
+139 silly audit   '@humanwhocodes/module-importer': [ '1.0.1' ],
+139 silly audit   '@humanwhocodes/retry': [ '0.4.3' ],
+139 silly audit   '@jridgewell/gen-mapping': [ '0.3.13' ],
+139 silly audit   '@jridgewell/remapping': [ '2.3.5' ],
+139 silly audit   '@jridgewell/resolve-uri': [ '3.1.2' ],
+139 silly audit   '@jridgewell/sourcemap-codec': [ '1.5.5' ],
+139 silly audit   '@jridgewell/trace-mapping': [ '0.3.31' ],
+139 silly audit   '@rolldown/pluginutils': [ '1.0.0-beta.27' ],
+139 silly audit   '@rollup/rollup-android-arm-eabi': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-android-arm64': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-darwin-arm64': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-darwin-x64': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-freebsd-arm64': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-freebsd-x64': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-linux-arm-gnueabihf': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-linux-arm-musleabihf': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-linux-arm64-gnu': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-linux-arm64-musl': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-linux-loong64-gnu': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-linux-loong64-musl': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-linux-ppc64-gnu': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-linux-ppc64-musl': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-linux-riscv64-gnu': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-linux-riscv64-musl': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-linux-s390x-gnu': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-linux-x64-gnu': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-linux-x64-musl': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-openbsd-x64': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-openharmony-arm64': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-win32-arm64-msvc': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-win32-ia32-msvc': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-win32-x64-gnu': [ '4.60.1' ],
+139 silly audit   '@rollup/rollup-win32-x64-msvc': [ '4.60.1' ],
+139 silly audit   '@types/babel__core': [ '7.20.5' ],
+139 silly audit   '@types/babel__generator': [ '7.27.0' ],
+139 silly audit   '@types/babel__template': [ '7.4.4' ],
+139 silly audit   '@types/babel__traverse': [ '7.28.0' ],
+139 silly audit   '@types/estree': [ '1.0.8' ],
+139 silly audit   '@types/json-schema': [ '7.0.15' ],
+139 silly audit   '@types/prop-types': [ '15.7.15' ],
+139 silly audit   '@types/react': [ '18.3.28' ],
+139 silly audit   '@types/react-dom': [ '18.3.7' ],
+139 silly audit   '@typescript-eslint/eslint-plugin': [ '8.58.1' ],
+139 silly audit   ignore: [ '7.0.5', '5.3.2' ],
+139 silly audit   '@typescript-eslint/parser': [ '8.58.1' ],
+139 silly audit   '@typescript-eslint/project-service': [ '8.58.1' ],
+139 silly audit   '@typescript-eslint/scope-manager': [ '8.58.1' ],
+139 silly audit   '@typescript-eslint/tsconfig-utils': [ '8.58.1' ],
+139 silly audit   '@typescript-eslint/type-utils': [ '8.58.1' ],
+139 silly audit   '@typescript-eslint/types': [ '8.58.1' ],
+139 silly audit   '@typescript-eslint/typescript-estree': [ '8.58.1' ],
+139 silly audit   'balanced-match': [ '4.0.4', '1.0.2' ],
+139 silly audit   'brace-expansion': [ '5.0.5', '1.1.13' ],
+139 silly audit   minimatch: [ '10.2.5', '3.1.5' ],
+139 silly audit   semver: [ '7.7.4', '6.3.1' ],
+139 silly audit   '@typescript-eslint/utils': [ '8.58.1' ],
+139 silly audit   '@typescript-eslint/visitor-keys': [ '8.58.1' ],
+139 silly audit   '@vitejs/plugin-react': [ '4.7.0' ],
+139 silly audit   acorn: [ '8.16.0' ],
+139 silly audit   'acorn-jsx': [ '5.3.2' ],
+139 silly audit   ajv: [ '6.14.0' ],
+139 silly audit   'ansi-styles': [ '4.3.0' ],
+139 silly audit   argparse: [ '2.0.1' ],
+139 silly audit   'baseline-browser-mapping': [ '2.10.16' ],
+139 silly audit   browserslist: [ '4.28.2' ],
+139 silly audit   callsites: [ '3.1.0' ],
+139 silly audit   'caniuse-lite': [ '1.0.30001787' ],
+139 silly audit   chalk: [ '4.1.2' ],
+139 silly audit   'color-convert': [ '2.0.1' ],
+139 silly audit   'color-name': [ '1.1.4' ],
+139 silly audit   'concat-map': [ '0.0.1' ],
+139 silly audit   'convert-source-map': [ '2.0.0' ],
+139 silly audit   'cross-spawn': [ '7.0.6' ],
+139 silly audit   csstype: [ '3.2.3' ],
+139 silly audit   debug: [ '4.4.3' ],
+139 silly audit   'deep-is': [ '0.1.4' ],
+139 silly audit   'electron-to-chromium': [ '1.5.334' ],
+139 silly audit   esbuild: [ '0.21.5' ],
+139 silly audit   escalade: [ '3.2.0' ],
+139 silly audit   'escape-string-regexp': [ '4.0.0' ],
+139 silly audit   eslint: [ '9.39.4' ],
+139 silly audit   'eslint-plugin-react-hooks': [ '5.2.0' ],
+139 silly audit   'eslint-plugin-react-refresh': [ '0.4.26' ],
+139 silly audit   'eslint-scope': [ '8.4.0' ],
+139 silly audit   espree: [ '10.4.0' ],
+139 silly audit   esquery: [ '1.7.0' ],
+139 silly audit   esrecurse: [ '4.3.0' ],
+139 silly audit   estraverse: [ '5.3.0' ],
+139 silly audit   esutils: [ '2.0.3' ],
+139 silly audit   'fast-deep-equal': [ '3.1.3' ],
+139 silly audit   'fast-json-stable-stringify': [ '2.1.0' ],
+139 silly audit   'fast-levenshtein': [ '2.0.6' ],
+139 silly audit   fdir: [ '6.5.0' ],
+139 silly audit   'file-entry-cache': [ '8.0.0' ],
+139 silly audit   'find-up': [ '5.0.0' ],
+139 silly audit   'flat-cache': [ '4.0.1' ],
+139 silly audit   flatted: [ '3.4.2' ],
+139 silly audit   fsevents: [ '2.3.3' ],
+139 silly audit   gensync: [ '1.0.0-beta.2' ],
+139 silly audit   'glob-parent': [ '6.0.2' ],
+139 silly audit   'has-flag': [ '4.0.0' ],
+139 silly audit   'import-fresh': [ '3.3.1' ],
+139 silly audit   imurmurhash: [ '0.1.4' ],
+139 silly audit   'is-extglob': [ '2.1.1' ],
+139 silly audit   'is-glob': [ '4.0.3' ],
+139 silly audit   isexe: [ '2.0.0' ],
+139 silly audit   'js-tokens': [ '4.0.0' ],
+139 silly audit   'js-yaml': [ '4.1.1' ],
+139 silly audit   jsesc: [ '3.1.0' ],
+139 silly audit   'json-buffer': [ '3.0.1' ],
+139 silly audit   'json-schema-traverse': [ '0.4.1' ],
+139 silly audit   'json-stable-stringify-without-jsonify': [ '1.0.1' ],
+139 silly audit   json5: [ '2.2.3' ],
+139 silly audit   keyv: [ '4.5.4' ],
+139 silly audit   levn: [ '0.4.1' ],
+139 silly audit   'locate-path': [ '6.0.0' ],
+139 silly audit   'lodash.merge': [ '4.6.2' ],
+139 silly audit   'loose-envify': [ '1.4.0' ],
+139 silly audit   'lru-cache': [ '5.1.1' ],
+139 silly audit   ms: [ '2.1.3' ],
+139 silly audit   nanoid: [ '3.3.11' ],
+139 silly audit   'natural-compare': [ '1.4.0' ],
+139 silly audit   'node-releases': [ '2.0.37' ],
+139 silly audit   optionator: [ '0.9.4' ],
+139 silly audit   'p-limit': [ '3.1.0' ],
+139 silly audit   'p-locate': [ '5.0.0' ],
+139 silly audit   'parent-module': [ '1.0.1' ],
+139 silly audit   'path-exists': [ '4.0.0' ],
+139 silly audit   'path-key': [ '3.1.1' ],
+139 silly audit   picocolors: [ '1.1.1' ],
+139 silly audit   picomatch: [ '4.0.4' ],
+139 silly audit   postcss: [ '8.5.9' ],
+139 silly audit   'prelude-ls': [ '1.2.1' ],
+139 silly audit   punycode: [ '2.3.1' ],
+139 silly audit   react: [ '18.3.1' ],
+139 silly audit   'react-dom': [ '18.3.1' ],
+139 silly audit   'react-refresh': [ '0.17.0' ],
+139 silly audit   'resolve-from': [ '4.0.0' ],
+139 silly audit   rollup: [ '4.60.1' ],
+139 silly audit   scheduler: [ '0.23.2' ],
+139 silly audit   'shebang-command': [ '2.0.0' ],
+139 silly audit   'shebang-regex': [ '3.0.0' ],
+139 silly audit   'source-map-js': [ '1.2.1' ],
+139 silly audit   'strip-json-comments': [ '3.1.1' ],
+139 silly audit   'supports-color': [ '7.2.0' ],
+139 silly audit   tinyglobby: [ '0.2.16' ],
+139 silly audit   'ts-api-utils': [ '2.5.0' ],
+139 silly audit   'type-check': [ '0.4.0' ],
+139 silly audit   typescript: [ '5.6.3' ],
+139 silly audit   'typescript-eslint': [ '8.58.1' ],
+139 silly audit   'update-browserslist-db': [ '1.2.3' ],
+139 silly audit   'uri-js': [ '4.4.1' ],
+139 silly audit   vite: [ '5.4.21' ],
+139 silly audit   which: [ '2.0.2' ],
+139 silly audit   'word-wrap': [ '1.2.5' ],
+139 silly audit   yallist: [ '3.1.1' ],
+139 silly audit   'yocto-queue': [ '0.1.0' ],
+139 silly audit   '@gsap/react': [ '2.1.2' ],
+139 silly audit   axios: [ '1.15.0' ],
+139 silly audit   'canvas-confetti': [ '1.9.4' ],
+139 silly audit   'framer-motion': [ '12.38.0' ],
+139 silly audit   gsap: [ '3.14.2' ],
+139 silly audit   howler: [ '2.2.4' ],
+139 silly audit   'lucide-react': [ '1.7.0' ],
+139 silly audit   'react-router-dom': [ '6.30.3' ],
+139 silly audit   zustand: [ '5.0.12' ],
+139 silly audit   'follow-redirects': [ '1.15.11' ],
+139 silly audit   'form-data': [ '4.0.5' ],
+139 silly audit   'proxy-from-env': [ '2.1.0' ],
+139 silly audit   asynckit: [ '0.4.0' ],
+139 silly audit   'combined-stream': [ '1.0.8' ],
+139 silly audit   'es-set-tostringtag': [ '2.1.0' ],
+139 silly audit   hasown: [ '2.0.2' ],
+139 silly audit   'mime-types': [ '2.1.35' ],
+139 silly audit   'delayed-stream': [ '1.0.0' ],
+139 silly audit   'es-errors': [ '1.3.0' ],
+139 silly audit   'get-intrinsic': [ '1.3.0' ],
+139 silly audit   'has-tostringtag': [ '1.0.2' ],
+139 silly audit   'motion-dom': [ '12.38.0' ],
+139 silly audit   'motion-utils': [ '12.36.0' ],
+139 silly audit   tslib: [ '2.8.1' ],
+139 silly audit   'call-bind-apply-helpers': [ '1.0.2' ],
+139 silly audit   'es-define-property': [ '1.0.1' ],
+139 silly audit   'es-object-atoms': [ '1.1.1' ],
+139 silly audit   'function-bind': [ '1.1.2' ],
+139 silly audit   'get-proto': [ '1.0.1' ],
+139 silly audit   gopd: [ '1.2.0' ],
+139 silly audit   'has-symbols': [ '1.1.0' ],
+139 silly audit   'math-intrinsics': [ '1.1.0' ],
+139 silly audit   'dunder-proto': [ '1.0.1' ],
+139 silly audit   'mime-db': [ '1.52.0' ],
+139 silly audit   '@remix-run/router': [ '1.23.2' ],
+139 silly audit   'react-router': [ '6.30.3' ]
+139 silly audit }
+140 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-win32-x64-msvc
+141 silly reify mark deleted [
+141 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-win32-x64-msvc'
+141 silly reify ]
+142 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-win32-x64-gnu
+143 silly reify mark deleted [
+143 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-win32-x64-gnu'
+143 silly reify ]
+144 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-win32-ia32-msvc
+145 silly reify mark deleted [
+145 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-win32-ia32-msvc'
+145 silly reify ]
+146 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-win32-arm64-msvc
+147 silly reify mark deleted [
+147 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-win32-arm64-msvc'
+147 silly reify ]
+148 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-openharmony-arm64
+149 silly reify mark deleted [
+149 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-openharmony-arm64'
+149 silly reify ]
+150 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-openbsd-x64
+151 silly reify mark deleted [
+151 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-openbsd-x64'
+151 silly reify ]
+152 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-x64-musl
+153 silly reify mark deleted [
+153 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-x64-musl'
+153 silly reify ]
+154 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-x64-gnu
+155 silly reify mark deleted [
+155 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-x64-gnu'
+155 silly reify ]
+156 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-s390x-gnu
+157 silly reify mark deleted [
+157 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-s390x-gnu'
+157 silly reify ]
+158 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-riscv64-musl
+159 silly reify mark deleted [
+159 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-riscv64-musl'
+159 silly reify ]
+160 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-riscv64-gnu
+161 silly reify mark deleted [
+161 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-riscv64-gnu'
+161 silly reify ]
+162 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-ppc64-musl
+163 silly reify mark deleted [
+163 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-ppc64-musl'
+163 silly reify ]
+164 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-ppc64-gnu
+165 silly reify mark deleted [
+165 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-ppc64-gnu'
+165 silly reify ]
+166 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-loong64-musl
+167 silly reify mark deleted [
+167 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-loong64-musl'
+167 silly reify ]
+168 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-loong64-gnu
+169 silly reify mark deleted [
+169 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-loong64-gnu'
+169 silly reify ]
+170 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-arm64-musl
+171 silly reify mark deleted [
+171 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-arm64-musl'
+171 silly reify ]
+172 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-arm64-gnu
+173 silly reify mark deleted [
+173 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-arm64-gnu'
+173 silly reify ]
+174 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-arm-musleabihf
+175 silly reify mark deleted [
+175 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-arm-musleabihf'
+175 silly reify ]
+176 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-arm-gnueabihf
+177 silly reify mark deleted [
+177 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-linux-arm-gnueabihf'
+177 silly reify ]
+178 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-freebsd-x64
+179 silly reify mark deleted [
+179 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-freebsd-x64'
+179 silly reify ]
+180 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-freebsd-arm64
+181 silly reify mark deleted [
+181 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-freebsd-arm64'
+181 silly reify ]
+182 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-darwin-x64
+183 silly reify mark deleted [
+183 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-darwin-x64'
+183 silly reify ]
+184 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-android-arm64
+185 silly reify mark deleted [
+185 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-android-arm64'
+185 silly reify ]
+186 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-android-arm-eabi
+187 silly reify mark deleted [
+187 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@rollup/rollup-android-arm-eabi'
+187 silly reify ]
+188 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/win32-x64
+189 silly reify mark deleted [
+189 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/win32-x64'
+189 silly reify ]
+190 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/win32-ia32
+191 silly reify mark deleted [
+191 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/win32-ia32'
+191 silly reify ]
+192 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/win32-arm64
+193 silly reify mark deleted [
+193 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/win32-arm64'
+193 silly reify ]
+194 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/sunos-x64
+195 silly reify mark deleted [
+195 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/sunos-x64'
+195 silly reify ]
+196 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/openbsd-x64
+197 silly reify mark deleted [
+197 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/openbsd-x64'
+197 silly reify ]
+198 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/netbsd-x64
+199 silly reify mark deleted [
+199 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/netbsd-x64'
+199 silly reify ]
+200 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/linux-x64
+201 silly reify mark deleted [
+201 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/linux-x64'
+201 silly reify ]
+202 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/linux-s390x
+203 silly reify mark deleted [
+203 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/linux-s390x'
+203 silly reify ]
+204 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/linux-riscv64
+205 silly reify mark deleted [
+205 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/linux-riscv64'
+205 silly reify ]
+206 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/linux-ppc64
+207 silly reify mark deleted [
+207 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/linux-ppc64'
+207 silly reify ]
+208 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/linux-mips64el
+209 silly reify mark deleted [
+209 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/linux-mips64el'
+209 silly reify ]
+210 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/linux-loong64
+211 silly reify mark deleted [
+211 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/linux-loong64'
+211 silly reify ]
+212 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/linux-ia32
+213 silly reify mark deleted [
+213 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/linux-ia32'
+213 silly reify ]
+214 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/linux-arm64
+215 silly reify mark deleted [
+215 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/linux-arm64'
+215 silly reify ]
+216 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/linux-arm
+217 silly reify mark deleted [
+217 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/linux-arm'
+217 silly reify ]
+218 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/freebsd-x64
+219 silly reify mark deleted [
+219 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/freebsd-x64'
+219 silly reify ]
+220 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/freebsd-arm64
+221 silly reify mark deleted [
+221 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/freebsd-arm64'
+221 silly reify ]
+222 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/darwin-x64
+223 silly reify mark deleted [
+223 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/darwin-x64'
+223 silly reify ]
+224 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/android-x64
+225 silly reify mark deleted [
+225 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/android-x64'
+225 silly reify ]
+226 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/android-arm64
+227 silly reify mark deleted [
+227 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/android-arm64'
+227 silly reify ]
+228 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/android-arm
+229 silly reify mark deleted [
+229 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/android-arm'
+229 silly reify ]
+230 verbose reify failed optional dependency /Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/aix-ppc64
+231 silly reify mark deleted [
+231 silly reify   '/Users/hemish/Desktop/HackNite/sin-city/frontend/node_modules/@esbuild/aix-ppc64'
+231 silly reify ]
+232 silly tarball no local data for react-router@https://registry.npmjs.org/react-router/-/react-router-6.30.3.tgz. Extracting by manifest.
+233 silly tarball no local data for @remix-run/router@https://registry.npmjs.org/@remix-run/router/-/router-1.23.2.tgz. Extracting by manifest.
+234 silly tarball no local data for mime-db@https://registry.npmjs.org/mime-db/-/mime-db-1.52.0.tgz. Extracting by manifest.
+235 silly tarball no local data for math-intrinsics@https://registry.npmjs.org/math-intrinsics/-/math-intrinsics-1.1.0.tgz. Extracting by manifest.
+236 silly tarball no local data for dunder-proto@https://registry.npmjs.org/dunder-proto/-/dunder-proto-1.0.1.tgz. Extracting by manifest.
+237 silly tarball no local data for has-symbols@https://registry.npmjs.org/has-symbols/-/has-symbols-1.1.0.tgz. Extracting by manifest.
+238 silly tarball no local data for get-proto@https://registry.npmjs.org/get-proto/-/get-proto-1.0.1.tgz. Extracting by manifest.
+239 silly tarball no local data for gopd@https://registry.npmjs.org/gopd/-/gopd-1.2.0.tgz. Extracting by manifest.
+240 silly tarball no local data for es-object-atoms@https://registry.npmjs.org/es-object-atoms/-/es-object-atoms-1.1.1.tgz. Extracting by manifest.
+241 silly tarball no local data for es-define-property@https://registry.npmjs.org/es-define-property/-/es-define-property-1.0.1.tgz. Extracting by manifest.
+242 silly tarball no local data for call-bind-apply-helpers@https://registry.npmjs.org/call-bind-apply-helpers/-/call-bind-apply-helpers-1.0.2.tgz. Extracting by manifest.
+243 silly tarball no local data for tslib@https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz. Extracting by manifest.
+244 silly tarball no local data for motion-utils@https://registry.npmjs.org/motion-utils/-/motion-utils-12.36.0.tgz. Extracting by manifest.
+245 silly tarball no local data for motion-dom@https://registry.npmjs.org/motion-dom/-/motion-dom-12.38.0.tgz. Extracting by manifest.
+246 silly tarball no local data for has-tostringtag@https://registry.npmjs.org/has-tostringtag/-/has-tostringtag-1.0.2.tgz. Extracting by manifest.
+247 silly tarball no local data for get-intrinsic@https://registry.npmjs.org/get-intrinsic/-/get-intrinsic-1.3.0.tgz. Extracting by manifest.
+248 silly tarball no local data for es-errors@https://registry.npmjs.org/es-errors/-/es-errors-1.3.0.tgz. Extracting by manifest.
+249 silly tarball no local data for delayed-stream@https://registry.npmjs.org/delayed-stream/-/delayed-stream-1.0.0.tgz. Extracting by manifest.
+250 silly tarball no local data for mime-types@https://registry.npmjs.org/mime-types/-/mime-types-2.1.35.tgz. Extracting by manifest.
+251 silly tarball no local data for hasown@https://registry.npmjs.org/hasown/-/hasown-2.0.2.tgz. Extracting by manifest.
+252 silly tarball no local data for es-set-tostringtag@https://registry.npmjs.org/es-set-tostringtag/-/es-set-tostringtag-2.1.0.tgz. Extracting by manifest.
+253 silly tarball no local data for combined-stream@https://registry.npmjs.org/combined-stream/-/combined-stream-1.0.8.tgz. Extracting by manifest.
+254 silly tarball no local data for asynckit@https://registry.npmjs.org/asynckit/-/asynckit-0.4.0.tgz. Extracting by manifest.
+255 silly tarball no local data for proxy-from-env@https://registry.npmjs.org/proxy-from-env/-/proxy-from-env-2.1.0.tgz. Extracting by manifest.
+256 silly tarball no local data for form-data@https://registry.npmjs.org/form-data/-/form-data-4.0.5.tgz. Extracting by manifest.
+257 silly tarball no local data for follow-redirects@https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.11.tgz. Extracting by manifest.
+258 silly tarball no local data for zustand@https://registry.npmjs.org/zustand/-/zustand-5.0.12.tgz. Extracting by manifest.
+259 silly tarball no local data for react-router-dom@https://registry.npmjs.org/react-router-dom/-/react-router-dom-6.30.3.tgz. Extracting by manifest.
+260 silly tarball no local data for lucide-react@https://registry.npmjs.org/lucide-react/-/lucide-react-1.7.0.tgz. Extracting by manifest.
+261 silly tarball no local data for howler@https://registry.npmjs.org/howler/-/howler-2.2.4.tgz. Extracting by manifest.
+262 silly tarball no local data for gsap@https://registry.npmjs.org/gsap/-/gsap-3.14.2.tgz. Extracting by manifest.
+263 silly tarball no local data for framer-motion@https://registry.npmjs.org/framer-motion/-/framer-motion-12.38.0.tgz. Extracting by manifest.
+264 silly tarball no local data for canvas-confetti@https://registry.npmjs.org/canvas-confetti/-/canvas-confetti-1.9.4.tgz. Extracting by manifest.
+265 silly tarball no local data for axios@https://registry.npmjs.org/axios/-/axios-1.15.0.tgz. Extracting by manifest.
+266 silly tarball no local data for @gsap/react@https://registry.npmjs.org/@gsap/react/-/react-2.1.2.tgz. Extracting by manifest.
+267 silly tarball no local data for function-bind@https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz. Extracting by manifest.
+268 http fetch GET 200 https://registry.npmjs.org/dunder-proto/-/dunder-proto-1.0.1.tgz 100ms (cache miss)
+269 http fetch GET 200 https://registry.npmjs.org/has-symbols/-/has-symbols-1.1.0.tgz 100ms (cache miss)
+270 http fetch GET 200 https://registry.npmjs.org/get-proto/-/get-proto-1.0.1.tgz 100ms (cache miss)
+271 http fetch GET 200 https://registry.npmjs.org/mime-db/-/mime-db-1.52.0.tgz 106ms (cache miss)
+272 http fetch GET 200 https://registry.npmjs.org/math-intrinsics/-/math-intrinsics-1.1.0.tgz 186ms (cache miss)
+273 http fetch GET 200 https://registry.npmjs.org/delayed-stream/-/delayed-stream-1.0.0.tgz 197ms (cache miss)
+274 http fetch GET 200 https://registry.npmjs.org/react-router/-/react-router-6.30.3.tgz 243ms (cache miss)
+275 http fetch GET 200 https://registry.npmjs.org/gopd/-/gopd-1.2.0.tgz 265ms (cache miss)
+276 http fetch GET 200 https://registry.npmjs.org/call-bind-apply-helpers/-/call-bind-apply-helpers-1.0.2.tgz 265ms (cache miss)
+277 http fetch GET 200 https://registry.npmjs.org/has-tostringtag/-/has-tostringtag-1.0.2.tgz 277ms (cache miss)
+278 http fetch GET 200 https://registry.npmjs.org/es-errors/-/es-errors-1.3.0.tgz 278ms (cache miss)
+279 http fetch GET 200 https://registry.npmjs.org/hasown/-/hasown-2.0.2.tgz 279ms (cache miss)
+280 http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 298ms
+281 silly audit report {
+281 silly audit report   esbuild: [
+281 silly audit report     {
+281 silly audit report       id: 1102341,
+281 silly audit report       url: 'https://github.com/advisories/GHSA-67mh-4wv8-2f99',
+281 silly audit report       title: 'esbuild enables any website to send any requests to the development server and read the response',
+281 silly audit report       severity: 'moderate',
+281 silly audit report       vulnerable_versions: '<=0.24.2',
+281 silly audit report       cwe: [Array],
+281 silly audit report       cvss: [Object]
+281 silly audit report     }
+281 silly audit report   ],
+281 silly audit report   vite: [
+281 silly audit report     {
+281 silly audit report       id: 1116229,
+281 silly audit report       url: 'https://github.com/advisories/GHSA-4w7w-66w2-5vf9',
+281 silly audit report       title: 'Vite Vulnerable to Path Traversal in Optimized Deps `.map` Handling',
+281 silly audit report       severity: 'moderate',
+281 silly audit report       vulnerable_versions: '<=6.4.1',
+281 silly audit report       cwe: [Array],
+281 silly audit report       cvss: [Object]
+281 silly audit report     }
+281 silly audit report   ]
+281 silly audit report }
+282 http fetch GET 200 https://registry.npmjs.org/mime-types/-/mime-types-2.1.35.tgz 304ms (cache miss)
+283 http fetch GET 200 https://registry.npmjs.org/es-define-property/-/es-define-property-1.0.1.tgz 311ms (cache miss)
+284 http fetch GET 200 https://registry.npmjs.org/es-object-atoms/-/es-object-atoms-1.1.1.tgz 311ms (cache miss)
+285 http fetch GET 200 https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz 312ms (cache miss)
+286 http fetch GET 200 https://registry.npmjs.org/get-intrinsic/-/get-intrinsic-1.3.0.tgz 311ms (cache miss)
+287 http fetch GET 200 https://registry.npmjs.org/motion-utils/-/motion-utils-12.36.0.tgz 315ms (cache miss)
+288 http fetch GET 200 https://registry.npmjs.org/es-set-tostringtag/-/es-set-tostringtag-2.1.0.tgz 341ms (cache miss)
+289 http fetch GET 200 https://registry.npmjs.org/proxy-from-env/-/proxy-from-env-2.1.0.tgz 346ms (cache miss)
+290 http fetch GET 200 https://registry.npmjs.org/form-data/-/form-data-4.0.5.tgz 501ms (cache miss)
+291 http fetch GET 200 https://registry.npmjs.org/asynckit/-/asynckit-0.4.0.tgz 502ms (cache miss)
+292 http fetch GET 200 https://registry.npmjs.org/combined-stream/-/combined-stream-1.0.8.tgz 503ms (cache miss)
+293 http fetch GET 200 https://registry.npmjs.org/follow-redirects/-/follow-redirects-1.15.11.tgz 502ms (cache miss)
+294 http fetch GET 200 https://registry.npmjs.org/zustand/-/zustand-5.0.12.tgz 508ms (cache miss)
+295 http fetch GET 200 https://registry.npmjs.org/canvas-confetti/-/canvas-confetti-1.9.4.tgz 506ms (cache miss)
+296 http fetch GET 200 https://registry.npmjs.org/@remix-run/router/-/router-1.23.2.tgz 520ms (cache miss)
+297 http fetch GET 200 https://registry.npmjs.org/function-bind/-/function-bind-1.1.2.tgz 625ms (cache miss)
+298 http fetch GET 200 https://registry.npmjs.org/howler/-/howler-2.2.4.tgz 669ms (cache miss)
+299 http fetch GET 200 https://registry.npmjs.org/react-router-dom/-/react-router-dom-6.30.3.tgz 704ms (cache miss)
+300 http fetch GET 200 https://registry.npmjs.org/@gsap/react/-/react-2.1.2.tgz 709ms (cache miss)
+301 http fetch GET 200 https://registry.npmjs.org/axios/-/axios-1.15.0.tgz 714ms (cache miss)
+302 http fetch GET 200 https://registry.npmjs.org/vite 517ms (cache miss)
+303 http fetch GET 200 https://registry.npmjs.org/esbuild 600ms (cache miss)
+304 http fetch GET 200 https://registry.npmjs.org/@vitejs%2fplugin-react 237ms (cache miss)
+305 http fetch GET 200 https://registry.npmjs.org/motion-dom/-/motion-dom-12.38.0.tgz 1131ms (cache miss)
+306 http fetch GET 200 https://registry.npmjs.org/framer-motion/-/framer-motion-12.38.0.tgz 1156ms (cache miss)
+307 http fetch GET 200 https://registry.npmjs.org/lucide-react/-/lucide-react-1.7.0.tgz 1710ms (cache miss)
+308 http fetch GET 200 https://registry.npmjs.org/gsap/-/gsap-3.14.2.tgz 2450ms (cache miss)
+309 silly ADD node_modules/react-router
+310 silly ADD node_modules/@remix-run/router
+311 silly ADD node_modules/mime-db
+312 silly ADD node_modules/dunder-proto
+313 silly ADD node_modules/math-intrinsics
+314 silly ADD node_modules/has-symbols
+315 silly ADD node_modules/gopd
+316 silly ADD node_modules/get-proto
+317 silly ADD node_modules/function-bind
+318 silly ADD node_modules/es-object-atoms
+319 silly ADD node_modules/es-define-property
+320 silly ADD node_modules/call-bind-apply-helpers
+321 silly ADD node_modules/tslib
+322 silly ADD node_modules/motion-utils
+323 silly ADD node_modules/motion-dom
+324 silly ADD node_modules/has-tostringtag
+325 silly ADD node_modules/get-intrinsic
+326 silly ADD node_modules/es-errors
+327 silly ADD node_modules/delayed-stream
+328 silly ADD node_modules/mime-types
+329 silly ADD node_modules/hasown
+330 silly ADD node_modules/es-set-tostringtag
+331 silly ADD node_modules/combined-stream
+332 silly ADD node_modules/asynckit
+333 silly ADD node_modules/proxy-from-env
+334 silly ADD node_modules/form-data
+335 silly ADD node_modules/follow-redirects
+336 silly ADD node_modules/zustand
+337 silly ADD node_modules/react-router-dom
+338 silly ADD node_modules/lucide-react
+339 silly ADD node_modules/howler
+340 silly ADD node_modules/gsap
+341 silly ADD node_modules/framer-motion
+342 silly ADD node_modules/canvas-confetti
+343 silly ADD node_modules/axios
+344 silly ADD node_modules/@gsap/react
+345 silly ADD node_modules/fsevents
+346 silly ADD
+347 silly ADD
+348 silly ADD
+349 silly ADD
+350 silly ADD
+351 silly ADD
+352 silly ADD
+353 silly ADD
+354 silly ADD
+355 silly ADD
+356 silly ADD
+357 silly ADD
+358 silly ADD
+359 silly ADD
+360 silly ADD
+361 silly ADD
+362 silly ADD
+363 silly ADD
+364 silly ADD
+365 silly ADD
+366 silly ADD
+367 silly ADD
+368 silly ADD
+369 silly ADD
+370 silly ADD
+371 silly ADD
+372 silly ADD
+373 silly ADD
+374 silly ADD
+375 silly ADD
+376 silly ADD
+377 silly ADD
+378 silly ADD
+379 silly ADD
+380 silly ADD
+381 silly ADD
+382 silly ADD
+383 silly ADD
+384 silly ADD
+385 silly ADD
+386 silly ADD
+387 silly ADD
+388 silly ADD
+389 silly ADD
+390 silly ADD
+391 silly ADD
+392 verbose exit 0
+393 info ok
