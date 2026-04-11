@@ -10,6 +10,7 @@ import ShowsDistrict from './pages/ShowsDistrict'
 import StreetScene from './pages/StreetScene'
 import Cloud9District from './pages/Cloud9District'
 import Planner from './pages/Planner'
+import MyBookings from './pages/MyBookings'
 
 function App() {
   const location = useLocation()
@@ -27,6 +28,7 @@ function App() {
           <Route path="/districts/cloud9" element={<Cloud9District />} />
           <Route path="/districts/street" element={<StreetScene />} />
           <Route path="/planner" element={<Planner />} />
+          <Route path="/my-bookings" element={<MyBookings />} />
         </Routes>
       </AnimatePresence>
       <Footer />

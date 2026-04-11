@@ -66,6 +66,19 @@ export default function Navbar() {
                 />
               </Link>
             ))}
+            {user && (
+              <Link
+                to="/my-bookings"
+                className="relative font-body font-semibold text-[13px] uppercase tracking-[0.15em] text-neon-gold hover:text-white transition-colors duration-300 py-1 group"
+              >
+                MY BOOKINGS
+                <span
+                  className={`absolute bottom-0 left-0 h-[1px] bg-neon-gold transition-all duration-300 ${
+                    location.pathname === '/my-bookings' ? 'w-full shadow-[0_0_8px_#FFD700]' : 'w-0 group-hover:w-full'
+                  }`}
+                />
+              </Link>
+            )}
           </div>
 
           {/* Right side */}

@@ -273,14 +273,29 @@ function TripVisualizer() {
   )
 }
 
+import { useUserStore } from '../store/userStore'
+
 /* ──────────────────── SUBSTANCE MIXER ──────────────────── */
 function SubstanceMixer() {
+  const { user, coins, removeCoins } = useUserStore()
   const [ingredients, setIngredients] = useState<string[]>([])
   const [result, setResult] = useState<string | null>(null)
   const options = ['🌿 Herb', '🍄 Shroom', '⚡ Energy', '🧊 Ice', '🔥 Spice', '💜 Lean']
 
   const mix = () => {
     if (ingredients.length < 2) return
+    if (!user) {
+      alert("You must Check In first to mix substances.")
+      return
+    }
+    if (coins < 150) {
+      alert("You need 150 coins to mix. Earn more at the Casino.")
+      return
+    }
+    
+    // Attempt purchase
+    if (!removeCoins(150)) return
+
     const results = [
       '🌈 RAINBOW ROAD — You see in 4 dimensions now',
       '🚀 ROCKET FUEL — Houston, we have liftoff',
@@ -367,7 +382,7 @@ function SubstanceMixer() {
         disabled={ingredients.length < 2 || !!result}
         className="px-8 py-3 rounded-lg font-display text-xl tracking-wider border-2 border-[#BF00FF] text-[#BF00FF] bg-transparent hover:bg-[#BF00FF22] transition-all disabled:opacity-30 disabled:cursor-not-allowed"
       >
-        MIX IT UP
+        MIX IT UP — 🪙 150
       </motion.button>
     </div>
   )

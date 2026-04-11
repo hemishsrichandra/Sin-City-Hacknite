@@ -9,28 +9,53 @@ interface AuthModalProps {
 
 export default function AuthModal({ open, onClose }: AuthModalProps) {
   const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [isLogin, setIsLogin] = useState(true)
   const [error, setError] = useState('')
   const [showWelcome, setShowWelcome] = useState(false)
+  const [loading, setLoading] = useState(false)
   const login = useUserStore((s) => s.login)
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const trimmed = username.trim()
-    if (!trimmed) {
-      setError('Enter a name, high roller.')
+    if (!trimmed || !password) {
+      setError('Enter a name and password, high roller.')
       return
     }
-    if (trimmed.length < 2) {
-      setError('Too short. Give us at least 2 characters.')
-      return
+    
+    setLoading(true)
+    setError('')
+    
+    try {
+      const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register'
+      const response = await fetch(`http://localhost:8000${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: trimmed, password })
+      })
+      
+      const data = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(data.detail || 'Authentication failed')
+      }
+      
+      login(data.user.username, data.access_token, data.user.avatar, data.user.coins, data.user.inventory || [], data.user.bookings || [])
+      
+      setShowWelcome(true)
+      setTimeout(() => {
+        setShowWelcome(false)
+        onClose()
+        setUsername('')
+        setPassword('')
+        setIsLogin(true)
+      }, 2000)
+    } catch (err: any) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
     }
-    login(trimmed)
-    setShowWelcome(true)
-    setTimeout(() => {
-      setShowWelcome(false)
-      onClose()
-      setUsername('')
-    }, 2000)
   }
 
   return (
@@ -78,7 +103,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                     animate={{ rotate: [0, -10, 10, -5, 5, 0], scale: [1, 1.2, 1] }}
                     transition={{ duration: 0.8 }}
                   >
-                    🎰
+                    {isLogin ? '🃏' : '🎰'}
                   </motion.div>
                   <h2
                     className="font-display text-4xl mb-2"
@@ -87,27 +112,40 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                       textShadow: '0 0 15px #FFD700, 0 0 40px #FFD70066',
                     }}
                   >
-                    WELCOME!
+                    {isLogin ? 'WELCOME BACK!' : 'WELCOME!'}
                   </h2>
-                  <p className="font-body text-lg text-[var(--text-secondary)]">
-                    You've been credited
-                  </p>
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
-                    className="mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full"
-                    style={{
-                      background: 'rgba(255,215,0,0.1)',
-                      border: '1px solid rgba(255,215,0,0.3)',
-                    }}
-                  >
-                    <span className="text-2xl">🪙</span>
-                    <span className="font-display text-3xl neon-gold">1,000</span>
-                  </motion.div>
-                  <p className="font-mono text-xs text-[var(--text-muted)] mt-4">
-                    Hit the casino floor. Make it count.
-                  </p>
+                  {isLogin ? (
+                    <>
+                      <p className="font-body text-lg text-[var(--text-secondary)]">
+                        Good to see you again.
+                      </p>
+                      <p className="font-mono text-xs text-[var(--text-muted)] mt-4">
+                        The table's warm. Let's play.
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="font-body text-lg text-[var(--text-secondary)]">
+                        You've been credited
+                      </p>
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.3, type: 'spring', stiffness: 200 }}
+                        className="mt-4 inline-flex items-center gap-2 px-6 py-3 rounded-full"
+                        style={{
+                          background: 'rgba(255,215,0,0.1)',
+                          border: '1px solid rgba(255,215,0,0.3)',
+                        }}
+                      >
+                        <span className="text-2xl">🪙</span>
+                        <span className="font-display text-3xl neon-gold">1,000</span>
+                      </motion.div>
+                      <p className="font-mono text-xs text-[var(--text-muted)] mt-4">
+                        Hit the casino floor. Make it count.
+                      </p>
+                    </>
+                  )}
                 </motion.div>
               ) : (
                 <>
@@ -157,8 +195,37 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                           e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'
                           e.currentTarget.style.boxShadow = 'none'
                         }}
-                        autoFocus
-                      />
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block font-mono text-xs text-[var(--text-muted)] mt-4 mb-2 uppercase tracking-wider">
+                          Password
+                        </label>
+                        <input
+                          type="password"
+                          value={password}
+                          onChange={(e) => {
+                            setPassword(e.target.value)
+                            setError('')
+                          }}
+                          placeholder="Your secret code..."
+                          className="w-full px-4 py-3 rounded-lg font-body text-lg text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none transition-all duration-300 focus:ring-2"
+                          style={{
+                            background: 'rgba(255,255,255,0.04)',
+                            border: '1px solid rgba(255,255,255,0.1)',
+                          }}
+                          onFocus={(e) => {
+                            e.currentTarget.style.borderColor = '#FFD70066'
+                            e.currentTarget.style.boxShadow = '0 0 20px rgba(255,215,0,0.1)'
+                          }}
+                          onBlur={(e) => {
+                            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'
+                            e.currentTarget.style.boxShadow = 'none'
+                          }}
+                        />
+                      </div>
+
                       <AnimatePresence>
                         {error && (
                           <motion.p
@@ -171,10 +238,10 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                           </motion.p>
                         )}
                       </AnimatePresence>
-                    </div>
 
                     <motion.button
                       type="submit"
+                      disabled={loading}
                       whileHover={{ scale: 1.02, boxShadow: '0 0 30px #FFD70044' }}
                       whileTap={{ scale: 0.98 }}
                       className="w-full py-4 rounded-lg font-display text-xl tracking-widest transition-all duration-300"
@@ -182,11 +249,22 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
                         background: 'linear-gradient(135deg, #FFD700, #FFA500)',
                         color: '#000',
                         border: 'none',
+                        opacity: loading ? 0.7 : 1
                       }}
                     >
-                      ENTER SIN CITY
+                      {loading ? 'WAITING ON THE DEALER...' : (isLogin ? 'ENTER SIN CITY' : 'JOIN THE HIGH ROLLERS')}
                     </motion.button>
                   </form>
+
+                  {/* Toggle Login/Register */}
+                  <div className="mt-4 text-center">
+                    <button 
+                      onClick={(e) => { e.preventDefault(); setIsLogin(!isLogin); setError(''); }}
+                      className="font-mono text-xs text-neon-cyan hover:text-white transition-colors"
+                    >
+                      {isLogin ? "Don't have an alias? Create one." : "Already checked in? Sign in here."}
+                    </button>
+                  </div>
 
                   {/* Chips display */}
                   <div className="mt-6 text-center">
@@ -201,9 +279,10 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
             {/* Close button */}
             {!showWelcome && (
               <button
-                onClick={onClose}
-                className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
-                style={{ background: 'rgba(255,255,255,0.05)' }}
+                type="button"
+                onClick={(e) => { e.stopPropagation(); onClose(); }}
+                className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full flex items-center justify-center text-[var(--text-muted)] hover:text-white hover:bg-white/10 transition-all duration-200 text-lg"
+                style={{ background: 'rgba(255,255,255,0.08)' }}
               >
                 ✕
               </button>

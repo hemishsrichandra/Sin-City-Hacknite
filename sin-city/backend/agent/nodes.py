@@ -4,7 +4,11 @@ from typing import List
 from agent.state import PlannerState
 from agent.prompts import ITINERARY_PROMPT
 from services.embeddings_service import match_activities_by_embedding
-from services.ollama_service import generate_ollama
+import google.generativeai as genai
+import os
+
+genai.configure(api_key=os.getenv("GEMINI_API_KEY", "missing_key"))
+model = genai.GenerativeModel('gemini-1.5-pro')
 
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
@@ -118,16 +122,20 @@ async def itinerary_builder_node(state: PlannerState) -> dict:
         days=state["days"],
     )
 
-    # Try Ollama first
-    itinerary = await generate_ollama(prompt)
+    # Use Gemini to generate ultra-personalized itinerary
+    try:
+        response = await model.generate_content_async(prompt)
+        itinerary = response.text
+    except Exception as e:
+        print(f"Gemini API Error: {e}")
+        itinerary = generate_fallback_itinerary(state)
 
-    # Fallback if Ollama returns nothing
     if not itinerary or len(itinerary.strip()) < 50:
         itinerary = generate_fallback_itinerary(state)
 
     return {
         "itinerary": itinerary,
-        "messages": ["Itinerary generated successfully"],
+        "messages": ["Itinerary generated successfully via AI"],
     }
 
 

@@ -5,6 +5,7 @@ import BlackjackGame from '../components/casino/BlackjackGame'
 import PokerGame from '../components/casino/PokerGame'
 import SlotMachine from '../components/casino/SlotMachine'
 import FlickerLight from '../components/ui/FlickerLight'
+import AuthModal from '../components/ui/AuthModal'
 import { useUserStore } from '../store/userStore'
 
 const GAMES = [
@@ -17,8 +18,10 @@ const GAMES = [
 export default function CasinoDistrict() {
   const { user, coins } = useUserStore()
   const [activeGame, setActiveGame] = useState('blackjack')
+  const [authOpen, setAuthOpen] = useState(false)
 
   return (
+    <>
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -75,6 +78,33 @@ export default function CasinoDistrict() {
                 <p className="font-body text-sm text-[var(--text-secondary)]">{user.username}'s Wallet</p>
                 <p className="font-display text-3xl neon-gold">🪙 {coins.toLocaleString()}</p>
               </div>
+            </motion.div>
+          )}
+
+          {/* Check In CTA for non-logged-in users */}
+          {!user && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="mt-8"
+            >
+              <motion.button
+                whileHover={{ scale: 1.05, boxShadow: '0 0 40px rgba(255,215,0,0.3)' }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setAuthOpen(true)}
+                className="px-10 py-4 rounded-xl font-display text-xl uppercase tracking-widest transition-all duration-300"
+                style={{
+                  background: 'linear-gradient(135deg, #FFD700, #FFA500)',
+                  color: '#000',
+                  boxShadow: '0 0 20px rgba(255,215,0,0.2)',
+                }}
+              >
+                CHECK IN TO PLAY
+              </motion.button>
+              <p className="font-mono text-xs text-[var(--text-muted)] mt-3">
+                🪙 New players receive 1,000 Sin Coins
+              </p>
             </motion.div>
           )}
         </div>
@@ -191,5 +221,9 @@ export default function CasinoDistrict() {
         </div>
       </section>
     </motion.div>
+
+    {/* Auth Modal */}
+    <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
+    </>
   )
 }

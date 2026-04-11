@@ -9,65 +9,89 @@ import { PlannerFormData } from '../types'
 type Stage = 'quiz' | 'streaming' | 'result'
 
 // Fallback itinerary if backend is unavailable
-const FALLBACK_ITINERARY = `DAY 1: THE GRAND ARRIVAL
+const FALLBACK_ITINERARY = `🎬 DAY 1: THE GRAND ARRIVAL
 
-7:00 PM — Check into The Bellagio
-[District: Casino Floor] [Estimated cost: $350]
-Drop your bags in a suite that overlooks the fountains. The city is already calling your name through the glass.
+💀 VIBE CHECK: The city smells like opportunity and expensive mistakes. Your Consigliere has mapped every move.
 
-8:30 PM — High-Stakes Poker at The Bellagio Poker Room
-[District: Casino Floor] [Estimated cost: $200]
-The most iconic poker room in Las Vegas. The felt is green, the stakes are real.
+7:00 PM — Check into The Bellagio 🎰
+📍 District: Casino Floor
+💰 The Damage: $350
+⚡⚡
+Drop your bags in a suite that overlooks the fountains. The city is already calling your name through the glass. The concierge knows your name before you speak it — that's how we do business.
 
-10:30 PM — Cocktails at The Chandelier Bar
-[District: Casino Floor] [Estimated cost: $60]
-Three levels of crystalline luxury. Order the verbena cocktail on level 1.5 — it changes flavor as you drink it.
+8:30 PM — High-Stakes Poker at The Bellagio Poker Room 🎰
+📍 District: Casino Floor
+💰 The Damage: $200
+⚡⚡⚡
+The felt is green. The stakes are real. The man across from you hasn't blinked in three hands. This is where fortunes change hands between sips of bourbon.
 
-12:00 AM — VIP Table at Hakkasan Nightclub
-[District: Neon Nightlife] [Estimated cost: $300]
-The bass hits different at 2 AM. The DJ knows it. You'll know it too.
+10:30 PM — Cocktails at The Chandelier Bar 🎲
+📍 District: Street Scene
+💰 The Damage: $60
+⚡
+Three levels of crystalline luxury. Order the verbena cocktail on level 1.5 — it changes flavor as you drink it. The bartender's been here since '98.
 
-Tonight was just the appetiser.
+12:00 AM — VIP Table at Hakkasan Nightclub 🌙
+📍 District: Neon Nightlife
+💰 The Damage: $300
+⚡⚡⚡⚡ 🔥
+The bass hits different at 2 AM. The DJ knows it. The smoke machines paint the air silver and gold. This is where the night truly begins.
 
-DAY 2: DOUBLE DOWN
+🔚 Tonight was just the appetiser. The main course arrives tomorrow.
 
-7:30 PM — Dinner at Hell's Kitchen
-[District: The Strip] [Estimated cost: $180]
-Gordon Ramsay's Vegas outpost. The beef Wellington is non-negotiable.
+🎬 DAY 2: DOUBLE DOWN
 
-9:30 PM — Cirque du Soleil — O
-[District: The Strip Shows] [Estimated cost: $150]
-Water, acrobatics, and a dream sequence you won't forget. This is peak Vegas spectacle.
+💀 VIBE CHECK: You didn't come to Vegas to play it safe. The Consigliere has arranged everything.
 
-11:30 PM — Roulette at The Wynn
-[District: Casino Floor] [Estimated cost: $100]
-Put it all on black. Or don't. The wheel doesn't care about your strategy.
+7:30 PM — Dinner at Hell's Kitchen 🎲
+📍 District: Street Scene
+💰 The Damage: $180
+⚡⚡
+Gordon Ramsay's Vegas outpost. The beef Wellington is non-negotiable. The sommelier will choose your wine — trust him.
 
-1:00 AM — Late Night Taco Crawl
-[District: Street Scene] [Estimated cost: $25]
-Follow the locals to the hidden trucks that only appear after midnight. This is where the real flavour lives.
+9:30 PM — Cirque du Noir 🎭
+📍 District: The Strip Shows
+💰 The Damage: $150
+⚡⚡⚡
+Gravity-defying acrobatics in total darkness, lit only by neon laser lines. The performers move like they've made a deal with physics itself.
 
-The house always wins. But tonight, you're the house.
+11:30 PM — Roulette at The Wynn 🎰
+📍 District: Casino Floor
+💰 The Damage: $100
+⚡⚡⚡⚡ 🔥
+Put it all on black. Or don't. The wheel doesn't care about your strategy. But the adrenaline? That's free.
 
-DAY 3: THE LAST HURRAH
+1:00 AM — Late Night Taco Crawl 🎲
+📍 District: Street Scene
+💰 The Damage: $25
+⚡
+Follow the locals to the hidden trucks that only appear after midnight. This is where the real flavor lives.
 
-4:00 PM — Pool Party at Encore Beach Club
-[District: Neon Nightlife] [Estimated cost: $80]
-Sun, bass, and champagne. The perfect afternoon before the final night.
+🔚 The house always wins. But tonight, you ARE the house.
 
-7:00 PM — Hidden Speakeasy Tour
-[District: Street Scene] [Estimated cost: $75]
-Three bars. Three passwords. Zero regrets.
+🎬 DAY 3: THE LAST HURRAH
 
-9:30 PM — The Apothecary (Restricted Zone)
-[District: Cloud 9] [Estimated cost: $100]
-Drop a synthetic tab. Let complete ego dissolution take over as you transcend reality into neon euphoria.
+💀 VIBE CHECK: Last day. Make every second count. No regrets. No mercy.
 
-11:00 PM — One Final Hand at The Cosmopolitan
-[District: Casino Floor] [Estimated cost: $150]
-The last deal of the trip. Make it count.
+7:00 PM — Hidden Speakeasy Tour 🎲
+📍 District: Street Scene
+💰 The Damage: $75
+⚡⚡⚡
+Three bars. Three passwords. Zero regrets. The kind of places that don't show up on Google Maps.
 
-What happens in Sin City... you already know the rest.`
+9:30 PM — Cloud 9 Experience ☁️
+📍 District: Cloud 9
+💰 The Damage: $100
+⚡⚡⚡⚡⚡ 🔥
+Transcend reality in a haze of premium vapor and immersive light tunnels. This is where the boundaries dissolve.
+
+11:00 PM — One Final Hand at The Cosmopolitan 🎰
+📍 District: Casino Floor
+💰 The Damage: $150
+⚡⚡⚡
+The last deal of the trip. The cards are warm. The dealer gives you a nod. Make. It. Count.
+
+🔚 What happens in Sin City... the Consigliere already made sure nobody remembers.`
 
 export default function Planner() {
   const [stage, setStage] = useState<Stage>('quiz')

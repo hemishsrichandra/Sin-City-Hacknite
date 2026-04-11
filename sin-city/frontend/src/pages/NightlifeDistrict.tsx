@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import FlickerLight from '../components/ui/FlickerLight'
 import GlowCard from '../components/ui/GlowCard'
+import AuthModal from '../components/ui/AuthModal'
+import BookingConfirmModal from '../components/ui/BookingConfirmModal'
 import { useUserStore } from '../store/userStore'
 
 import lunaVossImg from '../assets/luna_voss.png'
@@ -19,7 +21,7 @@ const escorts = [
     ethnicity: 'Eastern European', 
     age: '24', 
     specialty: 'Sensual GFE + Deepthroat', 
-    price: 600, 
+    price: 550, 
     tags: ['GFE', 'ORAL', 'ANAL'],
     heat: '🔥🔥🔥🔥',
     image: lunaVossImg
@@ -30,7 +32,7 @@ const escorts = [
     ethnicity: 'Japanese-Korean', 
     age: '22', 
     specialty: 'Shibari & Submissive Play', 
-    price: 550, 
+    price: 670, 
     tags: ['BDSM', 'FETISH', 'ROLEPLAY'],
     heat: '🔥🔥🔥',
     image: sakuraMinxImg
@@ -52,7 +54,7 @@ const escorts = [
     ethnicity: 'Ebony', 
     age: '25', 
     specialty: 'Dominatrix Experience + Foot Worship', 
-    price: 700, 
+    price: 580, 
     tags: ['DOM', 'FETISH', 'BDSM'],
     heat: '🔥🔥🔥🔥',
     image: naomiBlazeImg
@@ -63,7 +65,7 @@ const escorts = [
     ethnicity: 'Latina', 
     age: '23', 
     specialty: 'Pornstar Experience + Squirting', 
-    price: 580, 
+    price: 700, 
     tags: ['PSE', 'SQUIRT', 'ANAL'],
     heat: '🔥🔥🔥',
     image: isabellaRoseImg
@@ -584,9 +586,11 @@ export default function NightlifeDistrict() {
   const [verified, setVerified] = useState(false)
   const [selectedVibe, setSelectedVibe] = useState<string | null>(null)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
+  const [authOpen, setAuthOpen] = useState(false)
+  const [bookingItem, setBookingItem] = useState<{ id: string; name: string; type: string; district: string; price: number; venue?: string; time?: string } | null>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animRef = useRef<number>(0)
-  const { user, coins, removeCoins, addToInventory, hasItem } = useUserStore()
+  const { user, coins, hasItem } = useUserStore()
 
   const filteredEscorts = selectedVibe
     ? escorts.filter(e => e.tags.includes(selectedVibe))
@@ -594,42 +598,42 @@ export default function NightlifeDistrict() {
 
   const handleBookEscort = (escort: typeof escorts[0]) => {
     if (!user) {
-      setToast({ message: 'Log in first to book!', type: 'error' })
+      setAuthOpen(true)
       return
     }
     if (hasItem(escort.id)) {
       setToast({ message: `${escort.name} already booked!`, type: 'error' })
       return
     }
-    if (coins < escort.price) {
-      setToast({ message: `Need ${escort.price - coins} more coins! Hit the Casino! 🎰`, type: 'error' })
-      return
-    }
-    const success = removeCoins(escort.price)
-    if (success) {
-      addToInventory(escort.id)
-      setToast({ message: `${escort.name} booked! 🔥 Enjoy your session.`, type: 'success' })
-    }
+    setBookingItem({
+      id: escort.id,
+      name: escort.name,
+      type: 'escort',
+      district: 'Neon Nightlife',
+      price: escort.price,
+      venue: 'Private Suite',
+      time: 'Tonight',
+    })
   }
 
   const handleBookShow = (show: typeof cabaretShows[0]) => {
     if (!user) {
-      setToast({ message: 'Log in first to book!', type: 'error' })
+      setAuthOpen(true)
       return
     }
     if (hasItem(show.id)) {
       setToast({ message: 'Already reserved!', type: 'error' })
       return
     }
-    if (coins < show.price) {
-      setToast({ message: `Need ${show.price - coins} more coins! Hit the Casino! 🎰`, type: 'error' })
-      return
-    }
-    const success = removeCoins(show.price)
-    if (success) {
-      addToInventory(show.id)
-      setToast({ message: `${show.name} reserved! 🎭`, type: 'success' })
-    }
+    setBookingItem({
+      id: show.id,
+      name: show.name,
+      type: 'cabaret',
+      district: 'Neon Nightlife',
+      price: show.price,
+      venue: show.venue,
+      time: show.time,
+    })
   }
 
   // Bass visualizer
@@ -887,18 +891,6 @@ export default function NightlifeDistrict() {
           </div>
         </section>
 
-        {/* ─── RISQUÉ CARD DEALER ───────────────────────────── */}
-        <section className="py-20 px-6">
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="font-display text-4xl neon-crimson mb-2">THE PRIVATE TABLE</h2>
-            <p className="font-mono text-xs text-[var(--text-secondary)] mb-10">
-              High stakes. Higher pleasure. Private encounters arranged here.
-            </p>
-            <div className="bg-gradient-to-b from-[#0a0a14] to-[#08080F] rounded-2xl p-8 border border-neon-crimson/10">
-              <CardDealerAnimation />
-            </div>
-          </div>
-        </section>
 
         {/* ─── VIP ROOM ─────────────────────────────────────── */}
         <section className="py-16 px-6">
@@ -918,6 +910,16 @@ export default function NightlifeDistrict() {
       <AnimatePresence>
         {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       </AnimatePresence>
+
+      {/* Auth Modal */}
+      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
+
+      {/* Booking Confirm Modal */}
+      <BookingConfirmModal
+        open={!!bookingItem}
+        onClose={() => setBookingItem(null)}
+        item={bookingItem}
+      />
     </>
   )
 }
