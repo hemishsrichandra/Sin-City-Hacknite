@@ -23,7 +23,7 @@ const districts = [
     badge: '21+',
   },
   {
-    name: 'THE STRIP SHOWS',
+    name: 'THE SHOWS',
     icon: '★',
     accentColor: '#BF00FF',
     tagline: 'Spectacle beyond belief.',

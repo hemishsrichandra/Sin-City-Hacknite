@@ -17,7 +17,7 @@ const terminalLines = [
   '> Danger tolerance: MAXIMUM',
   '> Mapping secret routes...',
   '> Day 1: Casino Floor → Nightlife → After Hours',
-  '> Day 2: Strip shows → VIP Room → Cloud 9',
+  '> Day 2: The Shows → VIP Room → Cloud 9',
   '> The Consigliere has spoken. Your playbook is ready.',
 ]
 

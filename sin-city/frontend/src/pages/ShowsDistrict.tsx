@@ -77,7 +77,7 @@ export default function ShowsDistrict() {
           id: bookingItem.id,
           name: bookingItem.name,
           type: 'show',
-          district: 'The Strip Shows',
+          district: 'The Shows',
           price: bookingItem.price,
           venue: bookingItem.venue,
           time: bookingItem.time,
