@@ -9,7 +9,7 @@ export default function SoundToggle() {
 
   useEffect(() => {
     soundRef.current = new Howl({
-      src: ['/ambient.mp3'],
+      src: ['/sounds/casino-ambient.mp3'],
       loop: true,
       volume: 0,
       html5: true,
