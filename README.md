@@ -204,7 +204,7 @@ sin-city/
 
 ## 👥 Team
 
-Built for **HackNite 2025** 🎲
+Built for **HackNite 2026** 🎲
 
 ---
 
