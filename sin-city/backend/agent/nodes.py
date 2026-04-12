@@ -8,7 +8,7 @@ import google.generativeai as genai
 import os
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY", "missing_key"))
-model = genai.GenerativeModel('gemini-1.5-pro')
+model = genai.GenerativeModel('gemini-1.5-flash')
 
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
@@ -123,14 +123,17 @@ async def itinerary_builder_node(state: PlannerState) -> dict:
     )
 
     # Use Gemini to generate ultra-personalized itinerary
+    print(f"DEBUG: Calling Gemini for {state['days']}-day itinerary...")
     try:
         response = await model.generate_content_async(prompt)
         itinerary = response.text
+        if not itinerary or len(itinerary.strip()) < 50:
+            print("WARNING: Gemini returned empty or short response. Falling back.")
+            itinerary = generate_fallback_itinerary(state)
+        else:
+            print(f"DEBUG: Gemini successfully generated {len(itinerary)} chars.")
     except Exception as e:
-        print(f"Gemini API Error: {e}")
-        itinerary = generate_fallback_itinerary(state)
-
-    if not itinerary or len(itinerary.strip()) < 50:
+        print(f"CRITICAL: Gemini API Error: {type(e).__name__}: {e}")
         itinerary = generate_fallback_itinerary(state)
 
     return {

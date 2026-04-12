@@ -223,20 +223,20 @@ export default function InterestQuiz({ onSubmit, initialData }: InterestQuizProp
 
         {step < 4 ? (
           <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.05, boxShadow: '0 0 25px rgba(0, 245, 255, 0.5)' }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => setStep(step + 1)}
             disabled={!canProceed()}
-            className="px-8 py-3 rounded-lg font-body font-semibold text-sm uppercase tracking-wider bg-neon-cyan text-black disabled:opacity-30 disabled:cursor-not-allowed"
+            className="px-8 py-3 rounded-lg font-display text-sm font-bold uppercase tracking-widest bg-neon-cyan text-[#0a0a14] shadow-[0_0_15px_rgba(0,245,255,0.3)] disabled:opacity-20 disabled:cursor-not-allowed transition-all"
           >
             Next →
           </motion.button>
         ) : (
           <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.05, boxShadow: '0 0 40px rgba(255, 0, 110, 0.6)' }}
+            whileTap={{ scale: 0.95 }}
             onClick={handleSubmit}
-            className="px-10 py-3 rounded-lg font-display text-xl tracking-wider bg-neon-pink text-black shadow-[0_0_20px_#FF006E44]"
+            className="px-10 py-4 rounded-lg font-display text-xl font-bold tracking-widest bg-neon-pink text-white shadow-[0_0_20px_rgba(255,0,110,0.4)] transition-all"
           >
             GENERATE MY ITINERARY
           </motion.button>

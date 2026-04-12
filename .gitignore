@@ -2,4 +2,5 @@
 node_modules/
 .env
 .npm-cache/
+node_dist/
 Navigate to http://localhost:5173/ again. The conflict between .browserslistrc and package.json has been resolved. Verify that the website now loads correctly. Check for the "SIN CITY" noir theme and "THE FAMILY IS WATCHING" text. Take a final screenshot of the homepage and confirm everything is running smoothly.

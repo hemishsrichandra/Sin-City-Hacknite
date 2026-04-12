@@ -25,6 +25,9 @@ def embed_text(text: str) -> np.ndarray:
     return _model.encode(text, show_progress_bar=False)
 
 
+# Cache for activity embeddings to avoid redundant re-generation
+_ACTIVITY_EMBEDDINGS_CACHE = {}
+
 def match_activities_by_embedding(
     profile_summary: str,
     activities: List[dict],
@@ -39,8 +42,16 @@ def match_activities_by_embedding(
 
     scored = []
     for act in activities:
-        desc = f"{act['name']} {act['description']} {' '.join(act.get('tags', []))}"
-        act_embedding = embed_text(desc)
+        # Generate a unique key for the activity content
+        act_id = act.get("id", act.get("name", ""))
+        
+        if act_id in _ACTIVITY_EMBEDDINGS_CACHE:
+            act_embedding = _ACTIVITY_EMBEDDINGS_CACHE[act_id]
+        else:
+            desc = f"{act['name']} {act['description']} {' '.join(act.get('tags', []))}"
+            act_embedding = embed_text(desc)
+            _ACTIVITY_EMBEDDINGS_CACHE[act_id] = act_embedding
+            
         score = cosine_similarity(profile_embedding, act_embedding)
         scored.append((score, act))
 
