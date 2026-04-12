@@ -27,16 +27,12 @@ app = FastAPI(title="Sin City AI Planner", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://localhost:5174",
-        "http://localhost:3000",
-        "https://*.vercel.app",
-    ],
-    allow_credentials=True,
+    allow_origins=["*"],  # Allow all origins for cross-device access
+    allow_credentials=False,  # Must be False when allow_origins=["*"]
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 
 @app.post("/api/plan")

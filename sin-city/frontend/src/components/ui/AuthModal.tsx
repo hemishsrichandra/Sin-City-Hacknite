@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useUserStore } from '../../store/userStore'
+import { API_URL } from '../../utils/api'
 
 interface AuthModalProps {
   open: boolean
@@ -29,7 +30,7 @@ export default function AuthModal({ open, onClose }: AuthModalProps) {
     
     try {
       const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register'
-      const response = await fetch(`http://localhost:8000${endpoint}`, {
+      const response = await fetch(`${API_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: trimmed, password })

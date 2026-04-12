@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { API_URL } from '../utils/api'
 
 export interface Booking {
   id: string
@@ -87,7 +88,7 @@ export const useUserStore = create<UserState>()(
         if (!token) return
         
         try {
-          await fetch('http://localhost:8000/api/user/sync', {
+          await fetch(`${API_URL}/api/user/sync`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

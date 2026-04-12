@@ -5,10 +5,13 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
+    host: true, // Expose to the network so other devices can connect
+    port: 5173,
     fs: {
       allow: [
         '..',
-        '/Users/hemish/.gemini/antigravity/brain'
+        '/Users/hemish/.gemini/antigravity/brain',
+        '/Users/adarshsingh/.gemini/antigravity/brain'
       ]
     }
   }
