@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import FlickerLight from '../components/ui/FlickerLight'
-import AuthModal from '../components/ui/AuthModal'
 import BookingConfirmModal from '../components/ui/BookingConfirmModal'
 import { useUserStore } from '../store/userStore'
 
@@ -15,17 +14,12 @@ const shows = [
 ]
 
 export default function ShowsDistrict() {
-  const { user, coins, hasItem } = useUserStore()
+  const { coins, hasItem } = useUserStore()
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
   const [selectedShow, setSelectedShow] = useState<typeof shows[0] | null>(null)
-  const [authOpen, setAuthOpen] = useState(false)
   const [bookingItem, setBookingItem] = useState<typeof shows[0] | null>(null)
 
   const handleBookTicket = (show: typeof shows[0]) => {
-    if (!user) {
-      setAuthOpen(true)
-      return
-    }
     if (hasItem(show.id)) {
       setToast({ message: `${show.name} ticket already purchased!`, type: 'error' })
       return
@@ -73,8 +67,7 @@ export default function ShowsDistrict() {
         )}
       </AnimatePresence>
 
-      {/* Auth Modal (appears when unauthenticated user tries to book) */}
-      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
+      {/* Auth Modal removed — auth is enforced at App level */}
 
       {/* Booking Confirm Modal */}
       <BookingConfirmModal
@@ -203,19 +196,17 @@ export default function ShowsDistrict() {
               World-class spectacles, exclusive front-row seats, and unforgettable nights. Prepare to be mesmerized.
             </p>
 
-            {/* Coin balance */}
-            {user && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="mt-6 inline-flex items-center gap-2 px-5 py-2 rounded-full"
-                style={{ background: 'rgba(255,215,0,0.08)', border: '1px solid rgba(255,215,0,0.2)' }}
-              >
-                <span className="font-display text-lg neon-gold">🪙 {coins.toLocaleString()}</span>
-                <span className="font-mono text-xs text-[var(--text-muted)]">available</span>
-              </motion.div>
-            )}
+            {/* Coin balance - always shown (user is always authed) */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="mt-6 inline-flex items-center gap-2 px-5 py-2 rounded-full"
+              style={{ background: 'rgba(255,215,0,0.08)', border: '1px solid rgba(255,215,0,0.2)' }}
+            >
+              <span className="font-display text-lg neon-gold">🪙 {coins.toLocaleString()}</span>
+              <span className="font-mono text-xs text-[var(--text-muted)]">available</span>
+            </motion.div>
           </motion.div>
         </div>
       </section>

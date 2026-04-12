@@ -86,7 +86,7 @@ const PAYOUT_TABLE = [
 type GamePhase = 'betting' | 'deal' | 'draw' | 'result'
 
 export default function PokerGame() {
-  const { user, coins, addCoins, removeCoins } = useUserStore()
+  const { coins, addCoins, removeCoins } = useUserStore()
   const [bet, setBet] = useState(25)
   const [deck, setDeck] = useState<Card[]>([])
   const [hand, setHand] = useState<Card[]>([])
@@ -97,7 +97,7 @@ export default function PokerGame() {
   const betOptions = [10, 25, 50, 100, 250]
 
   const dealCards = useCallback(() => {
-    if (!user || coins < bet) return
+    if (coins < bet) return
     removeCoins(bet)
     const newDeck = createDeck()
     const dealtHand = [newDeck.pop()!, newDeck.pop()!, newDeck.pop()!, newDeck.pop()!, newDeck.pop()!]
@@ -105,7 +105,7 @@ export default function PokerGame() {
     setHand(dealtHand)
     setResult(null)
     setPhase('deal')
-  }, [user, coins, bet, removeCoins])
+  }, [coins, bet, removeCoins])
 
   const toggleHold = (index: number) => {
     if (phase !== 'deal') return
@@ -138,20 +138,6 @@ export default function PokerGame() {
 
     setPhase('result')
   }, [phase, deck, hand, bet, addCoins])
-
-  if (!user) {
-    return (
-      <div className="text-center py-12">
-        <div className="text-5xl mb-4">🎴</div>
-        <p className="font-display text-2xl text-[var(--text-secondary)]">
-          LOG IN TO PLAY POKER
-        </p>
-        <p className="font-mono text-xs text-[var(--text-muted)] mt-2">
-          Check in at the top to receive your chips
-        </p>
-      </div>
-    )
-  }
 
   return (
     <div className="flex flex-col items-center">

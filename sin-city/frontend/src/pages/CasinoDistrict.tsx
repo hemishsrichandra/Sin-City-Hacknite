@@ -5,7 +5,6 @@ import BlackjackGame from '../components/casino/BlackjackGame'
 import PokerGame from '../components/casino/PokerGame'
 import SlotMachine from '../components/casino/SlotMachine'
 import FlickerLight from '../components/ui/FlickerLight'
-import AuthModal from '../components/ui/AuthModal'
 import { useUserStore } from '../store/userStore'
 
 const GAMES = [
@@ -16,9 +15,8 @@ const GAMES = [
 ]
 
 export default function CasinoDistrict() {
-  const { user, coins } = useUserStore()
+  const { firebaseUser, coins } = useUserStore()
   const [activeGame, setActiveGame] = useState('blackjack')
-  const [authOpen, setAuthOpen] = useState(false)
 
   return (
     <>
@@ -61,52 +59,27 @@ export default function CasinoDistrict() {
           </motion.p>
 
           {/* Balance display */}
-          {user && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mt-8 inline-flex items-center gap-3 px-8 py-4 rounded-2xl"
-              style={{
-                background: 'rgba(255,215,0,0.06)',
-                border: '1px solid rgba(255,215,0,0.2)',
-                boxShadow: '0 0 40px rgba(255,215,0,0.05)',
-              }}
-            >
-              <span className="text-2xl">{user.avatar}</span>
-              <div className="text-left">
-                <p className="font-body text-sm text-[var(--text-secondary)]">{user.username}'s Wallet</p>
-                <p className="font-display text-3xl neon-gold">🪙 {coins.toLocaleString()}</p>
-              </div>
-            </motion.div>
-          )}
-
-          {/* Check In CTA for non-logged-in users */}
-          {!user && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mt-8"
-            >
-              <motion.button
-                whileHover={{ scale: 1.05, boxShadow: '0 0 40px rgba(255,215,0,0.3)' }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setAuthOpen(true)}
-                className="px-10 py-4 rounded-xl font-display text-xl uppercase tracking-widest transition-all duration-300"
-                style={{
-                  background: 'linear-gradient(135deg, #FFD700, #FFA500)',
-                  color: '#000',
-                  boxShadow: '0 0 20px rgba(255,215,0,0.2)',
-                }}
-              >
-                CHECK IN TO PLAY
-              </motion.button>
-              <p className="font-mono text-xs text-[var(--text-muted)] mt-3">
-                🪙 New players receive 1,000 Sin Coins
-              </p>
-            </motion.div>
-          )}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="mt-8 inline-flex items-center gap-3 px-8 py-4 rounded-2xl"
+            style={{
+              background: 'rgba(255,215,0,0.06)',
+              border: '1px solid rgba(255,215,0,0.2)',
+              boxShadow: '0 0 40px rgba(255,215,0,0.05)',
+            }}
+          >
+            {firebaseUser?.photoURL ? (
+              <img src={firebaseUser.photoURL} alt="" referrerPolicy="no-referrer" className="w-8 h-8 rounded-full border border-white/20" />
+            ) : (
+              <span className="text-2xl">🎰</span>
+            )}
+            <div className="text-left">
+              <p className="font-body text-sm text-[var(--text-secondary)]">{firebaseUser?.displayName?.split(' ')[0]}'s Wallet</p>
+              <p className="font-display text-3xl neon-gold">🪙 {coins.toLocaleString()}</p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -222,8 +195,6 @@ export default function CasinoDistrict() {
       </section>
     </motion.div>
 
-    {/* Auth Modal */}
-    <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
     </>
   )
 }

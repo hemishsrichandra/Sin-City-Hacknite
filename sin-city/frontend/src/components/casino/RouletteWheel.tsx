@@ -46,7 +46,7 @@ function isBetWin(b: BetType, result: number): boolean {
 }
 
 export default function RouletteWheel() {
-  const { user, coins, addCoins, removeCoins } = useUserStore()
+  const { coins, addCoins, removeCoins } = useUserStore()
   const [spinning, setSpinning] = useState(false)
   const [result, setResult] = useState<number | null>(null)
   const [rotation, setRotation] = useState(0)
@@ -67,7 +67,7 @@ export default function RouletteWheel() {
   ]
 
   const spin = useCallback(() => {
-    if (spinning || !user) return
+    if (spinning) return
     if (!selectedBet) {
       setWinMessage('Pick a bet first!')
       return
@@ -112,21 +112,8 @@ export default function RouletteWheel() {
         setWinAmount(-betAmount)
       }
     }, 4000)
-  }, [spinning, user, selectedBet, coins, betAmount, rotation, removeCoins, addCoins])
+  }, [spinning, selectedBet, coins, betAmount, rotation, removeCoins, addCoins])
 
-  if (!user) {
-    return (
-      <div className="text-center py-12">
-        <div className="text-5xl mb-4">🎡</div>
-        <p className="font-display text-2xl text-[var(--text-secondary)]">
-          LOG IN TO PLAY ROULETTE
-        </p>
-        <p className="font-mono text-xs text-[var(--text-muted)] mt-2">
-          Check in at the top to receive your chips
-        </p>
-      </div>
-    )
-  }
 
   return (
     <div className="flex flex-col items-center">

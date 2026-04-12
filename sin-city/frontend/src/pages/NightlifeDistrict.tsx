@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import FlickerLight from '../components/ui/FlickerLight'
 import GlowCard from '../components/ui/GlowCard'
-import AuthModal from '../components/ui/AuthModal'
 import BookingConfirmModal from '../components/ui/BookingConfirmModal'
 import { useUserStore } from '../store/userStore'
 
@@ -246,90 +245,10 @@ function FlickeringNeonSign({ text, color = '#E60039' }: { text: string; color?:
 }
 
 // ─── RISQUÉ CARD DEALER ────────────────────────────────────────────────────────
-function CardDealerAnimation() {
-  const cards = ['♠️', '♥️', '♦️', '♣️']
-  const [dealtCards, setDealtCards] = useState<number[]>([])
-  const [dealing, setDealing] = useState(false)
-  const deal = () => {
-    if (dealing) return
-    setDealing(true)
-    setDealtCards([])
-   
-    cards.forEach((_, i) => {
-      setTimeout(() => {
-        setDealtCards(prev => [...prev, i])
-        if (i === cards.length - 1) {
-          setTimeout(() => setDealing(false), 500)
-        }
-      }, i * 400)
-    })
-  }
-  return (
-    <div className="flex flex-col items-center">
-      {/* Dealer silhouette */}
-      <div className="relative mb-6">
-        <svg viewBox="0 0 200 120" className="w-48 h-28">
-          {/* Table edge */}
-          <path d="M 0 100 Q 100 120 200 100" stroke="#FFD700" strokeWidth="2" fill="none" opacity="0.5" />
-          <ellipse cx="100" cy="105" rx="90" ry="15" fill="#0a3d0a" opacity="0.3" />
-          {/* Dealer silhouette */}
-          <circle cx="100" cy="30" r="15" fill="#111" />
-          <path d="M 75 45 Q 100 40 125 45 L 120 85 Q 100 90 80 85 Z" fill="#111" />
-          {/* Bow tie */}
-          <motion.g animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2, repeat: Infinity }}>
-            <polygon points="93,48 100,52 107,48 100,44" fill="#E60039" />
-          </motion.g>
-          {/* Dealing arm */}
-          <motion.path
-            d="M 125 55 L 150 70 L 155 68"
-            stroke="#111"
-            strokeWidth="5"
-            strokeLinecap="round"
-            fill="none"
-            animate={dealing ? { d: ['M 125 55 L 150 70 L 155 68', 'M 125 55 L 160 60 L 170 55', 'M 125 55 L 150 70 L 155 68'] } : {}}
-            transition={{ duration: 0.3, repeat: dealing ? Infinity : 0 }}
-          />
-        </svg>
-      </div>
-      {/* Dealt cards */}
-      <div className="flex gap-3 mb-6 h-24">
-        <AnimatePresence>
-          {dealtCards.map((cardIdx) => (
-            <motion.div
-              key={cardIdx}
-              initial={{ rotateY: 180, x: -50, opacity: 0 }}
-              animate={{ rotateY: 0, x: 0, opacity: 1 }}
-              exit={{ y: 20, opacity: 0 }}
-              transition={{ duration: 0.4 }}
-              className="w-16 h-24 rounded-lg flex items-center justify-center text-3xl font-bold border"
-              style={{
-                background: 'linear-gradient(135deg, #1a1a2e, #16213e)',
-                borderColor: cardIdx % 2 === 1 ? '#E60039' : '#888',
-                color: cardIdx % 2 === 1 ? '#E60039' : '#ddd',
-                boxShadow: cardIdx % 2 === 1 ? '0 0 15px #E6003944' : 'none',
-              }}
-            >
-              {cards[cardIdx]}
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={deal}
-        disabled={dealing}
-        className="px-8 py-2 rounded-lg font-display text-lg tracking-wider border border-neon-crimson text-neon-crimson hover:bg-neon-crimson hover:text-black transition-all disabled:opacity-50"
-      >
-        {dealing ? 'DEALING...' : 'DEAL ME IN'}
-      </motion.button>
-    </div>
-  )
-}
 
 // ─── MATURE VIP ROOM ───────────────────────────────────────────────────────────
 function VIPRoom() {
-  const { user, coins, removeCoins, addToInventory, hasItem } = useUserStore()
+  const { coins, removeCoins, addToInventory, hasItem } = useUserStore()
   const [unlocking, setUnlocking] = useState(false)
   const [unlocked, setUnlocked] = useState(false)
   const [keySequence, setKeySequence] = useState<string[]>([])
@@ -384,10 +303,6 @@ function VIPRoom() {
   }
 
   const handleBuyVip = (item: typeof vipItems[0]) => {
-    if (!user) {
-      setToast({ message: 'Log in first to book!', type: 'error' })
-      return
-    }
     if (hasItem(item.id)) {
       setToast({ message: 'Already booked!', type: 'error' })
       return
@@ -586,21 +501,16 @@ export default function NightlifeDistrict() {
   const [verified, setVerified] = useState(false)
   const [selectedVibe, setSelectedVibe] = useState<string | null>(null)
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
-  const [authOpen, setAuthOpen] = useState(false)
   const [bookingItem, setBookingItem] = useState<{ id: string; name: string; type: string; district: string; price: number; venue?: string; time?: string } | null>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animRef = useRef<number>(0)
-  const { user, coins, hasItem } = useUserStore()
+  const { coins, hasItem } = useUserStore()
 
   const filteredEscorts = selectedVibe
     ? escorts.filter(e => e.tags.includes(selectedVibe))
     : escorts
 
   const handleBookEscort = (escort: typeof escorts[0]) => {
-    if (!user) {
-      setAuthOpen(true)
-      return
-    }
     if (hasItem(escort.id)) {
       setToast({ message: `${escort.name} already booked!`, type: 'error' })
       return
@@ -617,10 +527,6 @@ export default function NightlifeDistrict() {
   }
 
   const handleBookShow = (show: typeof cabaretShows[0]) => {
-    if (!user) {
-      setAuthOpen(true)
-      return
-    }
     if (hasItem(show.id)) {
       setToast({ message: 'Already reserved!', type: 'error' })
       return
@@ -714,19 +620,17 @@ export default function NightlifeDistrict() {
               Premium escorts • Explicit encounters • No limits after midnight
             </motion.p>
 
-            {/* Coin balance on page */}
-            {user && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                className="mt-6 inline-flex items-center gap-2 px-5 py-2 rounded-full"
-                style={{ background: 'rgba(255,215,0,0.08)', border: '1px solid rgba(255,215,0,0.2)' }}
-              >
-                <span className="font-display text-lg neon-gold">🪙 {coins.toLocaleString()}</span>
-                <span className="font-mono text-xs text-[var(--text-muted)]">available</span>
-              </motion.div>
-            )}
+            {/* Coin balance - always shown (auth enforced globally) */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+              className="mt-6 inline-flex items-center gap-2 px-5 py-2 rounded-full"
+              style={{ background: 'rgba(255,215,0,0.08)', border: '1px solid rgba(255,215,0,0.2)' }}
+            >
+              <span className="font-display text-lg neon-gold">🪙 {coins.toLocaleString()}</span>
+              <span className="font-mono text-xs text-[var(--text-muted)]">available</span>
+            </motion.div>
           </div>
         </section>
 
@@ -911,8 +815,6 @@ export default function NightlifeDistrict() {
         {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
       </AnimatePresence>
 
-      {/* Auth Modal */}
-      <AuthModal open={authOpen} onClose={() => setAuthOpen(false)} />
 
       {/* Booking Confirm Modal */}
       <BookingConfirmModal

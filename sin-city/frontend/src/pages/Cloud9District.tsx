@@ -277,17 +277,13 @@ import { useUserStore } from '../store/userStore'
 
 /* ──────────────────── SUBSTANCE MIXER ──────────────────── */
 function SubstanceMixer() {
-  const { user, coins, removeCoins } = useUserStore()
+  const { coins, removeCoins } = useUserStore()
   const [ingredients, setIngredients] = useState<string[]>([])
   const [result, setResult] = useState<string | null>(null)
   const options = ['🌿 Herb', '🍄 Shroom', '⚡ Energy', '🧊 Ice', '🔥 Spice', '💜 Lean']
 
   const mix = () => {
     if (ingredients.length < 2) return
-    if (!user) {
-      alert("You must Check In first to mix substances.")
-      return
-    }
     if (coins < 150) {
       alert("You need 150 coins to mix. Earn more at the Casino.")
       return

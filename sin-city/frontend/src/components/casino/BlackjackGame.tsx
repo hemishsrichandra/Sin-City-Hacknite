@@ -109,7 +109,7 @@ function CardComponent({ card, index, small }: { card: Card; index: number; smal
 }
 
 export default function BlackjackGame() {
-  const { user, coins, addCoins, removeCoins } = useUserStore()
+  const { coins, addCoins, removeCoins } = useUserStore()
   const [bet, setBet] = useState(50)
   const [deck, setDeck] = useState<Card[]>([])
   const [playerCards, setPlayerCards] = useState<Card[]>([])
@@ -121,7 +121,6 @@ export default function BlackjackGame() {
   const betOptions = [25, 50, 100, 250, 500]
 
   const startGame = useCallback(() => {
-    if (!user) return
     if (coins < bet) {
       setMessage('Not enough coins!')
       return
@@ -159,7 +158,7 @@ export default function BlackjackGame() {
       }
       setGameState('result')
     }
-  }, [user, coins, bet, removeCoins, addCoins])
+  }, [coins, bet, removeCoins, addCoins])
 
   const hit = useCallback(() => {
     if (gameState !== 'playing') return
@@ -171,7 +170,7 @@ export default function BlackjackGame() {
 
     if (handValue(newPlayerCards) > 21) {
       // Bust - reveal dealer
-      const revealedDealer = dealerCards.map(c => ({ ...c, hidden: false }))
+      const revealedDealer = dealerCards.map(c => ({ ...c, hidden: false } as Card))
       setDealerCards(revealedDealer)
       setMessage('BUST! 💥')
       setWinAmount(-bet)
@@ -183,7 +182,7 @@ export default function BlackjackGame() {
     if (gameState !== 'playing') return
 
     // Reveal dealer card
-    const revealedDealer = dealerCards.map(c => ({ ...c, hidden: false }))
+    const revealedDealer = dealerCards.map(c => ({ ...c, hidden: false } as Card))
     setDealerCards(revealedDealer)
     setGameState('dealer')
 
@@ -245,7 +244,7 @@ export default function BlackjackGame() {
     setPlayerCards(newPlayerCards)
 
     if (handValue(newPlayerCards) > 21) {
-      const revealedDealer = dealerCards.map(c => ({ ...c, hidden: false }))
+      const revealedDealer = dealerCards.map(c => ({ ...c, hidden: false } as Card))
       setDealerCards(revealedDealer)
       setMessage('BUST on Double Down! 💥')
       setWinAmount(-doubleBet)
@@ -254,7 +253,7 @@ export default function BlackjackGame() {
     }
 
     // Auto-stand after double
-    const revealedDealer = dealerCards.map(c => ({ ...c, hidden: false }))
+    const revealedDealer = dealerCards.map(c => ({ ...c, hidden: false } as Card))
     setDealerCards(revealedDealer)
     setGameState('dealer')
 
@@ -294,19 +293,6 @@ export default function BlackjackGame() {
     setTimeout(drawDealer, 600)
   }, [gameState, playerCards, deck, dealerCards, bet, coins, removeCoins, addCoins])
 
-  if (!user) {
-    return (
-      <div className="text-center py-12">
-        <div className="text-5xl mb-4">🃏</div>
-        <p className="font-display text-2xl text-[var(--text-secondary)]">
-          LOG IN TO PLAY BLACKJACK
-        </p>
-        <p className="font-mono text-xs text-[var(--text-muted)] mt-2">
-          Check in at the top to receive your chips
-        </p>
-      </div>
-    )
-  }
 
   return (
     <div className="flex flex-col items-center">

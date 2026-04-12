@@ -22,7 +22,7 @@ function generateRefCode(): string {
 }
 
 export default function BookingConfirmModal({ open, onClose, item }: BookingConfirmModalProps) {
-  const { user, coins, removeCoins, addToInventory, addBooking, hasItem } = useUserStore()
+  const { coins, removeCoins, addToInventory, addBooking, hasItem } = useUserStore()
   const [stage, setStage] = useState<'confirm' | 'success'>('confirm')
   const [refCode] = useState(generateRefCode)
 
@@ -32,7 +32,7 @@ export default function BookingConfirmModal({ open, onClose, item }: BookingConf
   const canAfford = coins >= item.price
 
   const handleConfirm = () => {
-    if (!user || alreadyOwned || !canAfford) return
+    if (alreadyOwned || !canAfford) return
 
     const success = removeCoins(item.price)
     if (success) {

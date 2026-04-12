@@ -28,7 +28,7 @@ function calculatePayout(results: string[], bet: number): { payout: number; labe
 }
 
 export default function SlotMachine() {
-  const { user, coins, addCoins, removeCoins } = useUserStore()
+  const { coins, addCoins, removeCoins } = useUserStore()
   const [reels, setReels] = useState<string[][]>([generateStrip(), generateStrip(), generateStrip()])
   const [spinning, setSpinning] = useState(false)
   const [results, setResults] = useState<string[]>(['🍒', '💎', '7️⃣'])
@@ -40,7 +40,7 @@ export default function SlotMachine() {
   const betOptions = [10, 25, 50, 100]
 
   const spin = useCallback(() => {
-    if (spinning || !user) return
+    if (spinning) return
     if (coins < bet) {
       setWinInfo({ payout: 0, label: 'Not enough coins!' })
       return
@@ -121,21 +121,8 @@ export default function SlotMachine() {
       }
       requestAnimationFrame(animate)
     })
-  }, [spinning, user, coins, bet, removeCoins, addCoins])
+  }, [spinning, coins, bet, removeCoins, addCoins])
 
-  if (!user) {
-    return (
-      <div className="text-center py-12">
-        <div className="text-5xl mb-4">🎰</div>
-        <p className="font-display text-2xl text-[var(--text-secondary)]">
-          LOG IN TO PLAY SLOTS
-        </p>
-        <p className="font-mono text-xs text-[var(--text-muted)] mt-2">
-          Check in at the top to receive your chips
-        </p>
-      </div>
-    )
-  }
 
   return (
     <div className="flex flex-col items-center">

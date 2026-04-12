@@ -2,7 +2,6 @@ import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { useUserStore, Booking } from '../store/userStore'
 import FlickerLight from '../components/ui/FlickerLight'
-import { useEffect } from 'react'
 
 const districtIcons: Record<string, string> = {
   'The Strip Shows': '🎭',
@@ -19,13 +18,8 @@ const statusColors: Record<string, { bg: string; text: string; border: string }>
 
 export default function MyBookings() {
   const navigate = useNavigate()
-  const { user, coins, bookings } = useUserStore()
-
-  useEffect(() => {
-    if (!user) navigate('/')
-  }, [user, navigate])
-
-  if (!user) return null
+  const { coins, bookings } = useUserStore()
+  // Auth is globally enforced by App.tsx — no redirect needed here
 
   const activeBookings = bookings.filter(b => b.status === 'confirmed')
   const pastBookings = bookings.filter(b => b.status !== 'confirmed')
@@ -190,8 +184,8 @@ function BookingCard({ booking, index }: { booking: Booking; index: number }) {
           <span className="font-mono text-xs text-[var(--text-muted)]">
             {date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
           </span>
-          {booking.details?.venue && (
-            <span className="font-mono text-xs text-[var(--text-muted)]">{booking.details.venue}</span>
+          {Boolean(booking.details?.venue) && (
+            <span className="font-mono text-xs text-[var(--text-muted)]">{String(booking.details!.venue)}</span>
           )}
         </div>
       </div>
