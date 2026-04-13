@@ -9,6 +9,18 @@ const ROUTE_REFRESH_MS = 30_000  // 30 seconds
 const PATROL_MOVE_MS   = 2_500   // police move every 2.5s
 const CAR_STEP_MS      = 300     // ms between each road-point step (~city driving speed)
 
+// ── Las Vegas fixed coordinates ──────────────────────────────────────────────
+// Start: MGM Grand (south end of Strip)
+const LV_START  = { lat: 36.1020, lng: -115.1721 }
+// Safe House: Fremont Street Experience (Downtown Las Vegas)
+const LV_SAFE   = { lat: 36.1699, lng: -115.1425 }
+// Police patrol spawn points (real Strip intersections)
+const LV_POLICE = [
+  { id: 'K9-1', lat: 36.1163, lng: -115.1745 },  // Caesars Palace
+  { id: 'K9-2', lat: 36.1283, lng: -115.1641 },  // Wynn / Encore
+  { id: 'K9-3', lat: 36.0907, lng: -115.1763 },  // Mandalay Bay
+]
+
 // Custom Leaflet icons — inline SVG so no image file needed
 const makeIcon = (color: string, label: string) => L.divIcon({
   className: '',
@@ -105,8 +117,8 @@ export default function GetawayGrid() {
   const carStepIdx  = useRef(0)                        // which coord the car is at
   const carMoveRef  = useRef<ReturnType<typeof setInterval> | null>(null) // car animation
 
-  const [phase, setPhase]           = useState<'locating' | 'ready' | 'active' | 'won'>('locating')
-  const [narrative, setNarrative]   = useState('ACQUIRING YOUR SIGNAL. STAND BY...')
+  const [phase, setPhase]           = useState<'ready' | 'active' | 'won'>('ready')
+  const [narrative, setNarrative]   = useState('LAS VEGAS GRID ONLINE. MGM GRAND → FREMONT STREET. HIT LAUNCH TO BEGIN EVASION.')
   const [heatLevel, setHeatLevel]   = useState(1)
   const [policeETA, setPoliceETA]   = useState<number | null>(null)
   const [timeLeft, setTimeLeft]     = useState(ROUTE_REFRESH_MS / 1000)
@@ -119,7 +131,8 @@ export default function GetawayGrid() {
     if (!mapRef.current || mapObj.current) return
 
     const map = L.map(mapRef.current, {
-      zoom: 15,
+      center: [LV_START.lat, LV_START.lng],
+      zoom: 14,
       zoomControl: false,
       attributionControl: false,
     })
@@ -133,57 +146,45 @@ export default function GetawayGrid() {
     mapObj.current = map
   }, [])
 
-  // ── Get real GPS location ────────────────────────────────────────────────────
+  // ── Initialize Las Vegas fixed city ──────────────────────────────────────────
   useEffect(() => {
-    if (!navigator.geolocation) {
-      setNarrative('GPS UNAVAILABLE. ENABLE LOCATION ACCESS.')
-      return
-    }
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const loc = { lat: pos.coords.latitude, lng: pos.coords.longitude }
-        playerPos.current = loc
+    // Wait for the map to be ready (runs after map-build effect)
+    const init = () => {
+      if (!mapObj.current) { setTimeout(init, 50); return }
 
-        if (!mapObj.current) return
-        mapObj.current.setView([loc.lat, loc.lng], 15)
+      playerPos.current = { ...LV_START }
 
-        // Player marker — directional arrow car
-        playerMark.current = L.marker([loc.lat, loc.lng], { icon: makeCarIcon(0), zIndexOffset: 1000 })
-          .addTo(mapObj.current)
-          .bindPopup('<b style="font-family:monospace;color:#00F5FF">YOU // MOVING TARGET</b>')
+      // Player car marker at MGM Grand
+      playerMark.current = L.marker([LV_START.lat, LV_START.lng], { icon: makeCarIcon(0), zIndexOffset: 1000 })
+        .addTo(mapObj.current)
+        .bindPopup('<b style="font-family:monospace;color:#00F5FF">GETAWAY CAR // MGM GRAND</b>')
 
-        // Place safe house ~1km northeast
-        const safe = { lat: loc.lat + 0.009, lng: loc.lng + 0.011 }
-        setSafeHousePos(safe)
-        safeMark.current = L.marker([safe.lat, safe.lng], { icon: SAFE_ICON })
+      // Safe house marker at Fremont Street
+      setSafeHousePos(LV_SAFE)
+      safeMark.current = L.marker([LV_SAFE.lat, LV_SAFE.lng], { icon: SAFE_ICON })
+        .addTo(mapObj.current)
+        .bindPopup('<b style="font-family:monospace;color:#00FF88">EXTRACTION // FREMONT STREET</b>')
+
+      // Police units at real Strip intersections
+      patrols.current = LV_POLICE.map(o => ({
+        id: o.id,
+        lat: o.lat,
+        lng: o.lng,
+        marker: L.marker([o.lat, o.lng], { icon: POLICE_ICON })
           .addTo(mapObj.current!)
-          .bindPopup('<b style="font-family:monospace;color:#00FF88">EXTRACTION POINT</b>')
-
-        // Spawn 3 police units around the player
-        const offsets = [
-          { lat: loc.lat - 0.004, lng: loc.lng + 0.005 },
-          { lat: loc.lat + 0.006, lng: loc.lng - 0.003 },
-          { lat: loc.lat - 0.002, lng: loc.lng - 0.007 },
-        ]
-        patrols.current = offsets.map((o, i) => ({
-          id: `K9-${i + 1}`,
-          lat: o.lat,
-          lng: o.lng,
-          marker: L.marker([o.lat, o.lng], { icon: POLICE_ICON })
-            .addTo(mapObj.current!)
-            .bindTooltip(`<span style="font-family:monospace;color:#FF006E;font-size:10px">UNIT K9-${i + 1}</span>`, { permanent: true, direction: 'top', className: 'patrol-label' }),
-          waypoints: [o, nudge(o.lat, o.lng), nudge(o.lat, o.lng), nudge(o.lat, o.lng)],
-          wIdx: 0,
-        }))
-
-        setPhase('ready')
-        setNarrative('SIGNAL LOCKED. NOVA INFERNO GRID ONLINE. TAP SAFE HOUSE OR HIT LAUNCH.')
-      },
-      () => {
-        setNarrative('LOCATION DENIED. ENABLE BROWSER LOCATION AND REFRESH.')
-      },
-      { enableHighAccuracy: true, timeout: 10000 }
-    )
+          .bindTooltip(`<span style="font-family:monospace;color:#FF006E;font-size:10px">${o.id}</span>`, {
+            permanent: true, direction: 'top', className: 'patrol-label'
+          }),
+        waypoints: [
+          { lat: o.lat, lng: o.lng },
+          nudge(o.lat, o.lng, 0.008),
+          nudge(o.lat, o.lng, 0.008),
+          nudge(o.lat, o.lng, 0.008),
+        ],
+        wIdx: 0,
+      }))
+    }
+    init()
   }, [])
 
   // ── Draw route ───────────────────────────────────────────────────────────────
@@ -358,21 +359,36 @@ export default function GetawayGrid() {
     if (routeLine.current) { routeLine.current.remove(); routeLine.current = null }
     routeCoords.current = []
     carStepIdx.current  = 0
-    setPhase(playerPos.current ? 'ready' : 'locating')
+    playerPos.current   = { ...LV_START }
+    setPhase('ready')
     setHeatLevel(1)
     setPoliceETA(null)
-    setNarrative('GRID RESET. READY TO LAUNCH.')
+    setNarrative('GRID RESET. GETAWAY CAR RETURNED TO MGM GRAND. READY TO LAUNCH.')
     setTimeLeft(ROUTE_REFRESH_MS / 1000)
-    // Reset car to player origin and put police back
-    if (playerPos.current) {
-      playerMark.current?.setLatLng([playerPos.current.lat, playerPos.current.lng])
-      playerMark.current?.setIcon(makeCarIcon(0))
-      patrols.current = patrols.current.map((pt) => {
-        const o = nudge(playerPos.current!.lat, playerPos.current!.lng, 0.005)
-        pt.marker?.setLatLng([o.lat, o.lng])
-        return { ...pt, lat: o.lat, lng: o.lng }
-      })
-    }
+    // Reset car marker to start position
+    playerMark.current?.setLatLng([LV_START.lat, LV_START.lng])
+    playerMark.current?.setIcon(makeCarIcon(0))
+    // Reset police to their Strip positions
+    patrols.current = patrols.current.map((pt, i) => {
+      const origin = LV_POLICE[i] ?? LV_POLICE[0]
+      pt.marker?.setLatLng([origin.lat, origin.lng])
+      return {
+        ...pt,
+        lat: origin.lat,
+        lng: origin.lng,
+        waypoints: [
+          { lat: origin.lat, lng: origin.lng },
+          nudge(origin.lat, origin.lng, 0.008),
+          nudge(origin.lat, origin.lng, 0.008),
+        ],
+        wIdx: 0,
+      }
+    })
+    // Fly back to the full strip view
+    mapObj.current?.flyToBounds(
+      [[LV_START.lat, LV_START.lng], [LV_SAFE.lat, LV_SAFE.lng]],
+      { padding: [60, 60], duration: 1.2 }
+    )
   }
 
   const pct = Math.round((timeLeft / (ROUTE_REFRESH_MS / 1000)) * 100)
@@ -559,20 +575,6 @@ export default function GetawayGrid() {
 
           {/* Phase overlays */}
           <AnimatePresence>
-            {phase === 'locating' && (
-              <motion.div
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm z-10"
-              >
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                  className="w-12 h-12 border-2 border-[#00F5FF] border-t-transparent rounded-full mb-6"
-                />
-                <p className="font-display text-2xl text-[#00F5FF] tracking-widest mb-2">ACQUIRING SIGNAL</p>
-                <p className="font-mono text-xs text-white/40">Allow location access when prompted</p>
-              </motion.div>
-            )}
             {phase === 'won' && (
               <motion.div
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
@@ -663,11 +665,11 @@ export default function GetawayGrid() {
             <p className="font-mono text-[7px] text-white/20 tracking-widest uppercase mb-3">How It Works</p>
             <div className="space-y-2.5">
               {[
-                { n: '01', t: 'Your real GPS location is placed on the map.' },
-                { n: '02', t: '3 police units spawn nearby and patrol the area.' },
-                { n: '03', t: 'The safest route to the safe house is drawn.' },
-                { n: '04', t: 'Every 30s the route and AI narration auto-refreshes.' },
-                { n: '05', t: 'Heat rises as police close in. Press ARRIVED when you reach safety.' },
+                { n: '01', t: 'Scene: MGM Grand → Fremont Street, Las Vegas.' },
+                { n: '02', t: '3 police units patrol Caesars, Wynn, and Mandalay Bay.' },
+                { n: '03', t: 'OSRM plots the safest real-road escape route.' },
+                { n: '04', t: 'Route and AI narration refresh every 30 seconds.' },
+                { n: '05', t: 'Car drives automatically. Heat rises as K9 units close in.' },
               ].map(step => (
                 <div key={step.n} className="flex gap-3">
                   <span className="font-mono text-[8px] text-neon-green/50 flex-shrink-0">{step.n}</span>
