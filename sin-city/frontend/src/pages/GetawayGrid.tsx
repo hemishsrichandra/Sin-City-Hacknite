@@ -6,9 +6,8 @@ import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 const ROUTE_REFRESH_MS = 30_000  // 30 seconds
-const PATROL_MOVE_MS   = 4_000   // police move every 4s (was 2.5 — easier)
-const CAR_STEP_MS      = 280     // ms between each road-point step
-const MISSION_SECS     = 300     // 5 minutes to escape (was 3 — easier)
+const PATROL_MOVE_MS   = 2_500   // police move every 2.5s
+const CAR_STEP_MS      = 300     // ms between each road-point step (~city driving speed)
 
 // ── Las Vegas fixed coordinates ──────────────────────────────────────────────
 // Start: MGM Grand (south end of Strip)
@@ -20,10 +19,7 @@ const LV_POLICE = [
   { id: 'K9-1', lat: 36.1163, lng: -115.1745 },  // Caesars Palace
   { id: 'K9-2', lat: 36.1283, lng: -115.1641 },  // Wynn / Encore
   { id: 'K9-3', lat: 36.0907, lng: -115.1763 },  // Mandalay Bay
-  { id: 'K9-4', lat: 36.1126, lng: -115.1748 },  // Bellagio / Flamingo crossroads
-  { id: 'K9-5', lat: 36.1200, lng: -115.1700 },  // Paris Las Vegas block
 ]
-
 
 // Custom Leaflet icons — inline SVG so no image file needed
 const makeIcon = (color: string, label: string) => L.divIcon({
@@ -78,40 +74,23 @@ const nudge = (lat: number, lng: number, radius = 0.005) => ({
   lng: lng + (Math.random() - 0.5) * radius,
 })
 
-// Fetch route from OSRM – Promise.race timeout, one retry, smooth interpolated fallback
+// Fetch a route from OSRM (free, no key)
 async function fetchRoute(
   from: { lat: number; lng: number },
-  to:   { lat: number; lng: number },
-  attempt = 0
+  to:   { lat: number; lng: number }
 ): Promise<[number, number][]> {
-  // 60‑point great‑circle interpolation so the car ALWAYS has a full path to drive
-  const smoothFallback = (): [number,number][] =>
-    Array.from({ length: 60 }, (_, i) => {
-      const t = i / 59
-      return [from.lat + (to.lat - from.lat) * t, from.lng + (to.lng - from.lng) * t] as [number,number]
-    })
   try {
     const url = `https://router.project-osrm.org/route/v1/driving/${from.lng},${from.lat};${to.lng},${to.lat}?overview=full&geometries=geojson`
-    const fetchP   = fetch(url)
-    const timeoutP = new Promise<never>((_, rej) => setTimeout(() => rej(new Error('timeout')), 7000))
-    const resp = await Promise.race([fetchP, timeoutP]) as Response
+    const resp = await fetch(url)
     if (!resp.ok) throw new Error('OSRM failed')
     const data = await resp.json()
     const coords: [number, number][] = data.routes[0].geometry.coordinates.map(
       ([lng, lat]: [number, number]) => [lat, lng]
     )
-    // Guard against suspiciously short route – retry once
-    if (coords.length < 8 && attempt < 1) {
-      await new Promise(r => setTimeout(r, 1000))
-      return fetchRoute(from, to, attempt + 1)
-    }
-    return coords.length >= 2 ? coords : smoothFallback()
+    return coords
   } catch {
-    if (attempt < 1) {
-      await new Promise(r => setTimeout(r, 1200))
-      return fetchRoute(from, to, attempt + 1)
-    }
-    return smoothFallback()
+    // Fallback: straight line
+    return [[from.lat, from.lng], [to.lat, to.lng]]
   }
 }
 
@@ -136,20 +115,16 @@ export default function GetawayGrid() {
   const playerPos   = useRef<{ lat: number; lng: number } | null>(null)
   const routeCoords = useRef<[number,number][]>([])   // full OSRM road geometry
   const carStepIdx  = useRef(0)                        // which coord the car is at
-  const carMoveRef    = useRef<ReturnType<typeof setInterval> | null>(null) // car animation
-  const countdownRef  = useRef<ReturnType<typeof setInterval> | null>(null) // route refresh tick
-  const missionRef    = useRef<ReturnType<typeof setInterval> | null>(null) // mission timer tick
+  const carMoveRef  = useRef<ReturnType<typeof setInterval> | null>(null) // car animation
 
-  const [phase, setPhase]           = useState<'ready' | 'active' | 'won' | 'busted'>('ready')
+  const [phase, setPhase]           = useState<'ready' | 'active' | 'won'>('ready')
   const [narrative, setNarrative]   = useState('LAS VEGAS GRID ONLINE. MGM GRAND → FREMONT STREET. HIT LAUNCH TO BEGIN EVASION.')
   const [heatLevel, setHeatLevel]   = useState(1)
   const [policeETA, setPoliceETA]   = useState<number | null>(null)
   const [timeLeft, setTimeLeft]     = useState(ROUTE_REFRESH_MS / 1000)
-  const [missionTime, setMissionTime] = useState(MISSION_SECS)  // 3-min mission clock
   const [aiLoading, setAiLoading]   = useState(false)
   const [checkpoints, setCheckpoints] = useState<string[]>([])
   const [safeHousePos, setSafeHousePos] = useState<{ lat: number; lng: number } | null>(null)
-  const heatRef = useRef(1) // stable ref for heat inside intervals
 
   // ── Build map once ───────────────────────────────────────────────────────────
   useEffect(() => {
@@ -162,8 +137,8 @@ export default function GetawayGrid() {
       attributionControl: false,
     })
 
-    // CartoDB Dark Matter (all) — dark background, full street + label visibility
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    // CartoDB Voyager — colorful roads, clear streets, no API key
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       subdomains: 'abcd',
       maxZoom: 20,
     }).addTo(map)
@@ -213,24 +188,24 @@ export default function GetawayGrid() {
   }, [])
 
   // ── Draw route ───────────────────────────────────────────────────────────────
-  const drawRoute = useCallback(async (
-    from: { lat: number; lng: number },
-    to:   { lat: number; lng: number }
-  ): Promise<[number,number][]> => {
-    if (!mapObj.current) return []
-    // Fetch FIRST – old polyline stays visible until new coords arrive (no blank gap)
-    const coords = await fetchRoute(from, to)
+  const drawRoute = useCallback(async (from: { lat: number; lng: number }, to: { lat: number; lng: number }) => {
+    if (!mapObj.current) return
     if (routeLine.current) { routeLine.current.remove(); routeLine.current = null }
+
+    const coords = await fetchRoute(from, to)
     routeCoords.current = coords
     carStepIdx.current  = 0
+
     routeLine.current = L.polyline(coords, {
       color: '#BF00FF',
       weight: 5,
       opacity: 0.9,
       dashArray: '12, 6',
     }).addTo(mapObj.current)
-    mapObj.current.fitBounds(L.latLngBounds(coords), { padding: [80, 80] })
-    return coords
+
+    // Fit map to show full route
+    const bounds = L.latLngBounds(coords)
+    mapObj.current.fitBounds(bounds, { padding: [100, 100] })
   }, [])
 
   // ── AI narration ─────────────────────────────────────────────────────────────
@@ -285,19 +260,6 @@ export default function GetawayGrid() {
       const curr = coords[idx]
       const next = coords[idx + 1]
 
-      // ── BUSTED check at 280ms – only when car physically overlaps a patrol ──
-      // 20m ≈ the pixel radius of both icons at zoom 14 (true visual overlap)
-      if (mapObj.current) {
-        const busted = patrols.current.some(pt =>
-          (mapObj.current!.distance([pt.lat, pt.lng], [next[0], next[1]]) ?? 9999) < 20
-        )
-        if (busted) {
-          setPhase('busted')
-          setNarrative('GETAWAY CAR INTERCEPTED. K9 UNIT ON TOP OF YOU. LIGHTS OUT.')
-          return
-        }
-      }
-
       // Compute bearing so car icon faces direction of travel
       const deg = bearing(curr, next)
       const newLatLng: [number,number] = [next[0], next[1]]
@@ -319,53 +281,39 @@ export default function GetawayGrid() {
       }
     }, CAR_STEP_MS)
 
-    // ── Patrol movement – pure random roaming, no convergence ──────────────────
+    // Patrol movement
     timerRef.current = setInterval(() => {
       patrols.current = patrols.current.map(pt => {
-        // Always use existing random waypoints – no chasing the player ever
         const next = pt.waypoints[(pt.wIdx + 1) % pt.waypoints.length]
         pt.marker?.setLatLng([next.lat, next.lng])
 
-        // Update ETA display only (heat level raised by proximity, BUSTED only by carMoveRef)
-        if (playerPos.current && mapObj.current) {
-          const dist = mapObj.current.distance(
+        // Recalc proximity heat
+        if (playerPos.current) {
+          const dist = mapObj.current?.distance(
             [next.lat, next.lng],
             [playerPos.current.lat, playerPos.current.lng]
-          )
-          // Heat indicator – purely cosmetic, does not trigger BUSTED
-          const newHeat =
-            dist < 150 ? 5 :
-            dist < 350 ? 4 :
-            dist < 600 ? 3 :
-            dist < 900 ? 2 : 1
-          setHeatLevel(h => Math.max(h, newHeat))
-          heatRef.current = Math.max(heatRef.current, newHeat)
-          setPoliceETA(Math.round(dist / 13))
+          ) ?? 999
+          if (dist < 150)       setHeatLevel(5)
+          else if (dist < 300)  setHeatLevel(4)
+          else if (dist < 500)  setHeatLevel(3)
+          else if (dist < 800)  setHeatLevel(2)
+          else                  setHeatLevel(1)
+
+          const etaSecs = Math.round(dist / 13) // ~50 km/h
+          setPoliceETA(etaSecs)
         }
 
         return { ...pt, lat: next.lat, lng: next.lng, wIdx: (pt.wIdx + 1) % pt.waypoints.length }
       })
-
-      // Heat decay when all patrols are well away
-      if (playerPos.current && mapObj.current) {
-        const minDist = Math.min(
-          ...patrols.current.map(pt =>
-            mapObj.current!.distance([pt.lat, pt.lng], [playerPos.current!.lat, playerPos.current!.lng])
-          )
-        )
-        if (minDist > 900) {
-          setHeatLevel(h => { const n = Math.max(1, h - 1); heatRef.current = n; return n })
-        }
-      }
     }, PATROL_MOVE_MS)
 
-    // Route + narrative refresh every 30s
+    // Route + narrative refresh every 2 minutes
     const refreshCycle = async () => {
       setTimeLeft(ROUTE_REFRESH_MS / 1000)
       if (playerPos.current && safeHousePos) {
         await drawRoute(playerPos.current, safeHousePos)
         await fetchIntel()
-        // Give patrols new pursuit waypoints
+        // Give patrols new patrol waypoints
         patrols.current = patrols.current.map(pt => ({
           ...pt,
           waypoints: Array.from({ length: 5 }, () =>
@@ -378,28 +326,15 @@ export default function GetawayGrid() {
     }
     narrativeTimer.current = setTimeout(refreshCycle, ROUTE_REFRESH_MS)
 
-    // Route countdown — stored in ref so reset can clear it
-    if (countdownRef.current) clearInterval(countdownRef.current)
-    countdownRef.current = setInterval(() => {
+    // Countdown timer
+    const countdown = setInterval(() => {
       setTimeLeft(t => {
-        if (t <= 1) { return ROUTE_REFRESH_MS / 1000 }
+        if (t <= 1) { clearInterval(countdown); return ROUTE_REFRESH_MS / 1000 }
         return t - 1
       })
     }, 1000)
 
-    // Mission countdown — stored in ref so reset can clear it
-    if (missionRef.current) clearInterval(missionRef.current)
-    missionRef.current = setInterval(() => {
-      setMissionTime(t => {
-        if (t <= 1) {
-          if (missionRef.current) clearInterval(missionRef.current)
-          setPhase('busted')
-          setNarrative('TIME EXPIRED. PERIMETER CLOSED. REINFORCEMENTS ARRIVED. NO WAY OUT.')
-          return 0
-        }
-        return t - 1
-      })
-    }, 1000)
+    return () => { clearInterval(countdown) }
   }, [drawRoute, fetchIntel, safeHousePos])
 
   // Cleanup on unmount
@@ -408,8 +343,6 @@ export default function GetawayGrid() {
       if (timerRef.current) clearInterval(timerRef.current)
       if (narrativeTimer.current) clearTimeout(narrativeTimer.current)
       if (carMoveRef.current) clearInterval(carMoveRef.current)
-      if (countdownRef.current) clearInterval(countdownRef.current)
-      if (missionRef.current) clearInterval(missionRef.current)
     }
   }, [])
 
@@ -423,17 +356,13 @@ export default function GetawayGrid() {
     if (timerRef.current) clearInterval(timerRef.current)
     if (narrativeTimer.current) clearTimeout(narrativeTimer.current)
     if (carMoveRef.current) clearInterval(carMoveRef.current)
-    if (countdownRef.current) clearInterval(countdownRef.current)  // fix: clear route tick
-    if (missionRef.current) clearInterval(missionRef.current)       // fix: clear mission tick
     if (routeLine.current) { routeLine.current.remove(); routeLine.current = null }
     routeCoords.current = []
     carStepIdx.current  = 0
     playerPos.current   = { ...LV_START }
-    heatRef.current     = 1
     setPhase('ready')
     setHeatLevel(1)
     setPoliceETA(null)
-    setMissionTime(MISSION_SECS)
     setNarrative('GRID RESET. GETAWAY CAR RETURNED TO MGM GRAND. READY TO LAUNCH.')
     setTimeLeft(ROUTE_REFRESH_MS / 1000)
     // Reset car marker to start position
@@ -527,23 +456,6 @@ export default function GetawayGrid() {
             </div>
           )}
 
-          {/* Mission countdown */}
-          {phase === 'active' && (
-            <div className="border-l border-white/10 pl-5">
-              <p className="font-mono text-[7px] text-white/25 tracking-widest uppercase mb-0.5">Time Left</p>
-              <motion.span
-                animate={missionTime <= 30 ? { opacity: [1, 0.3, 1] } : {}}
-                transition={{ duration: 0.4, repeat: Infinity }}
-                className={`font-display text-xl ${
-                  missionTime <= 30 ? 'text-[#FF006E] drop-shadow-[0_0_10px_#FF006E]' :
-                  missionTime <= 60 ? 'text-yellow-400' : 'text-neon-green'
-                }`}
-              >
-                {Math.floor(missionTime / 60)}:{String(missionTime % 60).padStart(2, '0')}
-              </motion.span>
-            </div>
-          )}
-
           {/* Controls */}
           <div className="flex gap-2 border-l border-white/10 pl-5">
             {phase === 'ready' && (
@@ -573,15 +485,11 @@ export default function GetawayGrid() {
                 </button>
               </>
             )}
-            {(phase === 'won' || phase === 'busted') && (
+            {(phase === 'won') && (
               <button onClick={resetSim}
-                className={`px-4 py-2 rounded-lg font-mono text-xs tracking-widest transition-all ${
-                  phase === 'won'
-                    ? 'bg-neon-green/15 border border-neon-green/40 text-neon-green hover:bg-neon-green/25'
-                    : 'bg-[#FF006E]/15 border border-[#FF006E]/40 text-[#FF006E] hover:bg-[#FF006E]/25'
-                }`}
+                className="px-4 py-2 rounded-lg font-mono text-xs tracking-widest bg-neon-green/15 border border-neon-green/40 text-neon-green hover:bg-neon-green/25 transition-all"
               >
-                TRY AGAIN
+                RUN AGAIN
               </button>
             )}
           </div>
@@ -670,40 +578,15 @@ export default function GetawayGrid() {
             {phase === 'won' && (
               <motion.div
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                className="absolute inset-0 flex flex-col items-center justify-center bg-[#001a0a]/92 backdrop-blur-sm z-[500]"
+                className="absolute inset-0 flex flex-col items-center justify-center bg-[#001a0a]/90 backdrop-blur-sm z-10"
               >
                 <div className="text-6xl mb-5">🏁</div>
                 <h2 className="font-display text-5xl text-neon-green mb-3 drop-shadow-[0_0_30px_#00FF88]">CLEAN ESCAPE</h2>
                 <p className="font-mono text-sm text-white/50 mb-8 max-w-xs text-center leading-relaxed">
-                  Fremont Street reached. You vanished into the Las Vegas night like smoke. Heat drops to zero.
+                  Safe house reached. You vanished into Nova Inferno like smoke. The heat drops to zero.
                 </p>
                 <button onClick={resetSim} className="px-8 py-4 rounded-xl border-2 border-neon-green text-neon-green font-display text-sm tracking-widest hover:bg-neon-green/20 transition-all">
                   EVADE AGAIN
-                </button>
-              </motion.div>
-            )}
-            {phase === 'busted' && (
-              <motion.div
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                className="absolute inset-0 flex flex-col items-center justify-center bg-[#1a0005]/95 backdrop-blur-sm z-[500]"
-              >
-                <motion.div
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 0.4, repeat: 3 }}
-                  className="text-6xl mb-5"
-                >🚔</motion.div>
-                <motion.h2
-                  animate={{ opacity: [1, 0.5, 1] }}
-                  transition={{ duration: 0.3, repeat: 5 }}
-                  className="font-display text-5xl text-[#FF006E] mb-3 drop-shadow-[0_0_30px_#FF006E]"
-                >
-                  BUSTED
-                </motion.h2>
-                <p className="font-mono text-sm text-white/50 mb-8 max-w-xs text-center leading-relaxed">
-                  {narrative}
-                </p>
-                <button onClick={resetSim} className="px-8 py-4 rounded-xl border-2 border-[#FF006E] text-[#FF006E] font-display text-sm tracking-widest hover:bg-[#FF006E]/20 transition-all">
-                  TRY AGAIN
                 </button>
               </motion.div>
             )}
@@ -817,8 +700,8 @@ export default function GetawayGrid() {
           50%       { opacity: 1; }
         }
 
-        /* Dark map tiles — slightly brighten labels for readability */
-        .leaflet-tile { filter: brightness(1.05) saturate(1.1); }
+        /* Dark neon map tiles feel */
+        .leaflet-tile { filter: saturate(0.85) brightness(0.9); }
       `}</style>
     </div>
   )
