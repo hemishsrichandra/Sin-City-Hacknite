@@ -78,23 +78,40 @@ const nudge = (lat: number, lng: number, radius = 0.005) => ({
   lng: lng + (Math.random() - 0.5) * radius,
 })
 
-// Fetch a route from OSRM (free, no key)
+// Fetch route from OSRM – Promise.race timeout, one retry, smooth interpolated fallback
 async function fetchRoute(
   from: { lat: number; lng: number },
-  to:   { lat: number; lng: number }
+  to:   { lat: number; lng: number },
+  attempt = 0
 ): Promise<[number, number][]> {
+  // 60‑point great‑circle interpolation so the car ALWAYS has a full path to drive
+  const smoothFallback = (): [number,number][] =>
+    Array.from({ length: 60 }, (_, i) => {
+      const t = i / 59
+      return [from.lat + (to.lat - from.lat) * t, from.lng + (to.lng - from.lng) * t] as [number,number]
+    })
   try {
     const url = `https://router.project-osrm.org/route/v1/driving/${from.lng},${from.lat};${to.lng},${to.lat}?overview=full&geometries=geojson`
-    const resp = await fetch(url)
+    const fetchP   = fetch(url)
+    const timeoutP = new Promise<never>((_, rej) => setTimeout(() => rej(new Error('timeout')), 7000))
+    const resp = await Promise.race([fetchP, timeoutP]) as Response
     if (!resp.ok) throw new Error('OSRM failed')
     const data = await resp.json()
     const coords: [number, number][] = data.routes[0].geometry.coordinates.map(
       ([lng, lat]: [number, number]) => [lat, lng]
     )
-    return coords
+    // Guard against suspiciously short route – retry once
+    if (coords.length < 8 && attempt < 1) {
+      await new Promise(r => setTimeout(r, 1000))
+      return fetchRoute(from, to, attempt + 1)
+    }
+    return coords.length >= 2 ? coords : smoothFallback()
   } catch {
-    // Fallback: straight line
-    return [[from.lat, from.lng], [to.lat, to.lng]]
+    if (attempt < 1) {
+      await new Promise(r => setTimeout(r, 1200))
+      return fetchRoute(from, to, attempt + 1)
+    }
+    return smoothFallback()
   }
 }
 
@@ -196,24 +213,24 @@ export default function GetawayGrid() {
   }, [])
 
   // ── Draw route ───────────────────────────────────────────────────────────────
-  const drawRoute = useCallback(async (from: { lat: number; lng: number }, to: { lat: number; lng: number }) => {
-    if (!mapObj.current) return
-    if (routeLine.current) { routeLine.current.remove(); routeLine.current = null }
-
+  const drawRoute = useCallback(async (
+    from: { lat: number; lng: number },
+    to:   { lat: number; lng: number }
+  ): Promise<[number,number][]> => {
+    if (!mapObj.current) return []
+    // Fetch FIRST – old polyline stays visible until new coords arrive (no blank gap)
     const coords = await fetchRoute(from, to)
+    if (routeLine.current) { routeLine.current.remove(); routeLine.current = null }
     routeCoords.current = coords
     carStepIdx.current  = 0
-
     routeLine.current = L.polyline(coords, {
       color: '#BF00FF',
       weight: 5,
       opacity: 0.9,
       dashArray: '12, 6',
     }).addTo(mapObj.current)
-
-    // Fit map to show full route
-    const bounds = L.latLngBounds(coords)
-    mapObj.current.fitBounds(bounds, { padding: [100, 100] })
+    mapObj.current.fitBounds(L.latLngBounds(coords), { padding: [80, 80] })
+    return coords
   }, [])
 
   // ── AI narration ─────────────────────────────────────────────────────────────
@@ -268,6 +285,19 @@ export default function GetawayGrid() {
       const curr = coords[idx]
       const next = coords[idx + 1]
 
+      // ── BUSTED check at 280ms – only when car physically overlaps a patrol ──
+      // 20m ≈ the pixel radius of both icons at zoom 14 (true visual overlap)
+      if (mapObj.current) {
+        const busted = patrols.current.some(pt =>
+          (mapObj.current!.distance([pt.lat, pt.lng], [next[0], next[1]]) ?? 9999) < 20
+        )
+        if (busted) {
+          setPhase('busted')
+          setNarrative('GETAWAY CAR INTERCEPTED. K9 UNIT ON TOP OF YOU. LIGHTS OUT.')
+          return
+        }
+      }
+
       // Compute bearing so car icon faces direction of travel
       const deg = bearing(curr, next)
       const newLatLng: [number,number] = [next[0], next[1]]
@@ -289,59 +319,38 @@ export default function GetawayGrid() {
       }
     }, CAR_STEP_MS)
 
-    // Patrol movement + police convergence at high heat
+    // ── Patrol movement – pure random roaming, no convergence ──────────────────
     timerRef.current = setInterval(() => {
       patrols.current = patrols.current.map(pt => {
-        // At heat ≥ 4 K9 units redirect toward player (intercept logic)
-        let waypoints = pt.waypoints
-        const heat = heatRef.current
-        if (heat >= 4 && playerPos.current) {
-          const p = playerPos.current
-          // Converge: aim directly at player position
-          waypoints = [
-            { lat: pt.lat, lng: pt.lng },
-            { lat: p.lat + (Math.random() - 0.5) * 0.002, lng: p.lng + (Math.random() - 0.5) * 0.002 },
-            { lat: p.lat, lng: p.lng },
-          ]
-        }
-        const next = waypoints[(pt.wIdx + 1) % waypoints.length]
+        // Always use existing random waypoints – no chasing the player ever
+        const next = pt.waypoints[(pt.wIdx + 1) % pt.waypoints.length]
         pt.marker?.setLatLng([next.lat, next.lng])
 
-        // Proximity checks
-        if (playerPos.current) {
-          const dist = mapObj.current?.distance(
+        // Update ETA display only (heat level raised by proximity, BUSTED only by carMoveRef)
+        if (playerPos.current && mapObj.current) {
+          const dist = mapObj.current.distance(
             [next.lat, next.lng],
             [playerPos.current.lat, playerPos.current.lng]
-          ) ?? 9999
-
-          // BUSTED — police catches the car (55m radius)
-          if (dist < 55) {
-            setPhase('busted')
-            setNarrative('K9 UNIT CLOSED THE GAP. GETAWAY CAR SURROUNDED. LIGHTS OUT.')
-            return pt
-          }
-
-          // Easier heat thresholds — police must be very close to ramp heat
+          )
+          // Heat indicator – purely cosmetic, does not trigger BUSTED
           const newHeat =
-            dist < 100 ? 5 :
-            dist < 250 ? 4 :
-            dist < 450 ? 3 :
-            dist < 750 ? 2 : 1
-          setHeatLevel(h => Math.max(h, newHeat)) // ratchet up, decay handled separately
+            dist < 150 ? 5 :
+            dist < 350 ? 4 :
+            dist < 600 ? 3 :
+            dist < 900 ? 2 : 1
+          setHeatLevel(h => Math.max(h, newHeat))
           heatRef.current = Math.max(heatRef.current, newHeat)
-
-          const etaSecs = Math.round(dist / 13)
-          setPoliceETA(etaSecs)
+          setPoliceETA(Math.round(dist / 13))
         }
 
-        return { ...pt, lat: next.lat, lng: next.lng, waypoints, wIdx: (pt.wIdx + 1) % waypoints.length }
+        return { ...pt, lat: next.lat, lng: next.lng, wIdx: (pt.wIdx + 1) % pt.waypoints.length }
       })
 
-      // Heat decay: every tick, if all patrols are far, cool down by 1
-      if (playerPos.current) {
+      // Heat decay when all patrols are well away
+      if (playerPos.current && mapObj.current) {
         const minDist = Math.min(
           ...patrols.current.map(pt =>
-            mapObj.current?.distance([pt.lat, pt.lng], [playerPos.current!.lat, playerPos.current!.lng]) ?? 9999
+            mapObj.current!.distance([pt.lat, pt.lng], [playerPos.current!.lat, playerPos.current!.lng])
           )
         )
         if (minDist > 900) {
