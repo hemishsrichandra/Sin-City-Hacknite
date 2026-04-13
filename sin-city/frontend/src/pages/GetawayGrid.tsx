@@ -103,7 +103,7 @@ export default function GetawayGrid() {
     if (tacticalRoute.length < 2 || isExecuting) return
 
     setIsExecuting(true)
-    const nextStep = tacticalRoute[1] // The step after current pos
+    const nextStep = tacticalRoute[1] 
     
     setTimeout(() => {
       setPlayerPos(nextStep)
@@ -130,17 +130,17 @@ export default function GetawayGrid() {
             {isRoute && (
               <motion.div 
                 layoutId="route-trail"
-                className="absolute inset-0 bg-[#BF00FF22] shadow-[inset_0_0_10px_#BF00FF44]"
+                className="absolute inset-0 bg-[#BF00FF33] shadow-[inset_0_0_15px_#BF00FF66]"
               />
             )}
             
-            {/* Building Icon if not road (mocking road grid) */}
+            {/* Building Icon */}
             {isLandmark && (
-              <div className="text-xl opacity-20 filter grayscale drop-shadow-[0_0_5px_cyan]">🏙️</div>
+              <div className="text-xl opacity-30 drop-shadow-[0_0_10px_cyan]">🏙️</div>
             )}
             
             {/* Coordinates in corner */}
-            <span className="absolute bottom-0.5 right-1 text-[6px] text-white/5 font-mono">{x},{y}</span>
+            <span className="absolute bottom-0.5 right-1 text-[7px] text-white/10 font-mono">{x},{y}</span>
           </div>
         )
       }
@@ -149,13 +149,17 @@ export default function GetawayGrid() {
   }
 
   return (
-    <div className="relative w-full h-[calc(100vh-100px)] bg-[#050508] flex items-center justify-center overflow-hidden">
+    <div className="relative w-full min-h-[calc(100vh-80px)] mt-20 bg-[#050508] flex items-center justify-center overflow-hidden">
       <FlickerLight color="#00FF88" intensity="low" className="top-10 left-10" />
       
       {/* GRID PLAYFIELD */}
-      <div className="relative">
+      <motion.div 
+        animate={isExecuting ? { x: [-2, 2, -2, 2, 0], y: [-1, 1, -1, 1, 0] } : {}}
+        transition={{ duration: 0.3 }}
+        className="relative"
+      >
         <div 
-          className="grid grid-cols-10 border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+          className="grid grid-cols-10 border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.8)]"
           style={{ width: GRID_SIZE * CELL_SIZE, height: GRID_SIZE * CELL_SIZE }}
         >
           {renderGrid()}
@@ -166,12 +170,12 @@ export default function GetawayGrid() {
         {/* DESTINATION (Glow) */}
         <motion.div 
           className="absolute w-[60px] h-[60px] flex items-center justify-center z-10"
-          animate={{ opacity: [0.4, 0.8, 0.4], scale: [1, 1.1, 1] }}
+          animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.2, 1] }}
           transition={{ duration: 2, repeat: Infinity }}
           style={{ left: destPos.x * CELL_SIZE, top: destPos.y * CELL_SIZE }}
         >
-           <div className="w-8 h-8 rounded-full bg-neon-green/20 border border-neon-green shadow-[0_0_20px_#00FF88]" />
-           <span className="absolute -top-6 font-mono text-[8px] text-neon-green">EXTRACTION</span>
+           <div className="w-8 h-8 rounded-full bg-neon-green/30 border-2 border-neon-green shadow-[0_0_30px_#00FF88]" />
+           <span className="absolute -top-8 font-mono text-[9px] text-neon-green font-bold tracking-tighter shadow-black">EXTRACTION_POINT</span>
         </motion.div>
 
         {/* PATROLS */}
@@ -185,7 +189,7 @@ export default function GetawayGrid() {
             <div className="relative group">
               <div className="w-4 h-4 bg-[#FF006E] shadow-[0_0_15px_#FF006E]" style={{ clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)' }} />
               <div className="absolute -inset-2 rounded-full border border-[#FF006E44] animate-ping" />
-              <span className="absolute -top-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 font-mono text-[7px] text-[#FF006E] whitespace-nowrap">UNIT_{p.id}</span>
+              <span className="absolute -top-4 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 font-mono text-[7px] text-[#FF006E] whitespace-nowrap bg-black/80 px-1">UNIT_{p.id}</span>
             </div>
           </motion.div>
         ))}
@@ -197,39 +201,52 @@ export default function GetawayGrid() {
           transition={{ type: 'spring', stiffness: 80, damping: 12 }}
         >
           <div className="relative">
-             <div className="w-6 h-4 bg-[#00F5FF] rounded-sm shadow-[0_0_25px_#00F5FF]" />
-             {/* Headlights */}
-             <div className="absolute top-0 right-0 w-4 h-4 bg-white/20 blur-sm -scale-x-100 translate-x-3 translate-y-[-50%]" style={{ clipPath: 'polygon(0 40%, 100% 0, 100% 100%, 0 60%)' }} />
-             <div className="absolute -inset-3 border border-[#00F5FF33] rounded-full animate-pulse" />
+             <motion.div 
+               animate={isExecuting ? { scale: [1, 1.3, 1] } : {}}
+               className="w-7 h-4 bg-[#00F5FF] rounded-sm shadow-[0_0_25px_#00F5FF]" 
+             />
+             <div className="absolute top-0 right-0 w-6 h-6 bg-white/20 blur-md -scale-x-100 translate-x-4 translate-y-[-50%]" style={{ clipPath: 'polygon(0 40%, 100% 0, 100% 100%, 0 60%)' }} />
+             <div className="absolute -inset-4 border border-[#00F5FF33] rounded-full animate-pulse" />
           </div>
         </motion.div>
-      </div>
+      </motion.div>
 
       {/* OVERLAY UI: HUD */}
-      <div className="absolute inset-x-0 bottom-0 pointer-events-none p-6 md:p-12 flex flex-col justify-end gap-6 max-w-7xl mx-auto">
+      <div className="absolute inset-0 pointer-events-none p-6 md:p-12 flex flex-col justify-between max-w-7xl mx-auto">
         
+        {/* Top Titles - Repositioned to clear Navbar */}
+        <div className="flex justify-between items-start mt-8">
+           <div className="p-4 border-l-2 border-[#FF006E] bg-black/40 backdrop-blur-sm pointer-events-auto">
+              <div className="flex gap-1 mb-1">
+                 {[1,2,3,4,5].map(s => (
+                   <span key={s} className={`text-xl ${s <= heatLevel ? 'text-[#FF006E] drop-shadow-[0_0_12px_#FF006E]' : 'text-white/5'}`}>★</span>
+                 ))}
+              </div>
+              <p className="font-mono text-[9px] tracking-[0.4em] text-white/40 uppercase">Heat Signal</p>
+           </div>
+
+           <div className="text-right pointer-events-auto">
+              <motion.h2 
+                animate={{ opacity: [0.8, 1, 0.8] }}
+                transition={{ duration: 4, repeat: Infinity }}
+                className="font-display text-4xl lg:text-5xl text-neon-cyan leading-none mb-1 drop-shadow-[0_0_15px_#00F5FF]"
+              >
+                NOVA INFERNO
+              </motion.h2>
+              <p className="font-mono text-[10px] text-white/30 tracking-[0.5em] uppercase">Sector: Red-Line Alpha</p>
+           </div>
+        </div>
+
+        {/* Bottom Section */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
           
-          {/* Heat & Meta */}
+          {/* Tactical Tracker */}
           <div className="md:col-span-3 space-y-4">
-             <motion.div 
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                className="p-5 rounded-xl border border-white/5 bg-black/60 backdrop-blur-xl pointer-events-auto"
-             >
-                <div className="flex gap-1 mb-2">
-                   {[1,2,3,4,5].map(s => (
-                     <span key={s} className={`text-xl ${s <= heatLevel ? 'text-[#FF006E] drop-shadow-[0_0_10px_#FF006E]' : 'text-white/5'}`}>★</span>
-                   ))}
-                </div>
-                <p className="font-mono text-[9px] tracking-[0.3em] text-white/30 uppercase">HEAT SENSOR ACTIVE</p>
-             </motion.div>
-
-             <div className="p-5 rounded-xl border border-white/5 bg-black/40 backdrop-blur-sm">
-                <p className="font-mono text-[9px] text-white/20 uppercase mb-2">Checkpoints Ahead</p>
+             <div className="p-5 rounded-xl border border-white/5 bg-black/60 backdrop-blur-xl pointer-events-auto">
+                <p className="font-mono text-[9px] text-white/20 uppercase mb-2">Checkpoints Identified</p>
                 <div className="flex flex-wrap gap-1.5">
                    {checkpoints.map(c => (
-                     <span key={c} className="text-[9px] font-mono text-neon-cyan border border-neon-cyan/20 px-2 py-0.5 rounded-sm bg-neon-cyan/5">{c}</span>
+                     <span key={c} className="text-[10px] font-mono text-neon-cyan border border-neon-cyan/20 px-2 py-1 rounded-sm bg-neon-cyan/5">{c}</span>
                    ))}
                 </div>
              </div>
@@ -239,38 +256,54 @@ export default function GetawayGrid() {
           <motion.div 
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="md:col-span-6 p-6 rounded-2xl border border-neon-green/20 bg-black/80 backdrop-blur-3xl shadow-[0_0_40px_rgba(0,0,0,0.5)] pointer-events-auto relative overflow-hidden"
+            className="md:col-span-6 p-7 rounded-2xl border border-neon-green/30 bg-black/90 backdrop-blur-3xl shadow-[0_0_60px_rgba(0,0,0,0.8)] pointer-events-auto relative overflow-hidden"
           >
-            <div className="absolute top-0 left-0 w-full h-[1px] bg-neon-green/30" />
-            <h3 className="font-mono text-[9px] text-neon-green tracking-[0.4em] mb-4 uppercase">Encrypted Comm 7G-12</h3>
-            <p className="font-display text-lg md:text-xl text-white leading-relaxed italic">
-              "{narrative}"
+            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-neon-green to-transparent animate-pulse" />
+            <div className="flex items-center gap-2 mb-4">
+              <span className="w-2 h-2 rounded-full bg-neon-green animate-ping" />
+              <h3 className="font-mono text-[9px] text-neon-green tracking-[0.5em] uppercase">Signal Confirmed // AI_CONSIGLIERE</h3>
+            </div>
+            <p className="font-display text-xl md:text-2xl text-white leading-relaxed italic">
+              <motion.span
+                key={narrative}
+                initial={{ opacity: 0, x: -5 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="block"
+              >
+                "{narrative}"
+              </motion.span>
             </p>
           </motion.div>
 
           {/* Action Control */}
           <div className="md:col-span-3 space-y-4">
-             <div className="p-5 rounded-xl border border-white/5 bg-black/60 backdrop-blur-xl pointer-events-auto">
+             <div className="p-6 rounded-xl border border-white/5 bg-black/60 backdrop-blur-xl pointer-events-auto group">
                 <p className="font-mono text-[9px] text-white/30 uppercase mb-1">Police ETA</p>
                 <div className="flex items-baseline gap-2">
-                   <span className="text-3xl font-display text-[#FF006E]">{policeETA || '--'}</span>
-                   <span className="text-[10px] font-mono text-white/20">SEC</span>
+                   <motion.span 
+                    animate={heatLevel >= 3 ? { opacity: [1, 0.5, 1] } : {}}
+                    transition={{ duration: 0.5, repeat: Infinity }}
+                    className="text-4xl font-display text-[#FF006E] drop-shadow-[0_0_10px_#FF006E]"
+                   >
+                    {policeETA || '--'}
+                   </motion.span>
+                   <span className="text-[10px] font-mono text-white/20">SECONDS TO INTERCEPT</span>
                 </div>
              </div>
 
              <button 
                 disabled={isExecuting || tacticalRoute.length < 2}
                 onClick={executeManeuver}
-                className="w-full py-5 rounded-xl bg-neon-green/10 border border-neon-green/40 hover:bg-neon-green/20 disabled:opacity-30 disabled:cursor-not-allowed transition-all pointer-events-auto group overflow-hidden relative"
+                className="w-full py-6 rounded-xl bg-neon-green/10 border-2 border-neon-green/40 hover:bg-neon-green/20 disabled:opacity-30 disabled:cursor-not-allowed transition-all pointer-events-auto group overflow-hidden relative"
              >
                 <motion.div 
-                  className="absolute inset-0 bg-neon-green/5"
+                  className="absolute inset-0 bg-neon-green/10"
                   animate={{ x: ['-100%', '100%'] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
                 />
-                <span className="relative font-display text-xs tracking-[0.2em] text-neon-green flex items-center justify-center gap-2">
-                   {isExecuting ? 'EVADING...' : 'EXECUTE MANEUVER'}
-                   <span className="text-xl">➔</span>
+                <span className="relative font-display text-sm tracking-[0.3em] text-neon-green flex items-center justify-center gap-3">
+                   {isExecuting ? 'SHADOW_MODE_ALPHA' : 'EXECUTE EVASIVE MANEUVER'}
+                   <span className="text-xl group-hover:translate-x-1 transition-transform">➔</span>
                 </span>
              </button>
           </div>
@@ -280,12 +313,8 @@ export default function GetawayGrid() {
       </div>
 
       {/* Peripheral HUD Accents */}
-      <div className="absolute top-12 left-12 font-mono text-[10px] text-white/20 tracking-widest hidden lg:block">
+      <div className="absolute top-24 left-12 font-mono text-[10px] text-white/20 tracking-widest hidden lg:block">
         SYS_OS v4.2 // NOVA_INFERNO_GRID // [72.112.98.0]
-      </div>
-      <div className="absolute top-12 right-12 text-right hidden lg:block">
-        <h2 className="font-display text-2xl text-neon-cyan leading-none">NOVA INFERNO</h2>
-        <p className="font-mono text-[9px] text-white/20 tracking-[0.4em] uppercase">Tactical District Overlay</p>
       </div>
 
     </div>

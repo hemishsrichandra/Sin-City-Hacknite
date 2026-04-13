@@ -12,12 +12,11 @@ const typewriterText = 'THE FAMILY IS WATCHING.'
 // Terminal lines for the consigliere teaser
 const terminalLines = [
   '> Connecting to the underground...',
-  '> Scanning VIP guest lists ♠',
-  '> Budget: $500/night',
-  '> Danger tolerance: MAXIMUM',
-  '> Mapping secret routes...',
-  '> Day 1: Casino Floor → Nightlife → After Hours',
-  '> Day 2: The Shows → VIP Room → Cloud 9',
+  '> Accessing Nova Inferno Grid...',
+  '> Tracking police patrol patterns...',
+  '> Danger level: MAXIMUM',
+  '> Initializing Getaway Grid engine...',
+  '> Escape route: Sector 4 Alpha Identified.',
   '> The Consigliere has spoken. Your playbook is ready.',
 ]
 
