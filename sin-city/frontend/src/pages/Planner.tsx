@@ -26,7 +26,7 @@ Drop your bags in a suite that overlooks the fountains. The city is already call
 The felt is green. The stakes are real. The man across from you hasn't blinked in three hands. This is where fortunes change hands between sips of bourbon.
 
 10:30 PM — Cocktails at The Chandelier Bar 🎲
-📍 District: Street Scene
+📍 District: The Getaway Grid
 💰 The Damage: $60
 ⚡
 Three levels of crystalline luxury. Order the verbena cocktail on level 1.5 — it changes flavor as you drink it. The bartender's been here since '98.
@@ -44,7 +44,7 @@ The bass hits different at 2 AM. The DJ knows it. The smoke machines paint the a
 💀 VIBE CHECK: You didn't come to Vegas to play it safe. The Consigliere has arranged everything.
 
 7:30 PM — Dinner at Hell's Kitchen 🎲
-📍 District: Street Scene
+📍 District: The Getaway Grid
 💰 The Damage: $180
 ⚡⚡
 Gordon Ramsay's Vegas outpost. The beef Wellington is non-negotiable. The sommelier will choose your wine — trust him.
@@ -62,7 +62,7 @@ Gravity-defying acrobatics in total darkness, lit only by neon laser lines. The 
 Put it all on black. Or don't. The wheel doesn't care about your strategy. But the adrenaline? That's free.
 
 1:00 AM — Late Night Taco Crawl 🎲
-📍 District: Street Scene
+📍 District: The Getaway Grid
 💰 The Damage: $25
 ⚡
 Follow the locals to the hidden trucks that only appear after midnight. This is where the real flavor lives.
@@ -74,7 +74,7 @@ Follow the locals to the hidden trucks that only appear after midnight. This is 
 💀 VIBE CHECK: Last day. Make every second count. No regrets. No mercy.
 
 7:00 PM — Hidden Speakeasy Tour 🎲
-📍 District: Street Scene
+📍 District: The Getaway Grid
 💰 The Damage: $75
 ⚡⚡⚡
 Three bars. Three passwords. Zero regrets. The kind of places that don't show up on Google Maps.

@@ -43,14 +43,14 @@ const districts = [
     badge: 'ELEVATED',
   },
   {
-    name: 'STREET SCENE',
-    icon: '⚡',
+    name: 'THE GETAWAY GRID',
+    icon: '🎯',
     accentColor: '#00FF88',
-    tagline: 'Where the real city breathes.',
-    description: 'Authentic local culture, underground bars, and the pulse of the street.',
+    tagline: 'Navigate Nova Inferno. Evade the law.',
+    description: 'A tactical evasion simulation. Dodge police patrols, navigate checkpoints, and reach the extraction point alive.',
     path: '/districts/street',
     featured: false,
-    badge: 'LOCAL',
+    badge: 'LIVE SIM',
   },
 ]
 
