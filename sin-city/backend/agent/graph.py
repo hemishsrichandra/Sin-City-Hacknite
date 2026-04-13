@@ -19,6 +19,8 @@ async def run_planner_agent(request: PlannerRequest) -> AsyncGenerator[str, None
         "days": request.days,
         "vibe": request.vibe,
         "party_size": request.party_size,
+        "persona": request.persona or "Tourist",
+        "pace": request.pace or "Balanced",
         "profile_summary": "",
         "matched_activities": [],
         "itinerary": "",
@@ -51,12 +53,21 @@ async def run_planner_agent(request: PlannerRequest) -> AsyncGenerator[str, None
 
     # Step 4: Build itinerary
     yield "BUILDING YOUR ITINERARY...\n\n"
-    await asyncio.sleep(0.2)
-
-    builder_result = await itinerary_builder_node(state)
-    state = {**state, **builder_result}
-
-    # Stream the itinerary word by word
-    for word in state["itinerary"].split(" "):
-        yield word + " "
-        await asyncio.sleep(0.03)  # 30ms between words for streaming effect
+    
+    # Get the stream from the node
+    stream_response = await itinerary_builder_node(state)
+    
+    if isinstance(stream_response, str):
+        # Fallback case or failed stream
+        for word in stream_response.split(" "):
+            yield word + " "
+            await asyncio.sleep(0.01)
+    else:
+        # Real Gemini stream
+        async for chunk in stream_response:
+            try:
+                if hasattr(chunk, 'text') and chunk.text:
+                    yield chunk.text
+            except Exception:
+                # Handle cases where chunk might not have text (e.g. finishes)
+                continue

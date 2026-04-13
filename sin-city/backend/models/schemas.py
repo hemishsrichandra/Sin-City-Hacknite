@@ -8,6 +8,8 @@ class PlannerRequest(BaseModel):
     days: int                           # e.g. 3
     vibe: Literal["WILD", "SOPHISTICATED", "LAID_BACK", "MYSTERY"]
     party_size: int                     # e.g. 2
+    persona: Optional[str] = "Tourist"  # e.g. "High Roller", "Ghost"
+    pace: Optional[str] = "Balanced"    # e.g. "Chill", "Overdrive"
 
 
 class HealthResponse(BaseModel):

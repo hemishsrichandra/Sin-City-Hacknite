@@ -108,38 +108,39 @@ async def budget_filter_node(state: PlannerState) -> dict:
 
 
 # ─── Node 4: Itinerary Builder Node ────────────────────────────
-async def itinerary_builder_node(state: PlannerState) -> dict:
-    """Build the itinerary using Ollama LLM or fallback."""
+async def itinerary_builder_node(state: PlannerState):
+    """Build the itinerary using Gemini Pro with real streaming support."""
     activities_text = "\n".join([
         f"- {act['name']} ({act['district']}) - ${act['cost_per_person']}/person, "
         f"{act['duration_hours']}hrs - {act['description']}"
         for act in state["matched_activities"]
     ])
 
+    # Enhanced profile summary with redesign variables
+    persona = state.get("persona", "Tourist")
+    pace = state.get("pace", "Balanced")
+    
+    custom_profile = (
+        f"{state['profile_summary']} \n"
+        f"USER PERSONA: {persona}. \n"
+        f"PREFERRED PACE: {pace}. \n"
+        f"Ensure the itinerary reflects this persona and pace."
+    )
+
     prompt = ITINERARY_PROMPT.format(
-        profile_summary=state["profile_summary"],
+        profile_summary=custom_profile,
         activities_list=activities_text,
         days=state["days"],
     )
 
-    # Use Gemini to generate ultra-personalized itinerary
-    print(f"DEBUG: Calling Gemini for {state['days']}-day itinerary...")
+    print(f"DEBUG: Initializing Gemini Stream for {state['days']}-day itinerary...")
     try:
-        response = await model.generate_content_async(prompt)
-        itinerary = response.text
-        if not itinerary or len(itinerary.strip()) < 50:
-            print("WARNING: Gemini returned empty or short response. Falling back.")
-            itinerary = generate_fallback_itinerary(state)
-        else:
-            print(f"DEBUG: Gemini successfully generated {len(itinerary)} chars.")
+        # Standard generate for state preservation, but we'll use stream in the graph
+        response = await model.generate_content_async(prompt, stream=True)
+        return response # Return the stream object
     except Exception as e:
         print(f"CRITICAL: Gemini API Error: {type(e).__name__}: {e}")
-        itinerary = generate_fallback_itinerary(state)
-
-    return {
-        "itinerary": itinerary,
-        "messages": ["Itinerary generated successfully via AI"],
-    }
+        return generate_fallback_itinerary(state)
 
 
 def generate_fallback_itinerary(state: PlannerState) -> str:

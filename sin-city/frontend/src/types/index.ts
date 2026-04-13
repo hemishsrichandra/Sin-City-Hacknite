@@ -4,6 +4,9 @@ export interface PlannerFormData {
   days: number
   vibe: 'WILD' | 'SOPHISTICATED' | 'LAID_BACK' | 'MYSTERY'
   party_size: number
+  persona?: string
+  pace?: string
+  exclusions?: string[]
 }
 
 export interface Activity {
