@@ -6,8 +6,9 @@ import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 const ROUTE_REFRESH_MS = 30_000  // 30 seconds
-const PATROL_MOVE_MS   = 2_500   // police move every 2.5s
-const CAR_STEP_MS      = 300     // ms between each road-point step (~city driving speed)
+const PATROL_MOVE_MS   = 4_000   // police move every 4s (was 2.5 — easier)
+const CAR_STEP_MS      = 280     // ms between each road-point step
+const MISSION_SECS     = 300     // 5 minutes to escape (was 3 — easier)
 
 // ── Las Vegas fixed coordinates ──────────────────────────────────────────────
 // Start: MGM Grand (south end of Strip)
@@ -22,7 +23,7 @@ const LV_POLICE = [
   { id: 'K9-4', lat: 36.1126, lng: -115.1748 },  // Bellagio / Flamingo crossroads
   { id: 'K9-5', lat: 36.1200, lng: -115.1700 },  // Paris Las Vegas block
 ]
-const MISSION_SECS = 180  // 3 minutes to escape
+
 
 // Custom Leaflet icons — inline SVG so no image file needed
 const makeIcon = (color: string, label: string) => L.divIcon({
@@ -118,7 +119,9 @@ export default function GetawayGrid() {
   const playerPos   = useRef<{ lat: number; lng: number } | null>(null)
   const routeCoords = useRef<[number,number][]>([])   // full OSRM road geometry
   const carStepIdx  = useRef(0)                        // which coord the car is at
-  const carMoveRef  = useRef<ReturnType<typeof setInterval> | null>(null) // car animation
+  const carMoveRef    = useRef<ReturnType<typeof setInterval> | null>(null) // car animation
+  const countdownRef  = useRef<ReturnType<typeof setInterval> | null>(null) // route refresh tick
+  const missionRef    = useRef<ReturnType<typeof setInterval> | null>(null) // mission timer tick
 
   const [phase, setPhase]           = useState<'ready' | 'active' | 'won' | 'busted'>('ready')
   const [narrative, setNarrative]   = useState('LAS VEGAS GRID ONLINE. MGM GRAND → FREMONT STREET. HIT LAUNCH TO BEGIN EVASION.')
@@ -289,10 +292,10 @@ export default function GetawayGrid() {
     // Patrol movement + police convergence at high heat
     timerRef.current = setInterval(() => {
       patrols.current = patrols.current.map(pt => {
-        // At heat ≥ 3 K9 units redirect toward player (intercept logic)
+        // At heat ≥ 4 K9 units redirect toward player (intercept logic)
         let waypoints = pt.waypoints
         const heat = heatRef.current
-        if (heat >= 3 && playerPos.current) {
+        if (heat >= 4 && playerPos.current) {
           const p = playerPos.current
           // Converge: aim directly at player position
           waypoints = [
@@ -311,19 +314,19 @@ export default function GetawayGrid() {
             [playerPos.current.lat, playerPos.current.lng]
           ) ?? 9999
 
-          // BUSTED — police catches the car
-          if (dist < 80) {
+          // BUSTED — police catches the car (55m radius)
+          if (dist < 55) {
             setPhase('busted')
             setNarrative('K9 UNIT CLOSED THE GAP. GETAWAY CAR SURROUNDED. LIGHTS OUT.')
             return pt
           }
 
-          // Heat levels based on closest patrol
+          // Easier heat thresholds — police must be very close to ramp heat
           const newHeat =
-            dist < 150 ? 5 :
-            dist < 300 ? 4 :
-            dist < 500 ? 3 :
-            dist < 900 ? 2 : 1
+            dist < 100 ? 5 :
+            dist < 250 ? 4 :
+            dist < 450 ? 3 :
+            dist < 750 ? 2 : 1
           setHeatLevel(h => Math.max(h, newHeat)) // ratchet up, decay handled separately
           heatRef.current = Math.max(heatRef.current, newHeat)
 
@@ -366,19 +369,21 @@ export default function GetawayGrid() {
     }
     narrativeTimer.current = setTimeout(refreshCycle, ROUTE_REFRESH_MS)
 
-    // Route countdown
-    const countdown = setInterval(() => {
+    // Route countdown — stored in ref so reset can clear it
+    if (countdownRef.current) clearInterval(countdownRef.current)
+    countdownRef.current = setInterval(() => {
       setTimeLeft(t => {
-        if (t <= 1) { clearInterval(countdown); return ROUTE_REFRESH_MS / 1000 }
+        if (t <= 1) { return ROUTE_REFRESH_MS / 1000 }
         return t - 1
       })
     }, 1000)
 
-    // Mission countdown — 3 min total
-    const missionCountdown = setInterval(() => {
+    // Mission countdown — stored in ref so reset can clear it
+    if (missionRef.current) clearInterval(missionRef.current)
+    missionRef.current = setInterval(() => {
       setMissionTime(t => {
         if (t <= 1) {
-          clearInterval(missionCountdown)
+          if (missionRef.current) clearInterval(missionRef.current)
           setPhase('busted')
           setNarrative('TIME EXPIRED. PERIMETER CLOSED. REINFORCEMENTS ARRIVED. NO WAY OUT.')
           return 0
@@ -386,8 +391,6 @@ export default function GetawayGrid() {
         return t - 1
       })
     }, 1000)
-
-    return () => { clearInterval(countdown); clearInterval(missionCountdown) }
   }, [drawRoute, fetchIntel, safeHousePos])
 
   // Cleanup on unmount
@@ -396,6 +399,8 @@ export default function GetawayGrid() {
       if (timerRef.current) clearInterval(timerRef.current)
       if (narrativeTimer.current) clearTimeout(narrativeTimer.current)
       if (carMoveRef.current) clearInterval(carMoveRef.current)
+      if (countdownRef.current) clearInterval(countdownRef.current)
+      if (missionRef.current) clearInterval(missionRef.current)
     }
   }, [])
 
@@ -409,6 +414,8 @@ export default function GetawayGrid() {
     if (timerRef.current) clearInterval(timerRef.current)
     if (narrativeTimer.current) clearTimeout(narrativeTimer.current)
     if (carMoveRef.current) clearInterval(carMoveRef.current)
+    if (countdownRef.current) clearInterval(countdownRef.current)  // fix: clear route tick
+    if (missionRef.current) clearInterval(missionRef.current)       // fix: clear mission tick
     if (routeLine.current) { routeLine.current.remove(); routeLine.current = null }
     routeCoords.current = []
     carStepIdx.current  = 0
