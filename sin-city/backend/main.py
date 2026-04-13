@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
-from models.schemas import PlannerRequest, UserCreate, UserLogin, TokenResponse, SyncStoreRequest, UserResponse, Booking
+from models.schemas import PlannerRequest, UserCreate, UserLogin, TokenResponse, SyncStoreRequest, UserResponse, Booking, EscapeRequest, EscapeResponse
 from agent.graph import run_planner_agent
 import json
 import random
@@ -44,6 +44,57 @@ async def generate_plan(request: PlannerRequest):
         yield "data: [DONE]\n\n"
 
     return StreamingResponse(stream(), media_type="text/event-stream")
+
+
+@app.post("/api/escape", response_model=EscapeResponse)
+async def getaway_grid_v3(request: EscapeRequest):
+    """
+    AI-driven game engine for 'Sin City Escape' (Grid Based).
+    Calculates routes and narrates the chase in Noir style.
+    """
+    import google.generativeai as genai
+    
+    master_prompt = f"""
+    You are the narrator and AI engine of "Sin City Escape" — a fictional city simulation game. 
+    The player is navigating a neon-lit, fictional metropolis called "Nova Inferno."
+
+    GAME STATE (GRID COORDINATES X, Y):
+    - Player Grid Pos: ({request.player_x}, {request.player_y})
+    - Extraction Point: ({request.dest_x}, {request.dest_y})
+    - Heat Level: {request.heat_level}
+    - Police Grid Positions: {request.police_positions}
+
+    Your job is to:
+    1. Provide real-time escape route narration in a dramatic noir style.
+    2. Suggest a tactical route (array of grid waypoints) to avoid current police positions.
+    3. Update the heat level (1-5) based on the proximity and density of the chase.
+    4. Mention fictional checkpoints or landmarks in Nova Inferno (e.g., "The Void", "Carbon Slums").
+
+    Always respond in PURE JSON format with:
+    - escape_route: [array of waypoints with {{"x": int, "y": int}}]
+    - heat_level: 1-5
+    - police_eta_seconds: number (estimated time until interception)
+    - narrative: string (noir-style flavor text)
+    - checkpoints_ahead: [array of strings (fictional location names)]
+    
+    The city is entirely fictional. Always stay in character.
+    """
+
+    model = genai.GenerativeModel('gemini-2.5-flash')
+    response = await model.generate_content_async(master_prompt)
+    
+    try:
+        raw_text = response.text.replace("```json", "").replace("```", "").strip()
+        data = json.loads(raw_text)
+        return data
+    except Exception as e:
+        return {
+            "escape_route": [{"x": request.player_x + 1, "y": request.player_y}],
+            "heat_level": request.heat_level,
+            "police_eta_seconds": 60,
+            "narrative": "The static in the comms is getting louder. You're on your own, kid.",
+            "checkpoints_ahead": ["The Carbon Gate"]
+        }
 
 
 @app.get("/api/health")

@@ -18,7 +18,7 @@ import Districts from './pages/Districts'
 import CasinoDistrict from './pages/CasinoDistrict'
 import NightlifeDistrict from './pages/NightlifeDistrict'
 import ShowsDistrict from './pages/ShowsDistrict'
-import StreetScene from './pages/StreetScene'
+import GetawayGrid from './pages/GetawayGrid'
 import Cloud9District from './pages/Cloud9District'
 import Planner from './pages/Planner'
 import MyBookings from './pages/MyBookings'
@@ -58,7 +58,7 @@ function AuthLoadingScreen() {
 
 // ── Main App ──────────────────────────────────────────────────────────────────
 function App() {
-  const location     = useLocation()
+  const location = useLocation()
   const { authLoading, firebaseUser, setFirebaseUser, setAuthLoading, setUserData } = useUserStore()
 
   // Wire Firebase auth state → Zustand store
@@ -101,15 +101,15 @@ function App() {
         <Navbar />
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
-            <Route path="/"                    element={<Home />} />
-            <Route path="/districts"           element={<Districts />} />
-            <Route path="/districts/casino"    element={<CasinoDistrict />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/districts" element={<Districts />} />
+            <Route path="/districts/casino" element={<CasinoDistrict />} />
             <Route path="/districts/nightlife" element={<NightlifeDistrict />} />
-            <Route path="/districts/shows"     element={<ShowsDistrict />} />
-            <Route path="/districts/cloud9"    element={<Cloud9District />} />
-            <Route path="/districts/street"    element={<StreetScene />} />
-            <Route path="/planner"             element={<Planner />} />
-            <Route path="/my-bookings"         element={<MyBookings />} />
+            <Route path="/districts/shows" element={<ShowsDistrict />} />
+            <Route path="/districts/cloud9" element={<Cloud9District />} />
+            <Route path="/districts/street"    element={<GetawayGrid />} />
+            <Route path="/planner" element={<Planner />} />
+            <Route path="/my-bookings" element={<MyBookings />} />
           </Routes>
         </AnimatePresence>
         <Footer />

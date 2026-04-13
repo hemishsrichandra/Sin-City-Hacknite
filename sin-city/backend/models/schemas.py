@@ -50,3 +50,18 @@ class TokenResponse(BaseModel):
     access_token: str
     token_type: str
     user: UserResponse
+
+class EscapeRequest(BaseModel):
+    player_x: int
+    player_y: int
+    dest_x: int
+    dest_y: int
+    heat_level: int
+    police_positions: List[dict]  # [{"x": int, "y": int}]
+
+class EscapeResponse(BaseModel):
+    escape_route: List[dict]      # [{"x": int, "y": int}]
+    heat_level: int
+    police_eta_seconds: int
+    narrative: str
+    checkpoints_ahead: List[str]
