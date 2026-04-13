@@ -8,7 +8,7 @@ import google.generativeai as genai
 import os
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY", "missing_key"))
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-2.5-flash')
 
 
 DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
