@@ -5,8 +5,8 @@ import 'leaflet/dist/leaflet.css'
 import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
-const ROUTE_REFRESH_MS = 120_000 // 2 minutes
-const PATROL_MOVE_MS   = 3_000   // police move every 3s
+const ROUTE_REFRESH_MS = 30_000  // 30 seconds
+const PATROL_MOVE_MS   = 2_500   // police move every 2.5s
 
 // Custom Leaflet icons — inline SVG so no image file needed
 const makeIcon = (color: string, label: string) => L.divIcon({
@@ -418,9 +418,74 @@ export default function GetawayGrid() {
         <div className="flex-1 relative">
           <div ref={mapRef} className="w-full h-full" style={{ minHeight: 'calc(100vh - 120px)' }} />
 
-          {/* Cinematic overlay frame */}
-          <div className="absolute inset-0 pointer-events-none border border-white/5"
-            style={{ background: 'radial-gradient(ellipse at center, transparent 60%, rgba(3,3,8,0.5) 100%)' }}
+          {/* ── Street Animations Layer ── */}
+
+          {/* Rain streaks */}
+          <div className="absolute inset-0 pointer-events-none z-[401] overflow-hidden">
+            {Array.from({ length: 28 }).map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-px bg-gradient-to-b from-transparent via-white/10 to-transparent"
+                style={{
+                  left: `${(i / 28) * 100 + Math.random() * 3}%`,
+                  height: `${40 + Math.random() * 40}px`,
+                }}
+                animate={{ y: ['-60px', '110vh'] }}
+                transition={{
+                  duration: 0.6 + Math.random() * 0.5,
+                  repeat: Infinity,
+                  delay: Math.random() * 2,
+                  ease: 'linear',
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Scanline overlay */}
+          <div
+            className="absolute inset-0 pointer-events-none z-[402]"
+            style={{
+              background: 'repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px)',
+            }}
+          />
+
+          {/* Animated neon corner accents */}
+          <div className="absolute inset-0 pointer-events-none z-[403]">
+            {/* TL */}
+            <motion.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 3, repeat: Infinity, delay: 0 }}
+              className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-[#00F5FF]/50" />
+            {/* TR */}
+            <motion.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 3, repeat: Infinity, delay: 0.75 }}
+              className="absolute top-0 right-0 w-16 h-16 border-t-2 border-r-2 border-[#00F5FF]/50" />
+            {/* BL */}
+            <motion.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
+              className="absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-[#00F5FF]/50" />
+            {/* BR */}
+            <motion.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 3, repeat: Infinity, delay: 2.25 }}
+              className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-[#00F5FF]/50" />
+          </div>
+
+          {/* Police siren flash — only when heat ≥ 3 */}
+          {heatLevel >= 3 && (
+            <motion.div
+              className="absolute inset-0 pointer-events-none z-[404]"
+              animate={{ backgroundColor: ['rgba(255,0,110,0.04)', 'rgba(0,64,255,0.04)', 'rgba(255,0,110,0.04)'] }}
+              transition={{ duration: 0.5, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          )}
+
+          {/* Glitch flash — when heat = 5 */}
+          {heatLevel >= 5 && (
+            <motion.div
+              className="absolute inset-0 pointer-events-none z-[405] bg-[#FF006E]/10"
+              animate={{ opacity: [0, 0.6, 0, 0.3, 0] }}
+              transition={{ duration: 0.2, repeat: Infinity, repeatDelay: 1.5 }}
+            />
+          )}
+
+          {/* Vignette frame */}
+          <div className="absolute inset-0 pointer-events-none z-[400] border border-white/5"
+            style={{ background: 'radial-gradient(ellipse at center, transparent 55%, rgba(3,3,8,0.65) 100%)' }}
           />
 
           {/* Phase overlays */}
@@ -532,7 +597,7 @@ export default function GetawayGrid() {
                 { n: '01', t: 'Your real GPS location is placed on the map.' },
                 { n: '02', t: '3 police units spawn nearby and patrol the area.' },
                 { n: '03', t: 'The safest route to the safe house is drawn.' },
-                { n: '04', t: 'Every 2 min the route and AI narration refreshes automatically.' },
+                { n: '04', t: 'Every 30s the route and AI narration auto-refreshes.' },
                 { n: '05', t: 'Heat rises as police close in. Press ARRIVED when you reach safety.' },
               ].map(step => (
                 <div key={step.n} className="flex gap-3">
@@ -545,7 +610,7 @@ export default function GetawayGrid() {
         </div>
       </div>
 
-      {/* Suppress Leaflet attribution style */}
+      {/* Leaflet + animation styles */}
       <style>{`
         .leaflet-control-attribution { display: none !important; }
         .patrol-label .leaflet-tooltip-content { 
@@ -553,6 +618,19 @@ export default function GetawayGrid() {
           box-shadow: none !important; padding: 0 !important;
         }
         .patrol-label { background: transparent !important; border: none !important; box-shadow: none !important; }
+
+        /* Animated route pulse on Leaflet polyline */
+        .leaflet-overlay-pane path {
+          filter: drop-shadow(0 0 4px #BF00FF) drop-shadow(0 0 12px #BF00FF66);
+          animation: routePulse 2s ease-in-out infinite;
+        }
+        @keyframes routePulse {
+          0%, 100% { opacity: 0.75; }
+          50%       { opacity: 1; }
+        }
+
+        /* Dark neon map tiles feel */
+        .leaflet-tile { filter: saturate(0.6) brightness(0.85); }
       `}</style>
     </div>
   )
