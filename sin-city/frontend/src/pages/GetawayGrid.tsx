@@ -7,6 +7,7 @@ import axios from 'axios'
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 const ROUTE_REFRESH_MS = 30_000  // 30 seconds
 const PATROL_MOVE_MS   = 2_500   // police move every 2.5s
+const CAR_STEP_MS      = 300     // ms between each road-point step (~city driving speed)
 
 // Custom Leaflet icons — inline SVG so no image file needed
 const makeIcon = (color: string, label: string) => L.divIcon({
@@ -25,7 +26,33 @@ const makeIcon = (color: string, label: string) => L.divIcon({
   `,
 })
 
-const PLAYER_ICON = makeIcon('#00F5FF', '🚗')
+// Bearing in degrees between two lat/lng points (for car rotation)
+function bearing(a: [number,number], b: [number,number]) {
+  const toRad = (d: number) => d * Math.PI / 180
+  const toDeg = (r: number) => r * 180 / Math.PI
+  const dLng = toRad(b[1] - a[1])
+  const lat1 = toRad(a[0]), lat2 = toRad(b[0])
+  const y = Math.sin(dLng) * Math.cos(lat2)
+  const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLng)
+  return (toDeg(Math.atan2(y, x)) + 360) % 360
+}
+
+// Dynamic car icon with rotation
+const makeCarIcon = (deg = 0) => L.divIcon({
+  className: '',
+  iconSize: [44, 44],
+  iconAnchor: [22, 22],
+  html: `
+    <div style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;transform:rotate(${deg}deg);transition:transform 0.25s ease;">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="16" cy="16" rx="16" ry="16" fill="#00F5FF" fill-opacity="0.18"/>
+        <path d="M16 4 L22 26 L16 22 L10 26 Z" fill="#00F5FF" filter="url(#glow)"/>
+        <defs><filter id="glow"><feGaussianBlur stdDeviation="2" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+      </svg>
+    </div>
+  `,
+})
+
 const SAFE_ICON   = makeIcon('#00FF88', '🏁')
 const POLICE_ICON = makeIcon('#FF006E', '🚔')
 
@@ -74,6 +101,9 @@ export default function GetawayGrid() {
   const timerRef    = useRef<ReturnType<typeof setInterval> | null>(null)
   const narrativeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const playerPos   = useRef<{ lat: number; lng: number } | null>(null)
+  const routeCoords = useRef<[number,number][]>([])   // full OSRM road geometry
+  const carStepIdx  = useRef(0)                        // which coord the car is at
+  const carMoveRef  = useRef<ReturnType<typeof setInterval> | null>(null) // car animation
 
   const [phase, setPhase]           = useState<'locating' | 'ready' | 'active' | 'won'>('locating')
   const [narrative, setNarrative]   = useState('ACQUIRING YOUR SIGNAL. STAND BY...')
@@ -94,13 +124,12 @@ export default function GetawayGrid() {
       attributionControl: false,
     })
 
-    // Dark Voyager CartoDB tile layer (no API key needed, looks premium)
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_voyager/{z}/{x}/{y}{r}.png', {
+    // CartoDB Voyager — colorful roads, clear streets, no API key
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
       subdomains: 'abcd',
       maxZoom: 20,
     }).addTo(map)
 
-    // Subtle neon green grid overlay effect via CSS
     mapObj.current = map
   }, [])
 
@@ -118,8 +147,8 @@ export default function GetawayGrid() {
         if (!mapObj.current) return
         mapObj.current.setView([loc.lat, loc.lng], 15)
 
-        // Player marker
-        playerMark.current = L.marker([loc.lat, loc.lng], { icon: PLAYER_ICON })
+        // Player marker — directional arrow car
+        playerMark.current = L.marker([loc.lat, loc.lng], { icon: makeCarIcon(0), zIndexOffset: 1000 })
           .addTo(mapObj.current)
           .bindPopup('<b style="font-family:monospace;color:#00F5FF">YOU // MOVING TARGET</b>')
 
@@ -163,16 +192,19 @@ export default function GetawayGrid() {
     if (routeLine.current) { routeLine.current.remove(); routeLine.current = null }
 
     const coords = await fetchRoute(from, to)
+    routeCoords.current = coords
+    carStepIdx.current  = 0
+
     routeLine.current = L.polyline(coords, {
       color: '#BF00FF',
-      weight: 4,
-      opacity: 0.85,
-      dashArray: '10, 6',
+      weight: 5,
+      opacity: 0.9,
+      dashArray: '12, 6',
     }).addTo(mapObj.current)
 
     // Fit map to show full route
     const bounds = L.latLngBounds(coords)
-    mapObj.current.fitBounds(bounds, { padding: [80, 80] })
+    mapObj.current.fitBounds(bounds, { padding: [100, 100] })
   }, [])
 
   // ── AI narration ─────────────────────────────────────────────────────────────
@@ -213,9 +245,40 @@ export default function GetawayGrid() {
     setPhase('active')
     setNarrative('SYSTEMS HOT. ROUTE CALCULATED. POLICE UNITS MOBILIZING.')
 
-    // Draw initial route
+    // Draw initial route — coords stored in routeCoords.current
     await drawRoute(p, s)
     await fetchIntel()
+
+    // ── Animate car along real road geometry ──────────────────────────────────
+    if (carMoveRef.current) clearInterval(carMoveRef.current)
+    carMoveRef.current = setInterval(() => {
+      const coords = routeCoords.current
+      const idx    = carStepIdx.current
+      if (!coords.length || idx >= coords.length - 1) return
+
+      const curr = coords[idx]
+      const next = coords[idx + 1]
+
+      // Compute bearing so car icon faces direction of travel
+      const deg = bearing(curr, next)
+      const newLatLng: [number,number] = [next[0], next[1]]
+
+      playerMark.current?.setLatLng(newLatLng)
+      playerMark.current?.setIcon(makeCarIcon(deg))
+
+      // Keep map camera loosely following the car
+      mapObj.current?.setView(newLatLng, mapObj.current.getZoom(), { animate: true, duration: 0.25 })
+
+      // Update playerPos ref so heat/ETA remain accurate
+      playerPos.current = { lat: next[0], lng: next[1] }
+      carStepIdx.current = idx + 1
+
+      // Win: reached destination
+      if (idx + 1 >= coords.length - 1) {
+        setPhase('won')
+        setNarrative('YOU MADE IT. SAFE HOUSE SECURED. HEAT LEVEL DROPPING. DISAPPEAR.')
+      }
+    }, CAR_STEP_MS)
 
     // Patrol movement
     timerRef.current = setInterval(() => {
@@ -278,6 +341,7 @@ export default function GetawayGrid() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current)
       if (narrativeTimer.current) clearTimeout(narrativeTimer.current)
+      if (carMoveRef.current) clearInterval(carMoveRef.current)
     }
   }, [])
 
@@ -290,14 +354,19 @@ export default function GetawayGrid() {
   const resetSim = () => {
     if (timerRef.current) clearInterval(timerRef.current)
     if (narrativeTimer.current) clearTimeout(narrativeTimer.current)
+    if (carMoveRef.current) clearInterval(carMoveRef.current)
     if (routeLine.current) { routeLine.current.remove(); routeLine.current = null }
+    routeCoords.current = []
+    carStepIdx.current  = 0
     setPhase(playerPos.current ? 'ready' : 'locating')
     setHeatLevel(1)
     setPoliceETA(null)
     setNarrative('GRID RESET. READY TO LAUNCH.')
     setTimeLeft(ROUTE_REFRESH_MS / 1000)
-    // Put police back near player
+    // Reset car to player origin and put police back
     if (playerPos.current) {
+      playerMark.current?.setLatLng([playerPos.current.lat, playerPos.current.lng])
+      playerMark.current?.setIcon(makeCarIcon(0))
       patrols.current = patrols.current.map((pt) => {
         const o = nudge(playerPos.current!.lat, playerPos.current!.lng, 0.005)
         pt.marker?.setLatLng([o.lat, o.lng])
@@ -630,7 +699,7 @@ export default function GetawayGrid() {
         }
 
         /* Dark neon map tiles feel */
-        .leaflet-tile { filter: saturate(0.6) brightness(0.85); }
+        .leaflet-tile { filter: saturate(0.85) brightness(0.9); }
       `}</style>
     </div>
   )
